@@ -1,0 +1,275 @@
+"
+Single documentation Chapter
+"
+Class {
+	#name : #DocChapter,
+	#superclass : #DocModelWithKey,
+	#instVars : [
+		'source',
+		'nextChapter'
+	],
+	#category : #'DocumentationSupport-Model'
+}
+
+{ #category : #accessing }
+DocChapter >> aBookOrChapter [
+
+	^ #()
+]
+
+{ #category : #'drag and drop' }
+DocChapter >> acceptChapter: aChapter [ 
+	
+	| aMenu |
+	
+	aChapter = self ifTrue: [ ^ self ].
+	
+	aMenu := SpMenuPresenter new.
+
+	aMenu addItem: [ :item | 
+		item
+			name: 'Set as next chapter'; 
+			action: [ self setAsNextChapter: aChapter ] ].
+
+	aMenu addItem: [ :item | 
+		item 
+			name: 'Move'; 
+			action: [ self acceptMove: aChapter  ] ].
+
+	aMenu openWithSpecAtPointer.
+
+]
+
+{ #category : #'drag and drop' }
+DocChapter >> acceptMove: aChapter [
+	
+	aChapter library = self library ifFalse: [ ^ self ].
+	(aChapter hasSubchapter: self) ifTrue: [ ^ self ].
+	
+	(aChapter book = self book) ifFalse: [ 
+		aChapter withAllSubchapters do: [ :each |
+			self book takeChapter: each ] ].
+	
+	aChapter parent: self.
+	
+	library aspectChanged: #chapters.
+
+]
+
+{ #category : #visiting }
+DocChapter >> acceptVisitor: aVisitor [ 
+
+	aVisitor visitChapter: self
+]
+
+{ #category : #adding }
+DocChapter >> addNewChapter [ 
+
+	| newChapter |
+	
+	newChapter := self book addNewChapterWithoutNotification. 
+	newChapter parent: self.
+	library aspectChanged: #chapters.
+	^ newChapter
+]
+
+{ #category : #removing }
+DocChapter >> chapterRemoved: anotherChapter [ 
+
+	nextChapter = anotherChapter ifTrue: [ 
+		self nextChapter: nil ].
+]
+
+{ #category : #accessing }
+DocChapter >> children [
+
+	^ self sortedChapters: (self book chapters select: [ :each | each parent = self ])
+	
+
+]
+
+{ #category : #removing }
+DocChapter >> delete [ 
+
+	self book deleteChapter: self.
+	self makeDirty.
+	library aspectChanged: #chapters.
+
+
+]
+
+{ #category : #'serialization support' }
+DocChapter >> fixNextReferenceUsing: aDictionary [
+
+	nextChapter ifNil: [ ^ self ].
+	nextChapter isParentReference ifFalse: [ ^ self ].
+	
+	nextChapter := nextChapter key 
+		ifNil: [ nil ]
+		ifNotNil: [ aDictionary at: nextChapter key ifAbsent: [ nil ] ].
+]
+
+{ #category : #'serialization support' }
+DocChapter >> fixParentReferenceUsing: aDictionary [
+
+	parent ifNil: [ ^ self ].
+	parent isParentReference ifFalse: [ ^ self ].
+	
+	parent := parent key 
+		ifNil: [ nil ]
+		ifNotNil: [ aDictionary at: parent key ].
+]
+
+{ #category : #'serialization support' }
+DocChapter >> fixParentReferencesUsing: aDictionary [
+
+	self fixParentReferenceUsing: aDictionary.
+	self fixNextReferenceUsing: aDictionary.
+
+]
+
+{ #category : #serialization }
+DocChapter >> fromSton: stonReader [
+	stonReader parseMapDo: [ :aKey :value |
+		aKey = #source ifTrue: [ source := value ].
+		aKey = #title ifTrue: [ title := value ].
+		aKey = #key ifTrue: [ key := value ].
+		aKey = #parent ifTrue: [ parent := DocParentReference key: value ].
+		aKey = #nextChapter ifTrue: [ nextChapter := DocParentReference key: value ]  ]
+	
+]
+
+{ #category : #accessing }
+DocChapter >> hasSubchapter: aChapter [ 
+
+	| subchapters |
+	
+	subchapters := self subchapters.
+	(subchapters includes: aChapter) ifTrue: [ ^ true ].
+
+	^ subchapters anySatisfy: [ :each | each hasSubchapter: aChapter ].
+]
+
+{ #category : #initialization }
+DocChapter >> initialize [ 
+
+	super initialize.
+	
+	source := ''
+]
+
+{ #category : #testing }
+DocChapter >> isChapter [
+
+	^ true
+]
+
+{ #category : #accessing }
+DocChapter >> nextChapter [
+
+	^ nextChapter
+]
+
+{ #category : #accessing }
+DocChapter >> nextChapter: anObject [
+
+	nextChapter := anObject.
+
+	self aspectChanged: #nextChapter.
+	"we changed chpaters order"
+	library aspectChanged: #chapters.
+
+]
+
+{ #category : #accessing }
+DocChapter >> nextChapterText [ 
+
+	^  nextChapter ifNil: [''] ifNotNil: [:c | c title ] 
+]
+
+{ #category : #accessing }
+DocChapter >> nextKeyOrNil [
+
+	nextChapter ifNil: [ ^ nil ].
+	
+	^ nextChapter key
+]
+
+{ #category : #printing }
+DocChapter >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream nextPutAll: '('.
+	self title printOn: aStream.
+	aStream nextPutAll: ')'.
+	
+]
+
+{ #category : #serialization }
+DocChapter >> readStonKey: aKey value: value [
+
+	super readStonKey: aKey value: value.
+	aKey = #source ifTrue: [ source := value ].
+	aKey = #nextChapter ifTrue: [ nextChapter := DocParentReference key: value ].
+	
+	
+]
+
+{ #category : #'drag and drop' }
+DocChapter >> setAsNextChapter: aChapter [
+
+	aChapter library = self library ifFalse: [ ^ self ].
+	
+	self nextChapter: aChapter.
+
+]
+
+{ #category : #accessing }
+DocChapter >> source [ 
+	
+	^ source
+]
+
+{ #category : #accessing }
+DocChapter >> source: aSource [
+
+	aSource = source 
+		ifFalse: [ self makeDirty ].
+	source := aSource.
+	
+	self aspectChanged: #source
+
+]
+
+{ #category : #serialization }
+DocChapter >> stonOn: stonWriter [	
+	stonWriter writeObject: self streamMap: [ :dictionary |
+		dictionary
+			at: #source put: source asString;
+			at: #title put: title;
+			at: #key put: key;
+			at: #parent put: self parentKeyOrNil;
+			at: #nextChapter put: self nextKeyOrNil]
+]
+
+{ #category : #accessing }
+DocChapter >> subchapters [ 
+
+	^ self book chapters select: [ :each | each parent = self ]
+]
+
+{ #category : #accessing }
+DocChapter >> withAllSubchapters [ 
+
+	^ { self }, (self subchapters flatCollect: [ :each | each withAllSubchapters ]) 
+]
+
+{ #category : #serialization }
+DocChapter >> writeStonKeysTo: aDictionary [ 
+
+	super writeStonKeysTo: aDictionary.
+	aDictionary
+		at: #source put: source;
+		at: #nextChapter put: self nextKeyOrNil
+		
+]
