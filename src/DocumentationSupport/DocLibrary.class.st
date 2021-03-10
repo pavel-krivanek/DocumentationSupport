@@ -18,6 +18,9 @@ Class {
 	#classVars : [
 		'Libraries'
 	],
+	#classInstVars : [
+		'referencesCache'
+	],
 	#category : #'DocumentationSupport-Model'
 }
 
@@ -77,6 +80,15 @@ DocLibrary class >> loadFromRepositories [
 DocLibrary class >> named: aString [ 
 
 	^ self libraries at: aString
+]
+
+{ #category : #private }
+DocLibrary class >> referencesCache [
+
+	^ referencesCache ifNil: [ 
+		referencesCache := (DocLibrary libraries flatCollect: #books) flatCollect: [ :each | 
+			each classesAndCompiledMethodsOverChaptersBidirectionalDictionary associations ] ]
+	
 ]
 
 { #category : #private }
