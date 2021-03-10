@@ -7,6 +7,10 @@ Class {
 	#category : #'DocumentationSupport-Model'
 }
 
+{ #category : #'as yet unclassified' }
+DocLibraryRepository >> forClassInclusionInDoc [
+]
+
 { #category : #accessing }
 DocLibraryRepository >> libraries [  
 

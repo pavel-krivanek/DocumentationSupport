@@ -28,10 +28,21 @@ BaselineOfDocumentationSupport >> baseline: spec [
 
 	spec for: #'common' do: [
 		spec blessing: #'baseline'.
+
+		self metaSTExporter: spec.
 			
 		spec 
 			package: 'DocumentationSupport';
 			package: 'DocumentationSupport-UI';
 			yourself
 		].
+]
+
+{ #category : #baselines }
+BaselineOfDocumentationSupport >> metaSTExporter: spec [
+
+	spec
+		baseline: 'MetaSTExporter'
+		with: [ 
+		spec repository: 'github://massimo-nocentini/MetaSTExporter/src' ]
 ]

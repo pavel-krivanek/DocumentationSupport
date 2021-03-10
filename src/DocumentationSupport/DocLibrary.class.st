@@ -151,6 +151,10 @@ DocLibrary >> fixParentReferencesUsing: aDictionary [
 		each fixParentReferencesUsing: aDictionary  ]
 ]
 
+{ #category : #'as yet unclassified' }
+DocLibrary >> forClassInclusionInDoc [
+]
+
 { #category : #initialization }
 DocLibrary >> initialize [ 
 
