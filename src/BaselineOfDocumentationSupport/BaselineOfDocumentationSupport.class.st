@@ -29,7 +29,7 @@ BaselineOfDocumentationSupport >> baseline: spec [
 	spec for: #'common' do: [
 		spec blessing: #'baseline'.
 
-		self metaSTExporter: spec.
+		"self metaSTExporter: spec."
 			
 		spec 
 			package: 'DocumentationSupport';
