@@ -17,46 +17,12 @@ Class {
 		'parent',
 		'nextInput',
 		'clearNext',
-		'goToNext'
+		'goToNext',
+		'splitButton',
+		'showEditor'
 	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }
-
-{ #category : #specs }
-DocChapterPresenter class >> defaultSpec [
-
-	^ SpBoxLayout newVertical
-		beNotHomogeneous;
-		add: (SpGridLayout new
-			add: 'Title:' at: 1@1;
-			add: #titleInput at: 2@1 span: 4@1;
-			add: 'Key:' at: 1@2;
-			add: (
-				SpBoxLayout newHorizontal
-					spacing: 5;
-					add: #keyInput expand: true fill: true;
-					add: #copyRefButton expand: false;
-					add: #copyIncludeButton expand: false;
-					yourself
-			) at: 2@2 span: 4@1;
-			add: 'Next:' at: 1@3;
-			add: (
-				SpBoxLayout newHorizontal
-					spacing: 5;
-					add: #nextInput expand: true fill: true;
-					add: #clearNext expand: false;
-					add: #goToNext expand: false;
-					yourself
-			) at: 2@3 span: 4@1;
-			
-			yourself) height: 140;
-		add: (	
-			SpBoxLayout newHorizontal
-				spacing: 5;
-				add: #srcInput;
-				add: #preview;
-				yourself ) expand: true
-]
 
 { #category : #'instance creation' }
 DocChapterPresenter class >> on: aChapter [ 
@@ -173,6 +139,15 @@ DocChapterPresenter >> initializePresenters [
 		action: [ 
 			self chapter nextChapter ifNotNil: [ 
 				self openReference: (ZnUrl fromString: ('ref://', self chapter nextChapter key))] ].
+		
+	showEditor := false.
+	splitButton := self newButton 
+		icon: (self iconNamed: #edit);
+		action: [ 
+			showEditor := showEditor not.
+			layout := self layoutShowingEditor: showEditor ].
+		
+	layout := self layoutShowingEditor: showEditor.
 
 
 ]
@@ -184,6 +159,46 @@ DocChapterPresenter >> initializeWindow: aWindowPresenter [
 		title: 'Documentation';
 		initialExtent: 1100@850;
 		windowIcon: (self iconNamed: #book)
+]
+
+{ #category : #layout }
+DocChapterPresenter >> layoutShowingEditor: aBoolean [
+
+	| previewLayout |
+	
+	aBoolean traceCr.
+	previewLayout := SpBoxLayout newHorizontal spacing: 5.
+	aBoolean ifTrue: [ previewLayout add: #srcInput expand: true ].
+	previewLayout 
+		add: #splitButton withConstraints: [ :con | con expand: false; width: 24];
+		add: #preview expand: true.
+
+	^ SpBoxLayout newVertical
+		beNotHomogeneous;
+		add: (SpGridLayout new
+			add: 'Title:' at: 1@1;
+			add: #titleInput at: 2@1 span: 4@1;
+			add: 'Key:' at: 1@2;
+			add: (
+				SpBoxLayout newHorizontal
+					spacing: 5;
+					add: #keyInput expand: true fill: true;
+					add: #copyRefButton expand: false;
+					add: #copyIncludeButton expand: false;
+					yourself
+			) at: 2@2 span: 4@1;
+			add: 'Next:' at: 1@3;
+			add: (
+				SpBoxLayout newHorizontal
+					spacing: 5;
+					add: #nextInput expand: true fill: true;
+					add: #clearNext expand: false;
+					add: #goToNext expand: false;
+					yourself
+			) at: 2@3 span: 4@1;
+			
+			yourself) height: 120;
+		add: previewLayout expand: true
 ]
 
 { #category : #actions }
