@@ -135,10 +135,6 @@ DocChapter >> fixParentReferencesUsing: aDictionary [
 
 ]
 
-{ #category : #'as yet unclassified' }
-DocChapter >> forClassInclusionInDoc [
-]
-
 { #category : #serialization }
 DocChapter >> fromSton: stonReader [
 	stonReader parseMapDo: [ :aKey :value |
