@@ -3,7 +3,7 @@ A command to add a chapter to a book or another chapter used in the toolbar.
 "
 Class {
 	#name : #DocAddChapterCommand,
-	#superclass : #StCommand,
+	#superclass : #DocStCommand,
 	#category : #'DocumentationSupport-UI-Commands'
 }
 
@@ -23,6 +23,12 @@ DocAddChapterCommand class >> defaultIconName [
 DocAddChapterCommand class >> defaultName [
 
 	^ 'Add chapter'
+]
+
+{ #category : #accessing }
+DocAddChapterCommand class >> priority [ 
+
+	^ 200
 ]
 
 { #category : #executing }

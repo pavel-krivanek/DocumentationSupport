@@ -3,7 +3,7 @@ A command to export library back to its repository.
 "
 Class {
 	#name : #DocExportCommand,
-	#superclass : #StCommand,
+	#superclass : #DocStCommand,
 	#category : #'DocumentationSupport-UI-Commands'
 }
 
@@ -23,6 +23,12 @@ DocExportCommand class >> defaultIconName [
 DocExportCommand class >> defaultName [
 
 	^ 'Export'
+]
+
+{ #category : #accessing }
+DocExportCommand class >> priority [ 
+
+	^ 100
 ]
 
 { #category : #executing }

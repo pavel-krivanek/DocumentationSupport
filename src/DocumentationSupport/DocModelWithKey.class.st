@@ -35,6 +35,15 @@ DocModelWithKey >> acceptVisitor: arg1 [
 	^ self subclassResponsibility
 ]
 
+{ #category : #serialization }
+DocModelWithKey >> addMetadataTo: aDictionary [ 
+
+	aDictionary
+		at: #title put: title;
+		at: #key put: key;
+		at: #parent put: self parentKeyOrNil
+]
+
 { #category : #adding }
 DocModelWithKey >> addNewChapter [
 	^ self subclassResponsibility
@@ -154,6 +163,14 @@ DocModelWithKey >> parentKeyOrNil [
 	parent ifNil: [ ^ nil ].
 	
 	^ parent key
+]
+
+{ #category : #serialization }
+DocModelWithKey >> readMetadataFrom: aDictionary [
+
+	aDictionary at: #title ifPresent: [ :value | title := value ].
+	aDictionary at: #key ifPresent: [ :value | key := value ].
+	aDictionary at: #parent ifPresent: [ :value | parent := DocParentReference key: value ].	
 ]
 
 { #category : #serialization }

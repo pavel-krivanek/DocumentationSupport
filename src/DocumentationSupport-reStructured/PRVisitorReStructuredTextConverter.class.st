@@ -9,7 +9,7 @@ Class {
 		'selectors',
 		'indentationLevel'
 	],
-	#category : #DocumentationSupport
+	#category : #'DocumentationSupport-reStructured'
 }
 
 { #category : #'visiting-document' }

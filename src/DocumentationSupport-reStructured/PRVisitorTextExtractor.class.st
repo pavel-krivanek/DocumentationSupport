@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'writeStream'
 	],
-	#category : #DocumentationSupport
+	#category : #'DocumentationSupport-reStructured'
 }
 
 { #category : #accessing }

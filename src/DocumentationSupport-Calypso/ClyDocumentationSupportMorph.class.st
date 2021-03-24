@@ -1,7 +1,7 @@
 Class {
 	#name : #ClyDocumentationSupportMorph,
 	#superclass : #ClyBrowserToolMorph,
-	#category : #'DocumentationSupport-UI'
+	#category : #'DocumentationSupport-Calypso'
 }
 
 { #category : #activation }

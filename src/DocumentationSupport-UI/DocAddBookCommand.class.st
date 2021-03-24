@@ -3,7 +3,7 @@ A command to add book to a library used in the toolbar.
 "
 Class {
 	#name : #DocAddBookCommand,
-	#superclass : #StCommand,
+	#superclass : #DocStCommand,
 	#category : #'DocumentationSupport-UI-Commands'
 }
 
@@ -23,6 +23,12 @@ DocAddBookCommand class >> defaultIconName [
 DocAddBookCommand class >> defaultName [
 
 	^ 'Add book'
+]
+
+{ #category : #accessing }
+DocAddBookCommand class >> priority [ 
+
+	^ 300
 ]
 
 { #category : #executing }

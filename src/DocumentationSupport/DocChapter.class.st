@@ -62,6 +62,13 @@ DocChapter >> acceptVisitor: aVisitor [
 	aVisitor visitChapter: self
 ]
 
+{ #category : #serialization }
+DocChapter >> addMetadataTo: aDictionary [ 
+
+	super addMetadataTo: aDictionary.
+	aDictionary 	at: #nextChapter put: self nextKeyOrNil.
+]
+
 { #category : #adding }
 DocChapter >> addNewChapter [ 
 
@@ -168,6 +175,13 @@ DocChapter >> isChapter [
 	^ true
 ]
 
+{ #category : #serialization }
+DocChapter >> materializeFrom: aStream [
+	
+	super materializeFrom: aStream.
+	self readSourceFrom: aStream.
+]
+
 { #category : #accessing }
 DocChapter >> nextChapter [
 
@@ -210,6 +224,21 @@ DocChapter >> printOn: aStream [
 ]
 
 { #category : #serialization }
+DocChapter >> readMetadataFrom: aDictionary [
+
+	super readMetadataFrom: aDictionary.
+	aDictionary at: #nextChapter ifPresent: [ :value | nextChapter := DocParentReference key: value ].	
+	
+	
+]
+
+{ #category : #serialization }
+DocChapter >> readSourceFrom: aStream [.
+
+	source := aStream upToEnd withInternalLineEndings
+]
+
+{ #category : #serialization }
 DocChapter >> readStonKey: aKey value: value [
 
 	super readStonKey: aKey value: value.
@@ -217,6 +246,15 @@ DocChapter >> readStonKey: aKey value: value [
 	aKey = #nextChapter ifTrue: [ nextChapter := DocParentReference key: value ].
 	
 	
+]
+
+{ #category : #serialization }
+DocChapter >> serializeTo: aStream [ 
+
+	super serializeTo: aStream.
+	aStream lf.
+	self writeContentTo: aStream.
+
 ]
 
 { #category : #'drag and drop' }
@@ -266,6 +304,12 @@ DocChapter >> subchapters [
 DocChapter >> withAllSubchapters [ 
 
 	^ { self }, (self subchapters flatCollect: [ :each | each withAllSubchapters ]) 
+]
+
+{ #category : #serialization }
+DocChapter >> writeContentTo: aStream [
+
+	aStream nextPutAll: source asString withUnixLineEndings
 ]
 
 { #category : #serialization }

@@ -2,7 +2,7 @@
 I perform loading of serialized document libraries.
 "
 Class {
-	#name : #DocMaterializerSton,
+	#name : #DocMaterializerMicrodown,
 	#superclass : #Object,
 	#instVars : [
 		'keysDictionary'
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #initialization }
-DocMaterializerSton >> initialize [ 
+DocMaterializerMicrodown >> initialize [ 
 
 	super initialize.
 	
@@ -19,45 +19,46 @@ DocMaterializerSton >> initialize [
 ]
 
 { #category : #materialization }
-DocMaterializerSton >> readBookFrom: bookDirectory [ 
+DocMaterializerMicrodown >> readBookFrom: bookDirectory [ 
 
 	| aBook |
-	aBook := (bookDirectory / 'description', 'ston') readStreamDo: [ :stream | 
-		STON fromStream: stream ].
+	aBook := (bookDirectory / 'description', 'md') readStreamDo: [ :stream | 
+		DocBook new  materializeFrom: stream ].
 	aBook chapters: (self readChaptersFrom: bookDirectory) asOrderedCollection.
 	self register: aBook as: aBook key.
 	^ aBook
 ]
 
 { #category : #materialization }
-DocMaterializerSton >> readBooksFrom: bookDirectory [
+DocMaterializerMicrodown >> readBooksFrom: bookDirectory [
 
 	^ bookDirectory directories collect: [ :dir |
 		self readBookFrom: dir]
 ]
 
 { #category : #materialization }
-DocMaterializerSton >> readChaptersFrom: bookDirectory [ 
+DocMaterializerMicrodown >> readChaptersFrom: bookDirectory [ 
 
 	| chapterFiles |
 	
-	chapterFiles := bookDirectory files reject: [ :file | file basename = 'description.ston' ].
+	chapterFiles := bookDirectory files reject: [ :file | file basename = 'description.md' ].
 	^ chapterFiles collect: [ :each | 
 		| aChapter |
-		aChapter := STON fromStream: each readStream.
+		aChapter := DocChapter new.
+		aChapter materializeFrom: each readStream.
 		self register: aChapter as: aChapter key.
 		aChapter ]
 ]
 
 { #category : #materialization }
-DocMaterializerSton >> readLibrariesFrom: directoryFileReference [
+DocMaterializerMicrodown >> readLibrariesFrom: directoryFileReference [
 
 	^ directoryFileReference directories collect: [ :dir |
 		self readLibraryFrom: dir]
 ]
 
 { #category : #materialization }
-DocMaterializerSton >> readLibraryFrom: libraryDirectory [ 
+DocMaterializerMicrodown >> readLibraryFrom: libraryDirectory [ 
 	| library | 
 	
 	library := DocLibrary new.
@@ -70,7 +71,7 @@ DocMaterializerSton >> readLibraryFrom: libraryDirectory [
 ]
 
 { #category : #private }
-DocMaterializerSton >> register: anObject as: aKey [ 
+DocMaterializerMicrodown >> register: anObject as: aKey [ 
 
 	keysDictionary at: aKey put: anObject
 ]

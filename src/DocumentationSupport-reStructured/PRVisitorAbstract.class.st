@@ -4,7 +4,7 @@ I am a visitor for `PRObject` objects in order to convert them in reStructuredTe
 Class {
 	#name : #PRVisitorAbstract,
 	#superclass : #PRVisitor,
-	#category : #DocumentationSupport
+	#category : #'DocumentationSupport-reStructured'
 }
 
 { #category : #'visiting-document' }

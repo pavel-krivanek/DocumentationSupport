@@ -8,7 +8,7 @@ Class {
 		'compiledMethods',
 		'classes'
 	],
-	#category : #DocumentationSupport
+	#category : #'DocumentationSupport-reStructured'
 }
 
 { #category : #accessing }

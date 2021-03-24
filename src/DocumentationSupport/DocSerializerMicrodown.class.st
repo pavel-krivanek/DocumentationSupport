@@ -2,7 +2,7 @@
 I perform serialization of document libraries.
 "
 Class {
-	#name : #DocSerializerSton,
+	#name : #DocSerializerMicrodown,
 	#superclass : #Object,
 	#instVars : [
 		'currentPath'
@@ -11,19 +11,19 @@ Class {
 }
 
 { #category : #accessing }
-DocSerializerSton >> currentPath [ 
+DocSerializerMicrodown >> currentPath [ 
 
 	^ currentPath
 ]
 
 { #category : #accessing }
-DocSerializerSton >> currentPath: anObject [
+DocSerializerMicrodown >> currentPath: anObject [
 
 	currentPath := anObject
 ]
 
 { #category : #exporting }
-DocSerializerSton >> export: aLibrary to: direcotoryFileReference [
+DocSerializerMicrodown >> export: aLibrary to: direcotoryFileReference [
 
 	self currentPath: direcotoryFileReference asFileReference.
 	self visitLibrary: aLibrary.
@@ -31,14 +31,14 @@ DocSerializerSton >> export: aLibrary to: direcotoryFileReference [
 ]
 
 { #category : #visiting }
-DocSerializerSton >> visitBook: aBook [
+DocSerializerMicrodown >> visitBook: aBook [
 
 	| ref | 
 		
 	ref := self currentPath / aBook key.
 	ref ensureCreateDirectory.
-	(ref / 'description', 'ston') writeStreamDo: [ :aStream |
-		STON put: aBook onStreamPretty: aStream  ].
+	(ref / 'description', 'md') writeStreamDo: [ :aStream |
+		aBook serializeTo: aStream  ].
 	aBook chapters do: [ :aChapter |
 		currentPath := ref.
 		aChapter acceptVisitor: self ].
@@ -46,19 +46,19 @@ DocSerializerSton >> visitBook: aBook [
 ]
 
 { #category : #visiting }
-DocSerializerSton >> visitChapter: aChapter [
+DocSerializerMicrodown >> visitChapter: aChapter [
 
 	| ref | 
 	
-	ref := self currentPath / aChapter key, 'ston'.
+	ref := self currentPath / aChapter key, 'md'.
 	
 	ref writeStreamDo: [ :aStream | 
-		STON put: aChapter onStreamPretty: aStream ]
+		aChapter serializeTo: aStream ]
 
 ]
 
 { #category : #visiting }
-DocSerializerSton >> visitLibrary: aLibrary [ 
+DocSerializerMicrodown >> visitLibrary: aLibrary [ 
 
 	| ref | 
 	

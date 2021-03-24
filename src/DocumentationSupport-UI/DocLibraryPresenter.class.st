@@ -90,12 +90,6 @@ DocLibraryPresenter >> aspect: anAspect changedFrom: anOrigin [
 ]
 
 { #category : #actions }
-DocLibraryPresenter >> convertToReStructuredText [
-
-	library repository convertDocLibraryToReStructuredText: library
-]
-
-{ #category : #actions }
 DocLibraryPresenter >> delete: anObject [
 
 	((self confirm: 'Really delete ', anObject name, '?') = true)
@@ -236,13 +230,15 @@ DocLibraryPresenter >> setupTreeMenu [
 { #category : #actions }
 DocLibraryPresenter >> toolbarActions [
 
+	| aGroup commandClasses |
+	
+	aGroup := CmCommandGroup forSpec.
+	commandClasses := DocStCommand allSubclasses sorted: [ :a :b | a priority <= b priority ].
+	commandClasses do: [ :aCommandClass | 
+		aGroup register: (aCommandClass forSpecContext: self) ].
+
 	^ CmCommandGroup forSpec
-		  register: (CmCommandGroup forSpec
-				   register: (DocExportCommand forSpecContext: self);
-				   register: (DocConvertToReSTCommand forSpecContext: self);
-				   register: (DocAddChapterCommand forSpecContext: self);
-				   register: (DocAddBookCommand forSpecContext: self);
-				   yourself);
+		  register: aGroup;
 		  yourself
 ]
 
