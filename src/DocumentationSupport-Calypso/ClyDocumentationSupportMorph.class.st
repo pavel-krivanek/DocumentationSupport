@@ -9,7 +9,7 @@ ClyDocumentationSupportMorph class >> browserTabActivationClass [
 	"This declaration specifies that in any browser when methods are selected, a diff tool will be available in a tab."
 
 	<classAnnotation>
-	^ClyTabActivationStrategy for: ClyClass asCalypsoItemContext
+	^ClyTabActivationStrategyAnnotation for: ClyClass asCalypsoItemContext
 ]
 
 { #category : #activation }
@@ -17,7 +17,7 @@ ClyDocumentationSupportMorph class >> browserTabActivationMethod [
 	"This declaration specifies that in any browser when methods are selected, a diff tool will be available in a tab."
 
 	<classAnnotation>
-	^ClyTabActivationStrategy for: ClyMethod asCalypsoItemContext
+	^ClyTabActivationStrategyAnnotation for: ClyMethod asCalypsoItemContext
 ]
 
 { #category : #activation }
@@ -25,7 +25,7 @@ ClyDocumentationSupportMorph class >> browserTabActivationPackage [
 	"This declaration specifies that in any browser when methods are selected, a diff tool will be available in a tab."
 
 	<classAnnotation>
-	^ClyTabActivationStrategy for: RPackage asCalypsoItemContext
+	^ClyTabActivationStrategyAnnotation for: RPackage asCalypsoItemContext
 ]
 
 { #category : #activation }
