@@ -109,6 +109,8 @@ DocChapterPresenter >> initializePresenters [
 	srcInput := self newText.
 	preview := self getPreviewPresenter.
 	
+	preview morph setText: '' asText.
+	
 	srcInput text: self chapter source.	
 
 	srcInput whenTextChangedDo: [ :newText | 
@@ -148,6 +150,8 @@ DocChapterPresenter >> initializePresenters [
 			layout := self layoutShowingEditor: showEditor ].
 		
 	layout := self layoutShowingEditor: showEditor.
+	
+	self updatePreview: self chapter source
 
 
 ]
@@ -241,11 +245,10 @@ DocChapterPresenter >> previewMorphFor: aSource [
 	textModel := RubScrolledTextModel new.
 	textMorph := textModel newScrolledText.
 	textMorph
-		beWrapped;
-		font: StandardFonts codeFont;
-		editingMode: RubPlainTextMode new..
-		textModel setInitialText: text.
-
+		beReadOnly;
+		beWrapped.
+	textModel setInitialText: text.
+	
 	 ^ textMorph
 ]
 

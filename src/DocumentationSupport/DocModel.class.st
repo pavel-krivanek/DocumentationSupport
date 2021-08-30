@@ -32,7 +32,7 @@ DocModel >> materializeFrom: aStream [
 { #category : #serialization }
 DocModel >> readMetadataFromStream: aStream [
 	
-	| metadata key |
+	| metadata key valueString |
 	
 	metadata := Dictionary new.
 
@@ -41,8 +41,11 @@ DocModel >> readMetadataFromStream: aStream [
 		line := aStream nextLine.
 		line trimBoth isEmpty ifTrue: [ ^ metadata ].
 		aKey := (line copyUpTo: $:) trimBoth.
-		value := (line copyAfter: $:) trimBoth.
-		(aKey notEmpty and: [ value notEmpty ]) ifTrue: [ 
+		valueString := (line copyAfter: $:) trimBoth.
+		value := valueString 
+			ifNotEmpty: [ STON fromString: valueString ]
+			ifEmpty: [ nil ].
+		(aKey notEmpty and: [ value notNil ]) ifTrue: [ 
 			metadata at: aKey put: value ].
 		 ].
 	
@@ -81,6 +84,6 @@ DocModel >> writeMetadata: aDictionary toStream: aStream [.
 		aStream nextPutAll: key asString.
 		aStream nextPutAll: ': '.
 		value ifNotNil: [ 
-			aStream nextPutAll: value asString ].
-		aStream lf ]
+			STON put: value onStream: aStream ].
+		aStream crlf ]
 ]

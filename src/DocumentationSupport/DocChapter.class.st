@@ -248,7 +248,7 @@ DocChapter >> readStonKey: aKey value: value [
 DocChapter >> serializeTo: aStream [ 
 
 	super serializeTo: aStream.
-	aStream lf.
+	aStream crlf.
 	self writeContentTo: aStream.
 
 ]
