@@ -1,7 +1,7 @@
-title: Documentation entities
-key: 9oyk5dgkepkaexj58cjea76jk
-parent: 91bclk1izenja63tom5j39v34
-nextChapter: 3z9zm74a6w6vnk79244tykdrk
+title: 'Documentation entities'
+key: '9oyk5dgkepkaexj58cjea76jk'
+parent: '91bclk1izenja63tom5j39v34'
+nextChapter: '3z9zm74a6w6vnk79244tykdrk'
 
 # Documentation entitites
 

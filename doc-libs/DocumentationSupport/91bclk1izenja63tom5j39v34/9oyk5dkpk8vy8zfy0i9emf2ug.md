@@ -1,7 +1,7 @@
-title: Libraries
-key: 9oyk5dkpk8vy8zfy0i9emf2ug
-parent: 9oyk5dgkepkaexj58cjea76jk
-nextChapter: 3z9zm765drcfzotsq9dvc48d4
+title: 'Libraries'
+key: '9oyk5dkpk8vy8zfy0i9emf2ug'
+parent: '9oyk5dgkepkaexj58cjea76jk'
+nextChapter: '3z9zm765drcfzotsq9dvc48d4'
 
 # Libraries
 
@@ -17,7 +17,7 @@ The method `DocLibrary class>>#clearLibraries` resets this global dictionary, so
 
 To open GUI for the library evaluate:
 ```
-DocLibraryPresenter open: #DocumentationSupport.
+DocLibraryPresenter open: #Documaps.
 ```
 where #Documaps is the library name
 
