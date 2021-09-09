@@ -266,9 +266,9 @@ DocChapterPresenter >> textFor: aSource [
 		
 		DocRichTextComposer new 
 			executor: self;		
-			start: tree asPillar. ]
+			visit: tree. ]
 		on: STONReaderError, MicParsingError, MessageNotUnderstood, SubclassResponsibility 
-			do: [ builder contents ].
+			do: [ :e | builder contents ].
 
 	^ text
 ]
@@ -276,18 +276,26 @@ DocChapterPresenter >> textFor: aSource [
 { #category : #preview }
 DocChapterPresenter >> updatePreview: newSource [ 
 
+		| newText |
+
 	previewUpdateMutex critical: [ 
 		updateProcess ifNotNil: [ 
 			updateProcess terminate.
 			updateProcess := nil ] ].
 
 	updateProcess := [ 
-		| newText |
+		"| newText |
 		newText := self textFor: newSource.
 	
 		previewUpdateMutex critical: [ 
-			self defer: [ preview morph setText: newText ] ]
+			self defer: [ 
+				preview morph setText: newText ] ]"
 	] fork.
+
+		newText := self textFor: newSource.
 	
+		previewUpdateMutex critical: [ 
+			self defer: [ 
+				preview morph setText: newText ] ]
 	
 ]

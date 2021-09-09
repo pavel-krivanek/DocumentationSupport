@@ -10,5 +10,5 @@ Class {
 { #category : #'handling transmission' }
 DocObjectPort >> incomingTransmission: anObject from: aTransmission [
 
-	self destinationPresenter object: anObject
+	self presenter object: anObject
 ]
