@@ -15,6 +15,20 @@ SearchBookTest >> setUp [
 ]
 
 { #category : #tests }
+SearchBookTest >> testIndexOfBooks [
+	| library dictionary |
+	library := DocLibrary new.
+	library addNewBook.
+	library books first	addNewChapter;
+	addNewChapter;
+	addNewChapter.
+	dictionary := searchObject indexOfBooks:  'test' in: library .
+	self assert: dictionary size equals: 1.
+	self assert: dictionary values first size equals: 3
+	
+]
+
+{ #category : #tests }
 SearchBookTest >> testIndexOfChapters [
 	| book |
 	book := DocBook new.

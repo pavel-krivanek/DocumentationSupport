@@ -8,6 +8,16 @@ Class {
 }
 
 { #category : #search }
+SearchBook >> indexOfBooks: aSubString in: aDocLibrary [
+  | index |
+
+  index := OrderedDictionary new.
+  aDocLibrary books do: [ :book |
+		index at: book key put: (self indexOfChapters: aSubString in: book) ].
+  ^ index
+]
+
+{ #category : #search }
 SearchBook >> indexOfChapters: aSubString in: aBook [
   | index |
 
