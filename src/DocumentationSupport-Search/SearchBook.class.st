@@ -11,10 +11,9 @@ Class {
 SearchBook >> indexOfChapters: aSubString in: aBook [
   | index |
 
-  index := OrderedCollection new.
-  aBook chapters doWithIndex: [ :chapter :i |
-		(chapter title includesSubstring: aSubString) 
-			ifTrue: [ index addLast: i ] ].
+  index := OrderedDictionary new.
+  aBook chapters do: [ :chapter |
+		index at: chapter key put: (self indexOfSubstring: aSubString in: chapter source) ].
   ^ index
 ]
 

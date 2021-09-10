@@ -14,7 +14,7 @@ SearchBookTest >> testIndexOfChapters [
 	addNewChapter;
 	addNewChapter.
 	(book chapters at: 2) title: 'test'.
-	self assert: (searchObject indexOfChapters:  'test' in: book ) equals: #(2) asOrderedCollection
+	self assert: (searchObject indexOfChapters:  'test' in: book ) size equals: 3
 	
 ]
 
