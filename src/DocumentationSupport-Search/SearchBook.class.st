@@ -18,11 +18,11 @@ SearchBook >> indexOfBooks: aSubString in: aDocLibrary [
 ]
 
 { #category : #search }
-SearchBook >> indexOfChapters: aSubString in: aBook [
+SearchBook >> indexOfChapters: aSubString in: aDocBook [
   | index |
 
   index := OrderedDictionary new.
-  aBook chapters do: [ :chapter |
+  aDocBook chapters do: [ :chapter |
 		index at: chapter key put: (self indexOfSubstring: aSubString in: chapter source) ].
   ^ index
 ]
