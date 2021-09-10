@@ -1,3 +1,6 @@
+"
+I search the index of all substring's occurence in a `DocLibrary` that I register in my searchCache
+"
 Class {
 	#name : #SearchBook,
 	#superclass : #Object,
@@ -36,4 +39,9 @@ SearchBook >> indexOfSubstring: aSubString in: aString [
   [ (i := aString findString: aSubString startingAt: i + 1) > 0 ] whileTrue: [
     index addLast: i ].
   ^ index
+]
+
+{ #category : #search }
+SearchBook >> search: aSubString in: aDocLibrary [
+	searchCache := self indexOfBooks: aSubString in: aDocLibrary
 ]
