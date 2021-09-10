@@ -8,6 +8,17 @@ Class {
 }
 
 { #category : #search }
+SearchBook >> indexOfChapters: aSubString in: aBook [
+  | index |
+
+  index := OrderedCollection new.
+  aBook chapters doWithIndex: [ :chapter :i |
+		(chapter title includesSubstring: aSubString) 
+			ifTrue: [ index addLast: i ] ].
+  ^ index
+]
+
+{ #category : #search }
 SearchBook >> indexOfSubstring: aSubString in: aString [
   | index i |
 
