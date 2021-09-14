@@ -5,7 +5,8 @@ Class {
 	#name : #SearchBook,
 	#superclass : #Object,
 	#instVars : [
-		'searchCache'
+		'searchCache',
+		'nbOccurence'
 	],
 	#category : #'DocumentationSupport-Search'
 }
@@ -37,11 +38,24 @@ SearchBook >> indexOfSubstring: aSubString in: aString [
   index := OrderedCollection new.
   i := 0.
   [ (i := aString findString: aSubString startingAt: i + 1) > 0 ] whileTrue: [
-    index addLast: i ].
+    index addLast: i.
+	 nbOccurence := nbOccurence + 1 ].
   ^ index
+]
+
+{ #category : #initialization }
+SearchBook >> initialize [
+	super initialize.
+	nbOccurence := 0
+]
+
+{ #category : #accessing }
+SearchBook >> nbOccurence [
+	^ nbOccurence
 ]
 
 { #category : #search }
 SearchBook >> search: aSubString in: aDocLibrary [
+	nbOccurence = 0.
 	searchCache := self indexOfBooks: aSubString in: aDocLibrary
 ]

@@ -47,3 +47,10 @@ SearchBookTest >> testIndexOfSubstring [
 	self assert: (searchObject indexOfSubstring: 'test' in: 'test other test word') equals: #(1 12) asOrderedCollection
 	
 ]
+
+{ #category : #tests }
+SearchBookTest >> testNbOccurence [
+	searchObject indexOfSubstring: 'test' in: 'test other test word'.
+	self assert: searchObject nbOccurence equals: 2
+	
+]
