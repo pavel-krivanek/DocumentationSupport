@@ -142,6 +142,39 @@ SearchBook >> nbOccurence [
 	^ nbOccurence
 ]
 
+{ #category : #accessing }
+SearchBook >> next [
+	searchCache doWithIndex: [ :book :i | 
+		(i >= actualBook and: [ self nextBook: book ]) ifTrue: [ 
+			^ true ].
+		i >= actualBook ifTrue: [ 
+			actualBook := actualBook + 1.
+			actualChapter := 1.
+			actualIndex := 0 ] ].
+	^ false
+]
+
+{ #category : #initialization }
+SearchBook >> nextBook: aBook [
+
+	aBook doWithIndex: [ :chapter :i | 
+		(i >= actualChapter and: [ self nextChapter: chapter ]) ifTrue: [ 
+			
+			^ true ].
+		i >= actualChapter ifTrue: [ 
+			actualChapter := actualChapter + 1.
+			actualIndex := 0 ] ].
+	^ false
+]
+
+{ #category : #initialization }
+SearchBook >> nextChapter: aChapter [
+		actualIndex < aChapter size ifTrue: [ 
+				actualIndex := actualIndex + 1.
+				^ true ].
+		^ false
+]
+
 { #category : #search }
 SearchBook >> search: aSubString in: aDocLibrary [
 	nbOccurence = 0.
