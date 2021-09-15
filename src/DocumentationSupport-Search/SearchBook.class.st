@@ -104,6 +104,39 @@ SearchBook >> initializeFirstOccurenceChapter: aChapter [
 				add: 1 ]
 ]
 
+{ #category : #initialization }
+SearchBook >> initializeLastOccurence [
+	lastOccurence := OrderedCollection ofSize: 3.
+	 searchCache ifNotEmpty: [ 
+		searchCache doWithIndex: [ :book :i |
+			actualBook := i.
+			self initializeLastOccurenceBook: book. ] 
+		]
+]
+
+{ #category : #initialization }
+SearchBook >> initializeLastOccurenceBook: aBook [
+	aBook ifNotEmpty: [ 
+		aBook doWithIndex: [ :chapter :i | 
+			actualChapter := i.
+			self initializeLastOccurenceChapter: chapter
+			]]
+			
+]
+
+{ #category : #initialization }
+SearchBook >> initializeLastOccurenceChapter: aChapter [
+		aChapter ifNotEmpty: [ 
+				lastOccurence at: 1 put: actualBook;
+				at: 2 put: actualChapter;
+				at: 3 put: aChapter size ]
+]
+
+{ #category : #accessing }
+SearchBook >> lastOccurence [
+	^ lastOccurence
+]
+
 { #category : #accessing }
 SearchBook >> nbOccurence [
 	^ nbOccurence

@@ -65,6 +65,21 @@ SearchBookTest >> testInitializeFirstOccurence [
 ]
 
 { #category : #tests }
+SearchBookTest >> testInitializeLastOccurence [
+	| library |
+	library := DocLibrary new.
+	library addNewBook.
+	library books first	addNewChapter;
+	addNewChapter;
+	addNewChapter.
+	library books first chapters first source: 'this test is a test'.
+	searchObject search: 'test' in: library.
+	searchObject initializeLastOccurence.
+	self assert: searchObject lastOccurence equals: #(1 1 2)asOrderedCollection
+	
+]
+
+{ #category : #tests }
 SearchBookTest >> testNbOccurence [
 	searchObject indexOfSubstring: 'test' in: 'test other test word'.
 	self assert: searchObject nbOccurence equals: 2
