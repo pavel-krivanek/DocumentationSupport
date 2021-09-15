@@ -128,3 +128,42 @@ SearchBookTest >> testNextIndex [
 	self assert: searchObject actualBook equals: 1
 	
 ]
+
+{ #category : #tests }
+SearchBookTest >> testPrevBook [
+	searchObject search: 'test' in: library.
+	self assert: searchObject next.
+	self assert: searchObject next.
+	self assert: searchObject next.
+	self assert: searchObject prev.
+	self assert: searchObject prev.
+	self assert: searchObject prev.
+	self assert: searchObject actualIndex equals: 1.
+	self assert: searchObject actualChapter equals: 1.
+	self assert: searchObject actualBook equals: 1
+	
+]
+
+{ #category : #tests }
+SearchBookTest >> testPrevChapter [
+	searchObject search: 'test' in: library.
+	self assert: searchObject next.
+	self assert: searchObject next.
+	self assert: searchObject prev.
+	self assert: searchObject prev.
+	self assert: searchObject actualIndex equals: 1.
+	self assert: searchObject actualChapter equals: 1.
+	self assert: searchObject actualBook equals: 1
+	
+]
+
+{ #category : #tests }
+SearchBookTest >> testPrevIndex [
+	searchObject search: 'test' in: library.
+	self assert: searchObject next.
+	self assert: searchObject prev.
+	self assert: searchObject actualIndex equals: 1.
+	self assert: searchObject actualChapter equals: 1.
+	self assert: searchObject actualBook equals: 1
+	
+]

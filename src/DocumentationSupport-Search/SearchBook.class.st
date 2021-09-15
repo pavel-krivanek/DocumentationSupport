@@ -175,8 +175,48 @@ SearchBook >> nextChapter: aChapter [
 		^ false
 ]
 
+{ #category : #accessing }
+SearchBook >> prev [
+	| tmp |
+	searchCache keys reverseWithIndexDo: [ :key :i |
+		(i <= actualBook and: [ self prevBook: (searchCache at: key) ]) ifTrue: [ 
+			^ true ].
+		actualBook > 1 ifTrue: [ 
+			actualBook := actualBook - 1.
+			actualChapter := (searchCache at: (searchCache keys  at: actualBook)) size.
+			tmp := searchCache at: (searchCache keys at: actualBook).
+			actualIndex := ((tmp) at: (tmp keys at: actualChapter)) size ] ].
+	^ false
+]
+
+{ #category : #initialization }
+SearchBook >> prevBook: aBook [
+
+	aBook keys reverseWithIndexDo: [ :key :i |
+		(i <= actualChapter and: [ self prevChapter: (aBook at: key) ]) ifTrue: [ 
+			^ true ].
+		actualChapter > 1 ifTrue: [ 
+			actualChapter := actualChapter - 1.
+			actualIndex := (aBook at: ( aBook keys at: actualChapter)) size.
+			actualIndex > 0 ifTrue: [ ^ true ] ] ].
+	^ false
+]
+
+{ #category : #initialization }
+SearchBook >> prevChapter: aChapter [
+		actualIndex > 1 ifTrue: [ 
+				actualIndex := actualIndex - 1.
+				^ true ].
+		^ false
+]
+
 { #category : #search }
 SearchBook >> search: aSubString in: aDocLibrary [
 	nbOccurence = 0.
-	searchCache := self indexOfBooks: aSubString in: aDocLibrary
+	searchCache := self indexOfBooks: aSubString in: aDocLibrary.
+	self initializeFirstOccurence.
+	self initializeLastOccurence.
+	actualBook := firstOccurence first.
+	actualChapter := firstOccurence second.
+	actualIndex := firstOccurence third
 ]
