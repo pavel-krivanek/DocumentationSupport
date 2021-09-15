@@ -6,10 +6,35 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'searchCache',
-		'nbOccurence'
+		'nbOccurence',
+		'firstOccurence',
+		'lastOccurence',
+		'actualBook',
+		'actualChapter',
+		'actualIndex'
 	],
 	#category : #'DocumentationSupport-Search'
 }
+
+{ #category : #accessing }
+SearchBook >> actualBook [
+	^ actualBook
+]
+
+{ #category : #accessing }
+SearchBook >> actualChapter [
+	^ actualChapter
+]
+
+{ #category : #accessing }
+SearchBook >> actualIndex [
+	^ actualIndex
+]
+
+{ #category : #accessing }
+SearchBook >> firstOccurence [
+	^ firstOccurence
+]
 
 { #category : #search }
 SearchBook >> indexOfBooks: aSubString in: aDocLibrary [
@@ -47,6 +72,36 @@ SearchBook >> indexOfSubstring: aSubString in: aString [
 SearchBook >> initialize [
 	super initialize.
 	nbOccurence := 0
+]
+
+{ #category : #initialization }
+SearchBook >> initializeFirstOccurence [
+	firstOccurence := OrderedCollection new.
+	 searchCache ifNotEmpty: [ 
+		searchCache doWithIndex: [ :book :i |
+			actualBook := i.
+			self initializeFirstOccurenceBook: book. ] 
+		]
+]
+
+{ #category : #initialization }
+SearchBook >> initializeFirstOccurenceBook: aBook [
+	(firstOccurence isEmpty and: [ aBook isNotEmpty ]) ifTrue: [ 
+		aBook doWithIndex: [ :chapter :i | 
+			actualChapter := i.
+			self initializeFirstOccurenceChapter: chapter
+			]]
+			
+]
+
+{ #category : #initialization }
+SearchBook >> initializeFirstOccurenceChapter: aChapter [
+		(firstOccurence isEmpty and: [ aChapter isNotEmpty ])
+			 ifTrue: [ 
+				actualIndex = 1.
+				firstOccurence add: actualBook;
+				add: actualChapter;
+				add: 1 ]
 ]
 
 { #category : #accessing }

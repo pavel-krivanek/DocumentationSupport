@@ -2,7 +2,8 @@ Class {
 	#name : #SearchBookTest,
 	#superclass : #TestCase,
 	#instVars : [
-		'searchObject'
+		'searchObject',
+		'library'
 	],
 	#category : #'DocumentationSupport-Search-Tests'
 }
@@ -45,6 +46,21 @@ SearchBookTest >> testIndexOfChapters [
 SearchBookTest >> testIndexOfSubstring [
 
 	self assert: (searchObject indexOfSubstring: 'test' in: 'test other test word') equals: #(1 12) asOrderedCollection
+	
+]
+
+{ #category : #tests }
+SearchBookTest >> testInitializeFirstOccurence [
+	| library |
+	library := DocLibrary new.
+	library addNewBook.
+	library books first	addNewChapter;
+	addNewChapter;
+	addNewChapter.
+	library books first chapters first source: 'this test is a test'.
+	searchObject search: 'test' in: library.
+	searchObject initializeFirstOccurence.
+	self assert: searchObject firstOccurence equals: #(1 1 1)asOrderedCollection
 	
 ]
 
