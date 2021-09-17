@@ -96,12 +96,12 @@ SearchBook >> initializeFirstOccurenceBook: aBook [
 
 { #category : #initialization }
 SearchBook >> initializeFirstOccurenceChapter: aChapter [
-		(firstOccurence isEmpty and: [ aChapter isNotEmpty ])
-			 ifTrue: [ 
-				actualIndex = 1.
-				firstOccurence add: actualBook;
-				add: actualChapter;
-				add: 1 ]
+	(firstOccurence isEmpty and: [ aChapter isNotEmpty ])
+		ifTrue: [ 
+			actualIndex = 1.
+			firstOccurence add: actualBook;
+			add: actualChapter;
+			add: 1 ]
 ]
 
 { #category : #initialization }
@@ -142,7 +142,7 @@ SearchBook >> nbOccurence [
 	^ nbOccurence
 ]
 
-{ #category : #accessing }
+{ #category : #actions }
 SearchBook >> next [
 	searchCache doWithIndex: [ :book :i | 
 		(i >= actualBook and: [ self nextBook: book ]) ifTrue: [ 
@@ -154,7 +154,7 @@ SearchBook >> next [
 	^ false
 ]
 
-{ #category : #initialization }
+{ #category : #actions }
 SearchBook >> nextBook: aBook [
 
 	aBook doWithIndex: [ :chapter :i | 
@@ -167,7 +167,7 @@ SearchBook >> nextBook: aBook [
 	^ false
 ]
 
-{ #category : #initialization }
+{ #category : #actions }
 SearchBook >> nextChapter: aChapter [
 		actualIndex < aChapter size ifTrue: [ 
 				actualIndex := actualIndex + 1.
@@ -175,7 +175,7 @@ SearchBook >> nextChapter: aChapter [
 		^ false
 ]
 
-{ #category : #accessing }
+{ #category : #actions }
 SearchBook >> prev [
 	| tmp |
 	searchCache keys reverseWithIndexDo: [ :key :i |
@@ -189,7 +189,7 @@ SearchBook >> prev [
 	^ false
 ]
 
-{ #category : #initialization }
+{ #category : #actions }
 SearchBook >> prevBook: aBook [
 
 	aBook keys reverseWithIndexDo: [ :key :i |
@@ -202,7 +202,7 @@ SearchBook >> prevBook: aBook [
 	^ false
 ]
 
-{ #category : #initialization }
+{ #category : #actions }
 SearchBook >> prevChapter: aChapter [
 		actualIndex > 1 ifTrue: [ 
 				actualIndex := actualIndex - 1.
