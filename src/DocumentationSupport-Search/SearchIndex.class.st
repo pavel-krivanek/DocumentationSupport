@@ -10,6 +10,16 @@ Class {
 }
 
 { #category : #accessing }
+SearchIndex class >> index: aBook in: aChapter at: anIndex [
+	| index |
+	index := self new.
+	index book: aBook;
+	chapter: aChapter;
+	index: anIndex.
+	^ index
+]
+
+{ #category : #accessing }
 SearchIndex >> book [
 	^ book
 ]
