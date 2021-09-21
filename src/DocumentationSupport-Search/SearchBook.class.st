@@ -64,7 +64,8 @@ SearchBook >> indexOfSubstring: aSubString in: aString [
 { #category : #initialization }
 SearchBook >> initialize [
 	super initialize.
-	nbOccurence := 0
+	nbOccurence := 0.
+	actualPosition := 0.
 ]
 
 { #category : #accessing }
