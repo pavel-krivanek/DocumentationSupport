@@ -26,7 +26,7 @@ SearchBook >> actualChapter [
 
 { #category : #accessing }
 SearchBook >> actualIndex [
-	^ actualIndex
+	^ searchCache at: actualPosition
 ]
 
 { #category : #accessing }
@@ -97,4 +97,9 @@ SearchBook >> search: aSubString in: aDocLibrary [
 	searchCache := OrderedCollection new.
 	self indexOfBooks: aSubString in: aDocLibrary.
 	actualPosition := 1
+]
+
+{ #category : #accessing }
+SearchBook >> searchCache [
+	^ searchCache
 ]
