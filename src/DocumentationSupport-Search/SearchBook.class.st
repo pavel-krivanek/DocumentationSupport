@@ -36,34 +36,28 @@ SearchBook >> firstOccurence [
 
 { #category : #search }
 SearchBook >> indexOfBooks: aSubString in: aDocLibrary [
-  | index |
 
-  index := OrderedDictionary new.
   aDocLibrary books do: [ :book |
-		index at: book key put: (self indexOfChapters: aSubString in: book) ].
-  ^ index
+		actualBook := book key.
+		self indexOfChapters: aSubString in: book ]
 ]
 
 { #category : #search }
 SearchBook >> indexOfChapters: aSubString in: aDocBook [
-  | index |
 
-  index := OrderedDictionary new.
   aDocBook chapters do: [ :chapter |
-		index at: chapter key put: (self indexOfSubstring: aSubString in: chapter source) ].
-  ^ index
+		actualChapter := chapter key.
+		self indexOfSubstring: aSubString in: chapter source ]
 ]
 
 { #category : #search }
 SearchBook >> indexOfSubstring: aSubString in: aString [
   | index i |
-
-  index := OrderedCollection new.
   i := 0.
   [ (i := aString findString: aSubString startingAt: i + 1) > 0 ] whileTrue: [
-    index addLast: i.
-	 nbOccurence := nbOccurence + 1 ].
-  ^ index
+    index := SearchIndex index: actualBook in: actualChapter at: i.
+	 searchCache add: index. 
+	 nbOccurence := nbOccurence + 1 ]
 ]
 
 { #category : #initialization }
@@ -125,10 +119,7 @@ SearchBook >> prev [
 { #category : #search }
 SearchBook >> search: aSubString in: aDocLibrary [
 	nbOccurence = 0.
-	searchCache := self indexOfBooks: aSubString in: aDocLibrary.
-	self initializeFirstOccurence.
-	self initializeLastOccurence.
-	actualBook := firstOccurence first.
-	actualChapter := firstOccurence second.
-	actualIndex := firstOccurence third
+	searchCache := OrderedCollection new.
+	self indexOfBooks: aSubString in: aDocLibrary.
+	actualPosition := 1
 ]
