@@ -19,6 +19,9 @@ Class {
 		'toolbar',
 		'treeMenu'
 	],
+	#classInstVars : [
+		'searchInput'
+	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }
 
@@ -28,6 +31,7 @@ DocLibraryPresenter class >> defaultSpec [
 	^ SpBoxLayout newVertical
 		spacing: 3;
 		add: #toolbar expand: false;
+		add: self searchBar withConstraints: [  :constraints | constraints height: 20 ];		
 		add: (SpBoxLayout newHorizontal
 			spacing: 10;
 			add: #tree withConstraints: [  :constraints | constraints width: 300 ];
@@ -52,6 +56,25 @@ DocLibraryPresenter class >> open: libraryName [
 		DocLibrary loadFromRepositories ].
 	^ (self on: (DocLibrary named: libraryName)) openWithSpec.
 
+]
+
+{ #category : #specs }
+DocLibraryPresenter class >> searchBar [
+	searchInput := (SpTextInputFieldPresenter new placeholder: 'Enter you search').
+	^ SpBoxLayout newHorizontal
+		  add: searchInput;
+		  add: (SpButtonPresenter new
+				   label: 'Search';
+				   action: [ nil ])
+		  height: 20;
+		  add: (SpButtonPresenter new
+				   label: 'Prev';
+				   action: [ nil ])
+		  height: 20;
+		  add: (SpButtonPresenter new
+				   label: 'Next';
+				   action: [ nil ])
+		  height: 20
 ]
 
 { #category : #actions }
