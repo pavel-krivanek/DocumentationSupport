@@ -81,42 +81,14 @@ SearchBook >> nbOccurence [
 
 { #category : #actions }
 SearchBook >> next [
-	| collection |
-	collection := OrderedCollection new.
-	collection add: actualBook;
-	add: actualChapter;
-	add: actualIndex.
-	collection = lastOccurence ifFalse: [ 
-		searchCache doWithIndex: [ :book :i | 
-		(i >= actualBook and: [ self nextBook: book ]) ifTrue: [ 
-			^ true ].
-		i >= actualBook ifTrue: [ 
-			actualBook := actualBook + 1.
-			actualChapter := 1.
-			actualIndex := 0 ] ].
-		 ].
-	
-	^ false
+	actualPosition < searchCache size 
+		ifTrue: [ actualPosition := actualPosition + 1 ]
 ]
 
 { #category : #actions }
 SearchBook >> prev [
-	| tmp collection |
-	collection := OrderedCollection new.
-	collection add: actualBook;
-	add: actualChapter;
-	add: actualIndex.
-	collection = firstOccurence ifFalse: [
-	searchCache keys reverseWithIndexDo: [ :key :i |
-		(i <= actualBook and: [ self prevBook: (searchCache at: key) ]) ifTrue: [ 
-			^ true ].
-		actualBook > 1 ifTrue: [ 
-			actualBook := actualBook - 1.
-			actualChapter := (searchCache at: (searchCache keys  at: actualBook)) size.
-			tmp := searchCache at: (searchCache keys at: actualBook).
-			actualIndex := ((tmp) at: (tmp keys at: actualChapter)) size ] ]
-	].
-	^ false
+	actualPosition > 1
+		ifTrue: [ actualPosition := actualPosition - 1 ]
 ]
 
 { #category : #search }
