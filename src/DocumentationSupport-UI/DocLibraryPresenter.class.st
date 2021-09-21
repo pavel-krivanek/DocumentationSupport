@@ -28,7 +28,6 @@ Class {
 
 { #category : #specs }
 DocLibraryPresenter class >> defaultSpec [
-
 	^ SpBoxLayout newVertical
 		spacing: 3;
 		add: #toolbar expand: false;
@@ -66,15 +65,25 @@ DocLibraryPresenter class >> searchBar [
 		  add: searchInput;
 		  add: (SpButtonPresenter new
 				   label: 'Search';
-				   action: [ nil ])
+				   action: [ | presenter |
+						presenter := searchInput owner.
+						self halt.
+						presenter docSearchObject search: searchInput text in: presenter library.
+						"hihlight the text" ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Prev';
-				   action: [ nil ])
+				   action: [ | presenter |
+						presenter := searchInput owner.
+						presenter docSearchObject prev.
+						"hihlight the text" ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Next';
-				   action: [ nil ])
+				   action: [ | presenter |
+						presenter := searchInput owner.
+						presenter docSearchObject next.
+						"hihlight the text" ])
 		  height: 20
 ]
 
