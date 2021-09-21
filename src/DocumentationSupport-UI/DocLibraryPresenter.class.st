@@ -17,7 +17,8 @@ Class {
 		'tree',
 		'editor',
 		'toolbar',
-		'treeMenu'
+		'treeMenu',
+		'docSearchObject'
 	],
 	#classInstVars : [
 		'searchInput'
@@ -126,6 +127,16 @@ DocLibraryPresenter >> delete: anObject [
 
 ]
 
+{ #category : #accessing }
+DocLibraryPresenter >> docSearchObject [
+	^ docSearchObject
+]
+
+{ #category : #accessing }
+DocLibraryPresenter >> docSearchObject: aDocSearchObject [
+	docSearchObject := aDocSearchObject
+]
+
 { #category : #actions }
 DocLibraryPresenter >> export [ 
 
@@ -138,7 +149,7 @@ DocLibraryPresenter >> export [
 DocLibraryPresenter >> initializePresenters [ 
 
 	super initializePresenters.
-		
+	docSearchObject := DocSearchBook new.
 	tree := self newTree.
 	editor := self instantiate: DocPanePresenter.
 	editor parent: self.
