@@ -2,7 +2,7 @@
 I search the index of all substring's occurence in a `DocLibrary` that I register in my searchCache
 "
 Class {
-	#name : #SearchBook,
+	#name : #DocSearchBook,
 	#superclass : #Object,
 	#instVars : [
 		'searchCache',
@@ -15,28 +15,28 @@ Class {
 }
 
 { #category : #accessing }
-SearchBook >> actualBook [
+DocSearchBook >> actualBook [
 	^ actualBook
 ]
 
 { #category : #accessing }
-SearchBook >> actualChapter [
+DocSearchBook >> actualChapter [
 	^ actualChapter
 ]
 
 { #category : #accessing }
-SearchBook >> actualIndex [
+DocSearchBook >> actualIndex [
 	^ searchCache at: actualPosition
 ]
 
 { #category : #accessing }
-SearchBook >> firstOccurence [
+DocSearchBook >> firstOccurence [
 	^ searchCache first
-		ifAbsent: [ ^ SearchIndex new ]
+		ifAbsent: [ ^ DocSearchIndex new ]
 ]
 
 { #category : #search }
-SearchBook >> indexOfBooks: aSubString in: aDocLibrary [
+DocSearchBook >> indexOfBooks: aSubString in: aDocLibrary [
 
   aDocLibrary books do: [ :book |
 		actualBook := book key.
@@ -44,7 +44,7 @@ SearchBook >> indexOfBooks: aSubString in: aDocLibrary [
 ]
 
 { #category : #search }
-SearchBook >> indexOfChapters: aSubString in: aDocBook [
+DocSearchBook >> indexOfChapters: aSubString in: aDocBook [
 
   aDocBook chapters do: [ :chapter |
 		actualChapter := chapter key.
@@ -52,47 +52,47 @@ SearchBook >> indexOfChapters: aSubString in: aDocBook [
 ]
 
 { #category : #search }
-SearchBook >> indexOfSubstring: aSubString in: aString [
+DocSearchBook >> indexOfSubstring: aSubString in: aString [
   | index i |
   i := 0.
   [ (i := aString findString: aSubString startingAt: i + 1) > 0 ] whileTrue: [
-    index := SearchIndex index: actualBook in: actualChapter at: i.
+    index := DocSearchIndex index: actualBook in: actualChapter at: i.
 	 searchCache add: index. 
 	 nbOccurence := nbOccurence + 1 ]
 ]
 
 { #category : #initialization }
-SearchBook >> initialize [
+DocSearchBook >> initialize [
 	super initialize.
 	nbOccurence := 0.
 	actualPosition := 0.
 ]
 
 { #category : #accessing }
-SearchBook >> lastOccurence [
+DocSearchBook >> lastOccurence [
 	^ searchCache last 
-		ifAbsent: [ ^ SearchIndex new ]
+		ifAbsent: [ ^ DocSearchIndex new ]
 ]
 
 { #category : #accessing }
-SearchBook >> nbOccurence [
+DocSearchBook >> nbOccurence [
 	^ nbOccurence
 ]
 
 { #category : #actions }
-SearchBook >> next [
+DocSearchBook >> next [
 	actualPosition < searchCache size 
 		ifTrue: [ actualPosition := actualPosition + 1 ]
 ]
 
 { #category : #actions }
-SearchBook >> prev [
+DocSearchBook >> prev [
 	actualPosition > 1
 		ifTrue: [ actualPosition := actualPosition - 1 ]
 ]
 
 { #category : #search }
-SearchBook >> search: aSubString in: aDocLibrary [
+DocSearchBook >> search: aSubString in: aDocLibrary [
 	nbOccurence = 0.
 	searchCache := OrderedCollection new.
 	self indexOfBooks: aSubString in: aDocLibrary.
@@ -100,6 +100,6 @@ SearchBook >> search: aSubString in: aDocLibrary [
 ]
 
 { #category : #accessing }
-SearchBook >> searchCache [
+DocSearchBook >> searchCache [
 	^ searchCache
 ]

@@ -1,8 +1,8 @@
 "
-I'm a SearchIndex which store the book, the chapter and the index of an occurrence.
+I'm a DocSearchIndex which store the book, the chapter and the index of an occurrence.
 "
 Class {
-	#name : #SearchIndex,
+	#name : #DocSearchIndex,
 	#superclass : #Object,
 	#instVars : [
 		'book',
@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : #accessing }
-SearchIndex class >> index: aBook in: aChapter at: anIndex [
+DocSearchIndex class >> index: aBook in: aChapter at: anIndex [
 	| index |
 	index := self new.
 	index book: aBook;
@@ -23,36 +23,36 @@ SearchIndex class >> index: aBook in: aChapter at: anIndex [
 ]
 
 { #category : #accessing }
-SearchIndex >> book [
+DocSearchIndex >> book [
 	^ book
 ]
 
 { #category : #accessing }
-SearchIndex >> book: aBook [
+DocSearchIndex >> book: aBook [
 	book := aBook
 ]
 
 { #category : #accessing }
-SearchIndex >> chapter [
+DocSearchIndex >> chapter [
 	^ chapter
 ]
 
 { #category : #accessing }
-SearchIndex >> chapter: aChapter [
+DocSearchIndex >> chapter: aChapter [
 	chapter := aChapter
 ]
 
 { #category : #accessing }
-SearchIndex >> index [
+DocSearchIndex >> index [
 	^ index
 ]
 
 { #category : #accessing }
-SearchIndex >> index: anIndex [
+DocSearchIndex >> index: anIndex [
 	index := anIndex
 ]
 
 { #category : #testing }
-SearchIndex >> isEmpty [
+DocSearchIndex >> isEmpty [
 	^ book isNil and: [ chapter isNil and: [ index isNil ] ]
 ]

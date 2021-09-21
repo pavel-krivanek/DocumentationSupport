@@ -50,7 +50,7 @@ DocLibraryPresenter class >> open: libraryName [
 
 	DocLibrary libraries ifEmpty: [ 
 		DocLibrary loadFromRepositories ].
-	(self on: (DocLibrary named: libraryName)) openWithSpec.
+	^ (self on: (DocLibrary named: libraryName)) openWithSpec.
 
 ]
 

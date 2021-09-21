@@ -1,5 +1,5 @@
 Class {
-	#name : #SearchBookTest,
+	#name : #DocSearchBookTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'searchObject',
@@ -9,9 +9,9 @@ Class {
 }
 
 { #category : #running }
-SearchBookTest >> setUp [
+DocSearchBookTest >> setUp [
 	super setUp.
-	searchObject := SearchBook new.
+	searchObject := DocSearchBook new.
 	library := DocLibrary new.
 	library addNewBook;
 	addNewBook.
@@ -26,14 +26,14 @@ SearchBookTest >> setUp [
 ]
 
 { #category : #tests }
-SearchBookTest >> testNbOccurence [
+DocSearchBookTest >> testNbOccurence [
 	searchObject search: 'test' in: library.
 	self assert: searchObject nbOccurence equals: 4
 	
 ]
 
 { #category : #tests }
-SearchBookTest >> testNext [
+DocSearchBookTest >> testNext [
 	searchObject search: 'test' in: library.
 	self assert: searchObject actualIndex index equals: 6.
 	searchObject next.
@@ -47,7 +47,7 @@ SearchBookTest >> testNext [
 ]
 
 { #category : #tests }
-SearchBookTest >> testPrev [
+DocSearchBookTest >> testPrev [
 	searchObject search: 'test' in: library.
 	searchObject next.
 	searchObject next.
@@ -63,7 +63,7 @@ SearchBookTest >> testPrev [
 ]
 
 { #category : #tests }
-SearchBookTest >> testSearchIn [
+DocSearchBookTest >> testSearchIn [
 	| dictionary |
 	dictionary := searchObject search: 'test' in: library.
 	self assert: dictionary searchCache first index equals: 6.	
