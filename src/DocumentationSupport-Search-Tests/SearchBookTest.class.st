@@ -27,34 +27,51 @@ SearchBookTest >> setUp [
 
 { #category : #tests }
 SearchBookTest >> testNbOccurence [
-	searchObject indexOfSubstring: 'test' in: 'test other test word'.
-	self assert: searchObject nbOccurence equals: 2
+	searchObject search: 'test' in: library.
+	self assert: searchObject nbOccurence equals: 4
 	
 ]
 
 { #category : #tests }
-SearchBookTest >> testNextBook [
+SearchBookTest >> testNext [
 	searchObject search: 'test' in: library.
-	self assert: searchObject next.
-	self assert: searchObject next.
-	self assert: searchObject next.
-	self assert: searchObject actualIndex equals: 1.
-	self assert: searchObject actualChapter equals: 2.
-	self assert: searchObject actualBook equals: 2
+	self assert: searchObject actualIndex index equals: 6.
+	searchObject next.
+	self assert: searchObject actualIndex index equals: 16.
+	searchObject next.
+	self assert: searchObject actualIndex index equals: 1.
+	searchObject next.
+	self assert: searchObject actualIndex index equals: 1.
+	
 	
 ]
 
 { #category : #tests }
-SearchBookTest >> testPrevBook [
+SearchBookTest >> testPrev [
 	searchObject search: 'test' in: library.
-	self assert: searchObject next.
-	self assert: searchObject next.
-	self assert: searchObject next.
-	self assert: searchObject prev.
-	self assert: searchObject prev.
-	self assert: searchObject prev.
-	self assert: searchObject actualIndex equals: 1.
-	self assert: searchObject actualChapter equals: 1.
-	self assert: searchObject actualBook equals: 1
+	searchObject next.
+	searchObject next.
+	searchObject next.
+	self assert: searchObject actualIndex index equals: 1.
+	searchObject prev.
+	self assert: searchObject actualIndex index equals: 1.
+	searchObject prev.
+	self assert: searchObject actualIndex index equals: 16.
+	searchObject prev.
+	self assert: searchObject actualIndex index equals: 6.
 	
+]
+
+{ #category : #tests }
+SearchBookTest >> testSearchIn [
+	| dictionary |
+	dictionary := searchObject search: 'test' in: library.
+	self assert: dictionary searchCache first index equals: 6.	
+	self assert: dictionary searchCache second index equals: 16.	
+	self assert: dictionary searchCache third index equals: 1.	
+	self assert: dictionary searchCache fourth index equals: 1.
+	
+	self assert: dictionary searchCache first book equals: dictionary searchCache second book.
+	self assert: dictionary searchCache second book equals: dictionary searchCache third book.
+	self assert: (dictionary searchCache first book = dictionary searchCache fourth book) not.		
 ]
