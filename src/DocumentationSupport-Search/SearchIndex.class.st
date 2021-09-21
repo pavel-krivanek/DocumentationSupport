@@ -1,3 +1,6 @@
+"
+I'm a SearchIndex which store the book, the chapter and the index of an occurrence.
+"
 Class {
 	#name : #SearchIndex,
 	#superclass : #Object,
