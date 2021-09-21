@@ -31,7 +31,8 @@ SearchBook >> actualIndex [
 
 { #category : #accessing }
 SearchBook >> firstOccurence [
-	^ firstOccurence
+	^ searchCache first
+		ifAbsent: [ ^ SearchIndex new ]
 ]
 
 { #category : #search }
@@ -68,7 +69,8 @@ SearchBook >> initialize [
 
 { #category : #accessing }
 SearchBook >> lastOccurence [
-	^ lastOccurence
+	^ searchCache last 
+		ifAbsent: [ ^ SearchIndex new ]
 ]
 
 { #category : #accessing }
