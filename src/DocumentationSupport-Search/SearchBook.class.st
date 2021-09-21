@@ -7,11 +7,9 @@ Class {
 	#instVars : [
 		'searchCache',
 		'nbOccurence',
-		'firstOccurence',
-		'lastOccurence',
 		'actualBook',
 		'actualChapter',
-		'actualIndex'
+		'actualPosition'
 	],
 	#category : #'DocumentationSupport-Search'
 }
@@ -74,64 +72,6 @@ SearchBook >> initialize [
 	nbOccurence := 0
 ]
 
-{ #category : #initialization }
-SearchBook >> initializeFirstOccurence [
-	firstOccurence := OrderedCollection new.
-	 searchCache ifNotEmpty: [ 
-		searchCache doWithIndex: [ :book :i |
-			actualBook := i.
-			self initializeFirstOccurenceBook: book. ] 
-		]
-]
-
-{ #category : #initialization }
-SearchBook >> initializeFirstOccurenceBook: aBook [
-	(firstOccurence isEmpty and: [ aBook isNotEmpty ]) ifTrue: [ 
-		aBook doWithIndex: [ :chapter :i | 
-			actualChapter := i.
-			self initializeFirstOccurenceChapter: chapter
-			]]
-			
-]
-
-{ #category : #initialization }
-SearchBook >> initializeFirstOccurenceChapter: aChapter [
-	(firstOccurence isEmpty and: [ aChapter isNotEmpty ])
-		ifTrue: [ 
-			actualIndex = 1.
-			firstOccurence add: actualBook;
-			add: actualChapter;
-			add: 1 ]
-]
-
-{ #category : #initialization }
-SearchBook >> initializeLastOccurence [
-	lastOccurence := OrderedCollection ofSize: 3.
-	 searchCache ifNotEmpty: [ 
-		searchCache doWithIndex: [ :book :i |
-			actualBook := i.
-			self initializeLastOccurenceBook: book. ] 
-		]
-]
-
-{ #category : #initialization }
-SearchBook >> initializeLastOccurenceBook: aBook [
-	aBook ifNotEmpty: [ 
-		aBook doWithIndex: [ :chapter :i | 
-			actualChapter := i.
-			self initializeLastOccurenceChapter: chapter
-			]]
-			
-]
-
-{ #category : #initialization }
-SearchBook >> initializeLastOccurenceChapter: aChapter [
-		aChapter ifNotEmpty: [ 
-				lastOccurence at: 1 put: actualBook;
-				at: 2 put: actualChapter;
-				at: 3 put: aChapter size ]
-]
-
 { #category : #accessing }
 SearchBook >> lastOccurence [
 	^ lastOccurence
@@ -163,27 +103,6 @@ SearchBook >> next [
 ]
 
 { #category : #actions }
-SearchBook >> nextBook: aBook [
-
-	aBook doWithIndex: [ :chapter :i | 
-		(i >= actualChapter and: [ self nextChapter: chapter ]) ifTrue: [ 
-			
-			^ true ].
-		i >= actualChapter ifTrue: [ 
-			actualChapter := actualChapter + 1.
-			actualIndex := 0 ] ].
-	^ false
-]
-
-{ #category : #actions }
-SearchBook >> nextChapter: aChapter [
-		actualIndex < aChapter size ifTrue: [ 
-				actualIndex := actualIndex + 1.
-				^ true ].
-		^ false
-]
-
-{ #category : #actions }
 SearchBook >> prev [
 	| tmp collection |
 	collection := OrderedCollection new.
@@ -201,27 +120,6 @@ SearchBook >> prev [
 			actualIndex := ((tmp) at: (tmp keys at: actualChapter)) size ] ]
 	].
 	^ false
-]
-
-{ #category : #actions }
-SearchBook >> prevBook: aBook [
-
-	aBook keys reverseWithIndexDo: [ :key :i |
-		(i <= actualChapter and: [ self prevChapter: (aBook at: key) ]) ifTrue: [ 
-			^ true ].
-		actualChapter > 1 ifTrue: [ 
-			actualChapter := actualChapter - 1.
-			actualIndex := (aBook at: ( aBook keys at: actualChapter)) size.
-			actualIndex > 0 ifTrue: [ ^ true ] ] ].
-	^ false
-]
-
-{ #category : #actions }
-SearchBook >> prevChapter: aChapter [
-		actualIndex > 1 ifTrue: [ 
-				actualIndex := actualIndex - 1.
-				^ true ].
-		^ false
 ]
 
 { #category : #search }

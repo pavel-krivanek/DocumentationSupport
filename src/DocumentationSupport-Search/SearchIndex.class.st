@@ -51,3 +51,8 @@ SearchIndex >> index [
 SearchIndex >> index: anIndex [
 	index := anIndex
 ]
+
+{ #category : #testing }
+SearchIndex >> isEmpty [
+	^ book isNil and: [ chapter isNil and: [ index isNil ] ]
+]
