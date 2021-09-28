@@ -70,24 +70,33 @@ DocLibraryPresenter class >> searchBar [
 						presenter := searchInput owner.
 						docSearch := presenter docSearchObject.
 						docSearch search: searchInput text in: presenter library.
-						presenter clickOnTree: docSearch actualIndex asClickPath. 
-						"hihlight the text" ])
+						DocRichTextComposer searchIndex: docSearch actualIndex index-1.
+						DocRichTextComposer searchSize: searchInput text size.
+						DocRichTextComposer searchHighLightEnableOn: true.
+						presenter clickOnTree: docSearch actualIndex asClickPath.
+						DocRichTextComposer searchHighLightEnableOn: false ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Prev';
 				   action: [
 						presenter := searchInput owner.
 						presenter docSearchObject prev.
-						presenter clickOnTree: docSearch actualIndex asClickPath 
-						"hihlight the text" ])
+						DocRichTextComposer searchIndex: docSearch actualIndex index-1.
+						DocRichTextComposer searchSize: searchInput text size.
+						DocRichTextComposer searchHighLightEnableOn: true.
+						presenter clickOnTree: docSearch actualIndex asClickPath.
+						DocRichTextComposer searchHighLightEnableOn: false ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Next';
 				   action: [
 						presenter := searchInput owner.
 						presenter docSearchObject next.
-						presenter clickOnTree: docSearch actualIndex asClickPath
-						"hihlight the text" ])
+						DocRichTextComposer searchIndex: docSearch actualIndex index-1.
+						DocRichTextComposer searchSize: searchInput text size.
+						DocRichTextComposer searchHighLightEnableOn: true.
+						presenter clickOnTree: docSearch actualIndex asClickPath.
+						DocRichTextComposer searchHighLightEnableOn: false ])
 		  height: 20
 ]
 
