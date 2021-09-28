@@ -22,6 +22,11 @@ DocSearchIndex class >> index: aBook in: aChapter at: anIndex [
 	^ index
 ]
 
+{ #category : #converting }
+DocSearchIndex >> asClickPath [
+	^ self createPath: chapter.
+]
+
 { #category : #accessing }
 DocSearchIndex >> book [
 	^ book
@@ -40,6 +45,16 @@ DocSearchIndex >> chapter [
 { #category : #accessing }
 DocSearchIndex >> chapter: aChapter [
 	chapter := aChapter
+]
+
+{ #category : #converting }
+DocSearchIndex >> createPath: aChapter [
+	| p |
+	p := aChapter parent.
+	p class = DocBook 
+		ifFalse: [ ^ (self createPath: p) add: (p children indexOf: aChapter);
+			yourself ] 
+		ifTrue: [ ^ OrderedCollection with: book with: (p children indexOf: aChapter) ] 
 ]
 
 { #category : #accessing }
