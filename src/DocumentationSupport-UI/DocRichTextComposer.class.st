@@ -4,8 +4,43 @@ Class {
 	#instVars : [
 		'executor'
 	],
+	#classInstVars : [
+		'searchIndex',
+		'searchSize',
+		'searchHighLightEnableOn'
+	],
 	#category : #'DocumentationSupport-UI-Support'
 }
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchHighLightEnableOn [
+	^ searchHighLightEnableOn ifNil: [ ^ false ]
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchHighLightEnableOn: aBoolean [
+	searchHighLightEnableOn := aBoolean
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchIndex [
+	^ searchIndex ifNil: [ ^ 1 ]
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchIndex: anInteger [
+	searchIndex := anInteger
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchSize [
+	^ searchSize ifNil: [ ^ 1 ]
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchSize: anInteger [
+	searchSize := anInteger.
+]
 
 { #category : #accessing }
 DocRichTextComposer >> executor [
@@ -17,6 +52,21 @@ DocRichTextComposer >> executor [
 DocRichTextComposer >> executor: anObject [
 
 	executor := anObject
+]
+
+{ #category : #'as yet unclassified' }
+DocRichTextComposer >> highlightText: aText [
+	self class searchHighLightEnableOn 
+		ifTrue: [ aText  addAttribute: (TextBackgroundColor new color: Color lightGray ) from: self class searchIndex to: self class searchIndex + self class searchSize - 1].
+	
+]
+
+{ #category : #visiting }
+DocRichTextComposer >> visit: aDocument [
+	| text |
+	text := super visit: aDocument.
+	self highlightText: text.
+	^ text.
 ]
 
 { #category : #visiting }
