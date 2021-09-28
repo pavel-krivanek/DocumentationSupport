@@ -122,6 +122,11 @@ DocLibraryPresenter >> aspect: anAspect changedFrom: anOrigin [
 	anAspect = #hierarchyNames ifTrue: [ self refreshTree ].
 ]
 
+{ #category : #'as yet unclassified' }
+DocLibraryPresenter >> clickOnTree: aCollection [
+	tree clickAtPath: aCollection
+]
+
 { #category : #actions }
 DocLibraryPresenter >> delete: anObject [
 
