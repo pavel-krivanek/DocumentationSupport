@@ -46,8 +46,8 @@ DocSearchBook >> indexOfBooks: aSubString in: aDocLibrary [
 { #category : #search }
 DocSearchBook >> indexOfChapters: aSubString in: aDocBook [
 
-  aDocBook chapters do: [ :chapter |
-		actualChapter := chapter key.
+  aDocBook chapters do: [ :chapter|
+		actualChapter := chapter.
 		self indexOfSubstring: aSubString in: chapter source ]
 ]
 
