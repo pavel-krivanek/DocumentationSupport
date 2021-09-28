@@ -38,8 +38,8 @@ DocSearchBook >> firstOccurence [
 { #category : #search }
 DocSearchBook >> indexOfBooks: aSubString in: aDocLibrary [
 
-  aDocLibrary books do: [ :book |
-		actualBook := book key.
+  aDocLibrary books doWithIndex: [ :book :i|
+		actualBook := i.
 		self indexOfChapters: aSubString in: book ]
 ]
 
