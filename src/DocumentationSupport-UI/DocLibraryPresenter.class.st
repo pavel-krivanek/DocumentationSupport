@@ -60,44 +60,45 @@ DocLibraryPresenter class >> open: libraryName [
 
 { #category : #specs }
 DocLibraryPresenter class >> searchBar [
+
 	| presenter docSearch |
-	searchInput := (SpTextInputFieldPresenter new placeholder: 'Enter you search').
+	searchInput := SpTextInputFieldPresenter new placeholder:
+		               'Enter you search'.
 	^ SpBoxLayout newHorizontal
 		  add: searchInput;
 		  add: (SpButtonPresenter new
 				   label: 'Search';
 				   action: [ 
-						presenter := searchInput owner.
-						docSearch := presenter docSearchObject.
-						docSearch search: searchInput text in: presenter library.
-						DocRichTextComposer searchIndex: docSearch actualIndex index-1.
-						DocRichTextComposer searchSize: searchInput text size.
-						DocRichTextComposer searchHighLightEnableOn: true.
-						presenter clickOnTree: docSearch actualIndex asClickPath.
-						DocRichTextComposer searchHighLightEnableOn: false ])
+					   presenter := searchInput owner.
+					   docSearch := presenter docSearchObject.
+					   docSearch search: searchInput text in: presenter library.
+					   DocRichTextComposer searchWord: searchInput text.
+					   self setHighlightAndClick: docSearch in: presenter ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Prev';
-				   action: [
-						presenter := searchInput owner.
-						presenter docSearchObject prev.
-						DocRichTextComposer searchIndex: docSearch actualIndex index-1.
-						DocRichTextComposer searchSize: searchInput text size.
-						DocRichTextComposer searchHighLightEnableOn: true.
-						presenter clickOnTree: docSearch actualIndex asClickPath.
-						DocRichTextComposer searchHighLightEnableOn: false ])
+				   action: [ 
+					   presenter := searchInput owner.
+					   presenter docSearchObject prev.
+					   self setHighlightAndClick: docSearch in: presenter ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Next';
-				   action: [
-						presenter := searchInput owner.
-						presenter docSearchObject next.
-						DocRichTextComposer searchIndex: docSearch actualIndex index-1.
-						DocRichTextComposer searchSize: searchInput text size.
-						DocRichTextComposer searchHighLightEnableOn: true.
-						presenter clickOnTree: docSearch actualIndex asClickPath.
-						DocRichTextComposer searchHighLightEnableOn: false ])
+				   action: [ 
+					   presenter := searchInput owner.
+					   presenter docSearchObject next.
+					   self setHighlightAndClick: docSearch in: presenter ])
 		  height: 20
+]
+
+{ #category : #specs }
+DocLibraryPresenter class >> setHighlightAndClick: docSearch in: presenter [
+
+	DocRichTextComposer searchIndex: docSearch actualOccurence index.
+	DocRichTextComposer searchSize: searchInput text size.
+	DocRichTextComposer searchHighLightEnableOn: true.
+	presenter clickOnTree: docSearch actualOccurence asClickPath.
+	^ DocRichTextComposer searchHighLightEnableOn: false
 ]
 
 { #category : #actions }
