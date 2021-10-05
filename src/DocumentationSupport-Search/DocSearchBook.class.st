@@ -9,7 +9,7 @@ Class {
 		'nbOccurence',
 		'actualBook',
 		'actualChapter',
-		'actualPosition'
+		'actualOccurence'
 	],
 	#category : #'DocumentationSupport-Search'
 }
@@ -25,8 +25,8 @@ DocSearchBook >> actualChapter [
 ]
 
 { #category : #accessing }
-DocSearchBook >> actualIndex [
-	^ searchCache at: actualPosition
+DocSearchBook >> actualOccurence [
+	^ searchCache at: actualOccurence
 ]
 
 { #category : #accessing }
@@ -65,7 +65,7 @@ DocSearchBook >> indexOfSubstring: aSubString in: aString [
 DocSearchBook >> initialize [
 	super initialize.
 	nbOccurence := 0.
-	actualPosition := 0.
+	actualOccurence := 0.
 ]
 
 { #category : #accessing }
@@ -81,14 +81,14 @@ DocSearchBook >> nbOccurence [
 
 { #category : #actions }
 DocSearchBook >> next [
-	actualPosition < searchCache size 
-		ifTrue: [ actualPosition := actualPosition + 1 ]
+	actualOccurence < searchCache size 
+		ifTrue: [ actualOccurence := actualOccurence + 1 ]
 ]
 
 { #category : #actions }
 DocSearchBook >> prev [
-	actualPosition > 1
-		ifTrue: [ actualPosition := actualPosition - 1 ]
+	actualOccurence > 1
+		ifTrue: [ actualOccurence := actualOccurence - 1 ]
 ]
 
 { #category : #search }
@@ -96,7 +96,7 @@ DocSearchBook >> search: aSubString in: aDocLibrary [
 	nbOccurence = 0.
 	searchCache := OrderedCollection new.
 	self indexOfBooks: aSubString in: aDocLibrary.
-	actualPosition := 1
+	actualOccurence := 1
 ]
 
 { #category : #accessing }
