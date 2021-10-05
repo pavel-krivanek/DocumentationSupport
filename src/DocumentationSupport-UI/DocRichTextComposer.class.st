@@ -65,11 +65,24 @@ DocRichTextComposer >> executor: anObject [
 	executor := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #highlighting }
 DocRichTextComposer >> highlightText: aText [
-	self class searchHighLightEnableOn 
-		ifTrue: [ aText  addAttribute: (TextBackgroundColor new color: Color lightGray ) from: self class searchIndex to: self class searchIndex + self class searchSize - 1].
+	| index |
+	index := self indexOfOccurence: aText.
+	(index > 0 and: [ self class searchHighLightEnableOn ]) ifTrue: [ 
+		aText  addAttribute: (TextBackgroundColor new color: Color lightGray ) from: index to: index + self class searchSize - 1
+		 ]
 	
+	
+]
+
+{ #category : #highlighting }
+DocRichTextComposer >> indexOfOccurence: aText [
+	| index |
+	index := 0.
+	1 to: self class searchIndex do: [ :occurence |
+		 index := aText findString: self class searchWord startingAt: index + 1 ].
+	^ index
 ]
 
 { #category : #visiting }
