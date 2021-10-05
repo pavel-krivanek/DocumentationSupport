@@ -6,7 +6,7 @@ A Microdown based Pharo tool for the in-image documentation
 ```smalltalk
 Metacello new
   baseline: 'DocumentationSupport';
-  repository: 'github://pavel-krivanek/DocumentationSupport:main/src';
+  repository: 'github://bauing-schmid/DocumentationSupport:main/src';
   load.
 ```
 
