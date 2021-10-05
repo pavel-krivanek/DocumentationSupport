@@ -7,7 +7,8 @@ Class {
 	#classInstVars : [
 		'searchIndex',
 		'searchSize',
-		'searchHighLightEnableOn'
+		'searchHighLightEnableOn',
+		'searchWord'
 	],
 	#category : #'DocumentationSupport-UI-Support'
 }
@@ -40,6 +41,16 @@ DocRichTextComposer class >> searchSize [
 { #category : #accessing }
 DocRichTextComposer class >> searchSize: anInteger [
 	searchSize := anInteger.
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchWord [
+	^ searchWord ifNil: [ ^ '' ]
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchWord: aString [
+	searchWord := aString.
 ]
 
 { #category : #accessing }
