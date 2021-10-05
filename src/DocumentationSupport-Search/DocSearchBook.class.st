@@ -53,10 +53,14 @@ DocSearchBook >> indexOfChapters: aSubString in: aDocBook [
 
 { #category : #search }
 DocSearchBook >> indexOfSubstring: aSubString in: aString [
-  | index i |
-  i := 0.
-  [ (i := aString findString: aSubString startingAt: i + 1) > 0 ] whileTrue: [
-    index := DocSearchIndex index: actualBook in: actualChapter at: i.
+  | index i occurence |
+  i := 1.
+  occurence := 1.
+
+  [ (i := aString findString: aSubString startingAt: i) > 0 ] whileTrue: [
+    index := DocSearchIndex index: actualBook in: actualChapter at: occurence.
+	 i := i + aSubString size.
+	 occurence := occurence + 1.
 	 searchCache add: index. 
 	 nbOccurence := nbOccurence + 1 ]
 ]
