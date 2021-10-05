@@ -35,13 +35,13 @@ DocSearchBookTest >> testNbOccurence [
 { #category : #tests }
 DocSearchBookTest >> testNext [
 	searchObject search: 'test' in: library.
-	self assert: searchObject actualIndex index equals: 6.
+	self assert: searchObject actualOccurence index equals: 1.
 	searchObject next.
-	self assert: searchObject actualIndex index equals: 16.
+	self assert: searchObject actualOccurence index equals: 2.
 	searchObject next.
-	self assert: searchObject actualIndex index equals: 1.
+	self assert: searchObject actualOccurence index equals: 1.
 	searchObject next.
-	self assert: searchObject actualIndex index equals: 1.
+	self assert: searchObject actualOccurence index equals: 1.
 	
 	
 ]
@@ -52,13 +52,13 @@ DocSearchBookTest >> testPrev [
 	searchObject next.
 	searchObject next.
 	searchObject next.
-	self assert: searchObject actualIndex index equals: 1.
+	self assert: searchObject actualOccurence index equals: 1.
 	searchObject prev.
-	self assert: searchObject actualIndex index equals: 1.
+	self assert: searchObject actualOccurence index equals: 1.
 	searchObject prev.
-	self assert: searchObject actualIndex index equals: 16.
+	self assert: searchObject actualOccurence index equals: 2.
 	searchObject prev.
-	self assert: searchObject actualIndex index equals: 6.
+	self assert: searchObject actualOccurence index equals: 1.
 	
 ]
 
@@ -66,8 +66,8 @@ DocSearchBookTest >> testPrev [
 DocSearchBookTest >> testSearchIn [
 	| dictionary |
 	dictionary := searchObject search: 'test' in: library.
-	self assert: dictionary searchCache first index equals: 6.	
-	self assert: dictionary searchCache second index equals: 16.	
+	self assert: dictionary searchCache first index equals: 1.	
+	self assert: dictionary searchCache second index equals: 2.	
 	self assert: dictionary searchCache third index equals: 1.	
 	self assert: dictionary searchCache fourth index equals: 1.
 	
