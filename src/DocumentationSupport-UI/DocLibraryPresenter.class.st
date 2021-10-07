@@ -17,17 +17,21 @@ Class {
 		'tree',
 		'editor',
 		'toolbar',
-		'treeMenu'
+		'treeMenu',
+		'docSearchObject'
+	],
+	#classInstVars : [
+		'searchInput'
 	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }
 
 { #category : #specs }
 DocLibraryPresenter class >> defaultSpec [
-
 	^ SpBoxLayout newVertical
 		spacing: 3;
 		add: #toolbar expand: false;
+		add: self searchBar withConstraints: [  :constraints | constraints height: 20 ];		
 		add: (SpBoxLayout newHorizontal
 			spacing: 10;
 			add: #tree withConstraints: [  :constraints | constraints width: 300 ];
@@ -50,8 +54,51 @@ DocLibraryPresenter class >> open: libraryName [
 
 	DocLibrary libraries ifEmpty: [ 
 		DocLibrary loadFromRepositories ].
-	(self on: (DocLibrary named: libraryName)) openWithSpec.
+	^ (self on: (DocLibrary named: libraryName)) openWithSpec.
 
+]
+
+{ #category : #specs }
+DocLibraryPresenter class >> searchBar [
+
+	| presenter docSearch |
+	searchInput := SpTextInputFieldPresenter new placeholder:
+		               'Enter you search'.
+	^ SpBoxLayout newHorizontal
+		  add: searchInput;
+		  add: (SpButtonPresenter new
+				   label: 'Search';
+				   action: [ 
+					   presenter := searchInput owner.
+					   docSearch := presenter docSearchObject.
+					   docSearch search: searchInput text in: presenter library.
+					   DocRichTextComposer searchWord: searchInput text.
+					   self setHighlightAndClick: docSearch in: presenter ])
+		  height: 20;
+		  add: (SpButtonPresenter new
+				   label: 'Prev';
+				   action: [ 
+					   presenter := searchInput owner.
+					   presenter docSearchObject prev.
+					   self setHighlightAndClick: docSearch in: presenter ])
+		  height: 20;
+		  add: (SpButtonPresenter new
+				   label: 'Next';
+				   action: [ 
+					   presenter := searchInput owner.
+					   presenter docSearchObject next.
+					   self setHighlightAndClick: docSearch in: presenter ])
+		  height: 20
+]
+
+{ #category : #specs }
+DocLibraryPresenter class >> setHighlightAndClick: docSearch in: presenter [
+
+	DocRichTextComposer searchIndex: docSearch actualOccurence index.
+	DocRichTextComposer searchSize: searchInput text size.
+	DocRichTextComposer searchHighLightEnableOn: true.
+	presenter clickOnTree: docSearch actualOccurence asClickPath.
+	^ DocRichTextComposer searchHighLightEnableOn: false
 ]
 
 { #category : #actions }
@@ -89,6 +136,11 @@ DocLibraryPresenter >> aspect: anAspect changedFrom: anOrigin [
 	anAspect = #hierarchyNames ifTrue: [ self refreshTree ].
 ]
 
+{ #category : #'as yet unclassified' }
+DocLibraryPresenter >> clickOnTree: aCollection [
+	tree clickAtPath: aCollection
+]
+
 { #category : #actions }
 DocLibraryPresenter >> delete: anObject [
 
@@ -103,6 +155,16 @@ DocLibraryPresenter >> delete: anObject [
 
 ]
 
+{ #category : #accessing }
+DocLibraryPresenter >> docSearchObject [
+	^ docSearchObject
+]
+
+{ #category : #accessing }
+DocLibraryPresenter >> docSearchObject: aDocSearchObject [
+	docSearchObject := aDocSearchObject
+]
+
 { #category : #actions }
 DocLibraryPresenter >> export [ 
 
@@ -115,7 +177,7 @@ DocLibraryPresenter >> export [
 DocLibraryPresenter >> initializePresenters [ 
 
 	super initializePresenters.
-		
+	docSearchObject := DocSearchBook new.
 	tree := self newTree.
 	editor := self instantiate: DocPanePresenter.
 	editor parent: self.

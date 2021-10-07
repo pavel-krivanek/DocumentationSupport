@@ -4,8 +4,54 @@ Class {
 	#instVars : [
 		'executor'
 	],
+	#classInstVars : [
+		'searchIndex',
+		'searchSize',
+		'searchHighLightEnableOn',
+		'searchWord'
+	],
 	#category : #'DocumentationSupport-UI-Support'
 }
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchHighLightEnableOn [
+	^ searchHighLightEnableOn ifNil: [ ^ false ]
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchHighLightEnableOn: aBoolean [
+	searchHighLightEnableOn := aBoolean
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchIndex [
+	^ searchIndex ifNil: [ ^ 1 ]
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchIndex: anInteger [
+	searchIndex := anInteger
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchSize [
+	^ searchSize ifNil: [ ^ 1 ]
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchSize: anInteger [
+	searchSize := anInteger.
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchWord [
+	^ searchWord ifNil: [ ^ '' ]
+]
+
+{ #category : #accessing }
+DocRichTextComposer class >> searchWord: aString [
+	searchWord := aString.
+]
 
 { #category : #accessing }
 DocRichTextComposer >> executor [
@@ -17,6 +63,34 @@ DocRichTextComposer >> executor [
 DocRichTextComposer >> executor: anObject [
 
 	executor := anObject
+]
+
+{ #category : #highlighting }
+DocRichTextComposer >> highlightText: aText [
+	| index |
+	index := self indexOfOccurence: aText.
+	(index > 0 and: [ self class searchHighLightEnableOn ]) ifTrue: [ 
+		aText  addAttribute: (TextBackgroundColor new color: Color lightGray ) from: index to: index + self class searchSize - 1
+		 ]
+	
+	
+]
+
+{ #category : #highlighting }
+DocRichTextComposer >> indexOfOccurence: aText [
+	| index |
+	index := 0.
+	1 to: self class searchIndex do: [ :occurence |
+		 index := aText findString: self class searchWord startingAt: index + 1 ].
+	^ index
+]
+
+{ #category : #visiting }
+DocRichTextComposer >> visit: aDocument [
+	| text |
+	text := super visit: aDocument.
+	self highlightText: text.
+	^ text.
 ]
 
 { #category : #visiting }
