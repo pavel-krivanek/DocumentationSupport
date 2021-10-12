@@ -105,13 +105,19 @@ DocLibraryPresenter class >> searchBar [
 	^ SpBoxLayout newHorizontal
 		  add: searchInput;
 		  add: (SpButtonPresenter new
+				   label: 'Search';
+				   action: [ occurence := 1.
+						self searchOccurenceWords: occurence displayOn: occurenceDisplay.
+				 		searchText := searchInput text ])
+		  height: 20;
+		  add: (SpButtonPresenter new
 				   label: 'Prev';
 				   action: [ occurence > 1 ifTrue: [ occurence := occurence  - 1.
 						self prevAction: occurence displayOn: occurenceDisplay ]])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Next';
-				   action: [ occurence <  searchInput owner docSearchObject nbOccurence nbOccurence ifTrue: [ occurence := occurence  + 1.
+				   action: [ occurence <  searchInput owner docSearchObject nbOccurence ifTrue: [ occurence := occurence  + 1.
 						self nextAction: occurence displayOn: occurenceDisplay ] ])
 		  height: 20;
 		  add: (occurenceDisplay text: '0/0')
