@@ -26,7 +26,7 @@ DocSearchBook >> actualChapter [
 
 { #category : #accessing }
 DocSearchBook >> actualOccurence [
-	^ searchCache at: actualOccurence
+	[^ searchCache at: actualOccurence] on: SubscriptOutOfBounds do: [ ^ nil ] 
 ]
 
 { #category : #accessing }

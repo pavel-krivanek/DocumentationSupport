@@ -93,8 +93,9 @@ DocLibraryPresenter class >> searchBar [
 
 { #category : #specs }
 DocLibraryPresenter class >> setHighlightAndClick: docSearch in: presenter [
-
-	DocRichTextComposer searchIndex: docSearch actualOccurence index.
+	| searchIndex |
+	searchIndex := docSearch actualOccurence ifNil: [ ^ nil ].
+	DocRichTextComposer searchIndex: docSearch  index.
 	DocRichTextComposer searchSize: searchInput text size.
 	DocRichTextComposer searchHighLightEnableOn: true.
 	presenter clickOnTree: docSearch actualOccurence asClickPath.
