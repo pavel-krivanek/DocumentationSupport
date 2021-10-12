@@ -97,7 +97,7 @@ DocSearchBook >> prev [
 
 { #category : #search }
 DocSearchBook >> search: aSubString in: aDocLibrary [
-	nbOccurence = 0.
+	nbOccurence := 0.
 	searchCache := OrderedCollection new.
 	self indexOfBooks: aSubString in: aDocLibrary.
 	actualOccurence := 1
