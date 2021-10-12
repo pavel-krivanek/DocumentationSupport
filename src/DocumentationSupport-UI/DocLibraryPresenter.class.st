@@ -120,7 +120,8 @@ DocLibraryPresenter class >> searchBar [
 				   action: [ occurence <  searchInput owner docSearchObject nbOccurence ifTrue: [ occurence := occurence  + 1.
 						self nextAction: occurence displayOn: occurenceDisplay ] ])
 		  height: 20;
-		  add: (occurenceDisplay text: '0/0')
+		  add: (SpBoxLayout newHorizontal
+				add: (occurenceDisplay text: '0/0') width: 30 )""
 ]
 
 { #category : #specs }
