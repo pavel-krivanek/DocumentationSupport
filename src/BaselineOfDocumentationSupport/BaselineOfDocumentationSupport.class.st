@@ -34,6 +34,8 @@ BaselineOfDocumentationSupport >> baseline: spec [
 		spec 
 			package: 'DocumentationSupport';
 			package: 'DocumentationSupport-UI';
+			package: 'DocumentationSupport-Search';
+			package: 'DocumentationSupport-Search-Tests';
 			yourself
 		].
 ]
