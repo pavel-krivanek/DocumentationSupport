@@ -39,6 +39,20 @@ DocLibraryPresenter class >> defaultSpec [
 			yourself) expand: true
 ]
 
+{ #category : #specs }
+DocLibraryPresenter class >> nextAction: occurence displayOn: occurenceDisplay [
+
+	| docSearch presenter |
+	presenter := searchInput owner.
+	docSearch := presenter docSearchObject.
+	presenter docSearchObject next.
+	self setHighlightAndClick: docSearch in: presenter.
+	^ occurenceDisplay text: occurence asString , '/' , docSearch nbOccurence asString.
+		
+	
+
+]
+
 { #category : #'instance creation' }
 DocLibraryPresenter class >> on: aLibrary [ 
 
@@ -59,34 +73,61 @@ DocLibraryPresenter class >> open: libraryName [
 ]
 
 { #category : #specs }
+DocLibraryPresenter class >> prevAction: occurence displayOn: occurenceDisplay [
+
+	| docSearch presenter |
+	presenter := searchInput owner.
+	docSearch := presenter docSearchObject.
+	presenter docSearchObject prev.
+	self setHighlightAndClick: docSearch in: presenter.
+	^ occurenceDisplay text: occurence asString , '/' , docSearch nbOccurence asString.
+		
+	
+
+]
+
+{ #category : #specs }
 DocLibraryPresenter class >> searchBar [
 
-	| presenter docSearch |
-	searchInput := SpTextInputFieldPresenter new placeholder: 'Enter you search'.
-	searchInput whenSubmitDo: [ 
-		presenter := searchInput owner.
-		docSearch := presenter docSearchObject.
-		docSearch search: searchInput text in: presenter library.
-		DocRichTextComposer searchWord: searchInput text.
-		self setHighlightAndClick: docSearch in: presenter ].
-	
+	| occurenceDisplay occurence searchText |
+	occurence := 1.
+	occurenceDisplay := SpTextInputFieldPresenter new beNotEditable.
+	searchInput := SpTextInputFieldPresenter new placeholder:
+		               'Enter you search'.
+	searchInput whenSubmitDo: [
+		(searchText = searchInput text and: [ occurence <  searchInput owner docSearchObject nbOccurence ])
+			ifTrue: [ occurence := occurence  + 1.
+						self nextAction: occurence displayOn: occurenceDisplay ]
+			ifFalse: [ occurence := 1.
+				 self searchOccurenceWords: occurence displayOn: occurenceDisplay.
+				 searchText := searchInput text] ].
+
 	^ SpBoxLayout newHorizontal
 		  add: searchInput;
 		  add: (SpButtonPresenter new
 				   label: 'Prev';
-				   action: [ 
-					   presenter := searchInput owner.
-					   presenter docSearchObject prev.
-					   self setHighlightAndClick: docSearch in: presenter ])
+				   action: [ occurence > 1 ifTrue: [ occurence := occurence  - 1.
+						self prevAction: occurence displayOn: occurenceDisplay ]])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Next';
-				   action: [ 
-					   presenter := searchInput owner.
-					   presenter docSearchObject next.
-					   self setHighlightAndClick: docSearch in: presenter ])
-		  height: 20.
-		
+				   action: [ occurence <  searchInput owner docSearchObject nbOccurence nbOccurence ifTrue: [ occurence := occurence  + 1.
+						self nextAction: occurence displayOn: occurenceDisplay ] ])
+		  height: 20;
+		  add: (occurenceDisplay text: '0/0')
+]
+
+{ #category : #specs }
+DocLibraryPresenter class >> searchOccurenceWords: occurence displayOn: occurenceDisplay [
+
+	| docSearch presenter |
+	presenter := searchInput owner.
+	docSearch := presenter docSearchObject.
+	docSearch search: searchInput text in: presenter library.
+	DocRichTextComposer searchWord: searchInput text.
+	self setHighlightAndClick: docSearch in: presenter.
+	^ occurenceDisplay text:
+		  occurence asString , '/' , docSearch nbOccurence asString
 ]
 
 { #category : #specs }
