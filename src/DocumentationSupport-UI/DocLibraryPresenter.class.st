@@ -62,19 +62,16 @@ DocLibraryPresenter class >> open: libraryName [
 DocLibraryPresenter class >> searchBar [
 
 	| presenter docSearch |
-	searchInput := SpTextInputFieldPresenter new placeholder:
-		               'Enter you search'.
+	searchInput := SpTextInputFieldPresenter new placeholder: 'Enter you search'.
+	searchInput whenSubmitDo: [ 
+		presenter := searchInput owner.
+		docSearch := presenter docSearchObject.
+		docSearch search: searchInput text in: presenter library.
+		DocRichTextComposer searchWord: searchInput text.
+		self setHighlightAndClick: docSearch in: presenter ].
+	
 	^ SpBoxLayout newHorizontal
 		  add: searchInput;
-		  add: (SpButtonPresenter new
-				   label: 'Search';
-				   action: [ 
-					   presenter := searchInput owner.
-					   docSearch := presenter docSearchObject.
-					   docSearch search: searchInput text in: presenter library.
-					   DocRichTextComposer searchWord: searchInput text.
-					   self setHighlightAndClick: docSearch in: presenter ])
-		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Prev';
 				   action: [ 
@@ -88,7 +85,8 @@ DocLibraryPresenter class >> searchBar [
 					   presenter := searchInput owner.
 					   presenter docSearchObject next.
 					   self setHighlightAndClick: docSearch in: presenter ])
-		  height: 20
+		  height: 20.
+		
 ]
 
 { #category : #specs }
