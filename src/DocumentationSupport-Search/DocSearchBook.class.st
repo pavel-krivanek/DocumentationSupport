@@ -95,6 +95,7 @@ DocSearchBook >> next [
 DocSearchBook >> prev [
 	actualOccurence > 1
 		ifTrue: [ actualOccurence := actualOccurence - 1 ]
+		ifFalse: [ actualOccurence := searchCache size ] 
 ]
 
 { #category : #search }
