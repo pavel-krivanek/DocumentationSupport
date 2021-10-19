@@ -137,6 +137,22 @@ DocLibraryPresenter class >> prevActionDisplayOn: occurenceDisplay [
 ]
 
 { #category : #actions }
+DocLibraryPresenter class >> prevChapterAction: occurenceCollection on: occurenceDisplay [
+
+	| indexOfActualOccurence |
+	indexOfActualOccurence := 0.
+	 indexChapter > 1 
+		ifTrue: [ 1  to: (indexChapter - 2) do: [ :i | indexOfActualOccurence := indexOfActualOccurence + (occurenceCollection at: i) ].
+					 indexChapter := indexChapter - 1 ]
+		ifFalse: [ indexChapter := occurenceCollection size.
+					  1  to: indexChapter - 1 do: [ :i | indexOfActualOccurence := indexOfActualOccurence + (occurenceCollection at: i) ]. ].
+	occurence := 1.
+	searchInput owner docSearchObject actualOccurence: indexOfActualOccurence.
+	self nextActionDisplayOn: occurenceDisplay
+	
+]
+
+{ #category : #actions }
 DocLibraryPresenter class >> searchAction: searchText on: occurenceDisplay [
 	occurence := 1.
 	self searchActionDisplayOn: occurenceDisplay.
