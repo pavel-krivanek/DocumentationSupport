@@ -201,6 +201,14 @@ DocLibraryPresenter class >> searchBar [
 				   label: 'Next';
 				   action: [ self nextAction: occurenceCollection on: occurenceDisplay ])
 		  height: 20;
+		  add: (SpButtonPresenter new
+				   label: 'Prev Chapter';
+				   action: [ self prevChapterAction: occurenceCollection on: occurenceDisplay ])
+		  height: 20;
+		  add: (SpButtonPresenter new
+				   label: 'Next Chapter';
+				   action: [ self nextChapterAction: occurenceCollection on: occurenceDisplay ])
+		  height: 20;
 		  add: (SpBoxLayout newHorizontal
 				   add: (occurenceDisplay text: '0/0')
 				   width: 275) 
