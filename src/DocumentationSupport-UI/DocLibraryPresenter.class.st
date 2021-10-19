@@ -72,6 +72,21 @@ DocLibraryPresenter class >> nextActionDisplayOn: occurenceDisplay [
 
 ]
 
+{ #category : #actions }
+DocLibraryPresenter class >> nextChapterAction: occurenceCollection on: occurenceDisplay [
+
+	 | indexOfActualOccurence |
+	indexOfActualOccurence := 0.
+	 1  to: indexChapter do: [ :i | indexOfActualOccurence := indexOfActualOccurence + (occurenceCollection at: i) ].
+	 indexChapter < occurenceCollection size 
+		ifTrue: [ searchInput owner docSearchObject actualOccurence: indexOfActualOccurence.
+					 indexChapter := indexChapter + 1 ]
+		ifFalse: [ indexChapter := 1 ].
+	occurence := 1.
+	self nextActionDisplayOn: occurenceDisplay
+	
+]
+
 { #category : #'instance creation' }
 DocLibraryPresenter class >> on: aLibrary [ 
 
