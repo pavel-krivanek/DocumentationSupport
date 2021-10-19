@@ -9,7 +9,8 @@ Class {
 		'nbOccurence',
 		'actualBook',
 		'actualChapter',
-		'actualOccurence'
+		'actualOccurence',
+		'numberOfOccurence'
 	],
 	#category : #'DocumentationSupport-Search'
 }
@@ -87,6 +88,7 @@ DocSearchBook >> nbOccurence [
 DocSearchBook >> next [
 	actualOccurence < searchCache size 
 		ifTrue: [ actualOccurence := actualOccurence + 1 ]
+		ifFalse: [ actualOccurence := 1 ]
 ]
 
 { #category : #actions }
