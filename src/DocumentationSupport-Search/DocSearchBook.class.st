@@ -48,8 +48,10 @@ DocSearchBook >> indexOfBooks: aSubString in: aDocLibrary [
 DocSearchBook >> indexOfChapters: aSubString in: aDocBook [
 
   aDocBook chapters do: [ :chapter|
+		numberOfOccurence := 0.
 		actualChapter := chapter.
-		self indexOfSubstring: aSubString in: chapter source ]
+		self indexOfSubstring: aSubString in: chapter source.
+		numberOfOccurence > 0 ifTrue: [ nbOccurence add: numberOfOccurence ]]
 ]
 
 { #category : #search }
@@ -63,7 +65,7 @@ DocSearchBook >> indexOfSubstring: aSubString in: aString [
 	 i := i + aSubString size.
 	 occurence := occurence + 1.
 	 searchCache add: index. 
-	 nbOccurence := nbOccurence + 1 ]
+	 numberOfOccurence := numberOfOccurence + 1 ]
 ]
 
 { #category : #initialization }
