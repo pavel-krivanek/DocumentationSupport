@@ -42,6 +42,23 @@ DocLibraryPresenter class >> defaultSpec [
 ]
 
 { #category : #actions }
+DocLibraryPresenter class >> nextAction: occurenceCollection on: occurenceDisplay [
+
+	"check if we must increment the indexChapter"
+	(occurence = (occurenceCollection at: indexChapter) and: [ indexChapter < occurenceCollection size ]) 
+		ifTrue: [ indexChapter := indexChapter + 1.
+					 occurence := 0 ].
+				
+	occurence < (occurenceCollection at: indexChapter)
+		"case where we can increment the occurence"
+		ifTrue: [ occurence := occurence + 1 ]
+		"else we return at the first occurrence"
+		ifFalse: [ indexChapter := 1.
+					  occurence := 1 ].
+	self nextActionDisplayOn: occurenceDisplay
+]
+
+{ #category : #actions }
 DocLibraryPresenter class >> nextActionDisplayOn: occurenceDisplay [
 
 	| docSearch presenter |
@@ -75,6 +92,22 @@ DocLibraryPresenter class >> open: libraryName [
 ]
 
 { #category : #actions }
+DocLibraryPresenter class >> prevAction: occurenceCollection on: occurenceDisplay [
+	occurence > 1
+		"case where we can decrement the occurence"
+		ifTrue: [ occurence := occurence - 1 ]
+		
+		ifFalse: [ indexChapter > 1 
+						"case where we can decrement the index chapter"
+					  	ifTrue: [ indexChapter := indexChapter - 1 ]
+						"else we return at the last occurence found"
+						ifFalse: [ indexChapter := occurenceCollection size].
+						occurence := occurenceCollection at: indexChapter ].
+	self prevActionDisplayOn: occurenceDisplay
+					   
+]
+
+{ #category : #actions }
 DocLibraryPresenter class >> prevActionDisplayOn: occurenceDisplay [
 
 	| docSearch presenter |
@@ -86,6 +119,12 @@ DocLibraryPresenter class >> prevActionDisplayOn: occurenceDisplay [
 		
 	
 
+]
+
+{ #category : #actions }
+DocLibraryPresenter class >> searchAction: searchText on: occurenceDisplay [
+	occurence := 1.
+	self searchActionDisplayOn: occurenceDisplay.
 ]
 
 { #category : #actions }
