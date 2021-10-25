@@ -28,7 +28,9 @@ DocSearchBookTest >> setUp [
 { #category : #tests }
 DocSearchBookTest >> testNbOccurence [
 	searchObject search: 'test' in: library.
-	self assert: searchObject nbOccurence equals: 4
+	self assert: (searchObject nbOccurence at: 1) equals: 2.
+	self assert: (searchObject nbOccurence at: 2) equals: 1.
+	self assert: (searchObject nbOccurence at: 3) equals: 1
 	
 ]
 
