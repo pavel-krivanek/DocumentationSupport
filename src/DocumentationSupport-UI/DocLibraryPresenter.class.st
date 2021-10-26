@@ -186,16 +186,24 @@ DocLibraryPresenter class >> searchActionDisplayOn: occurenceDisplay [
 { #category : #specs }
 DocLibraryPresenter class >> searchBar [
 
-	| occurenceDisplay searchText occurenceCollection |
-	occurenceCollection := searchInput owner docSearchObject nbOccurence.
+	| occurenceDisplay searchText occurenceCollection chapterDropList lastOccurenceByChapter |
+	searchInput := SpTextInputFieldPresenter new placeholder: 'Enter you search'.
+	occurenceCollection := OrderedCollection new.
+	chapterDropList := (SpDropListPresenter new
+				display: [ :chapter | (searchInput owner docSearchObject actualOccurence: chapter) actualOccurence chapter title ];
+				whenSelectedItemChangedDo: [ :chapterOccurence |  
+					indexChapter := lastOccurenceByChapter indexOf: chapterOccurence. 
+					self droplistChapterAction: occurenceCollection on: occurenceDisplay ]).
 	indexChapter := 1.
 	occurence := 1.
 	occurenceDisplay := SpTextInputFieldPresenter new beNotEditable.
-	searchInput := SpTextInputFieldPresenter new placeholder: 'Enter you search'.
 	searchInput whenSubmitDo: [ 
 		searchText = searchInput text
 			ifTrue: [ [self nextAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ]
 			ifFalse: [ [self searchAction: occurence  on: occurenceDisplay.
+						  occurenceCollection  := searchInput owner docSearchObject nbOccurence.
+						  lastOccurenceByChapter := self setLastOccurenceByChapter: occurenceCollection.
+						  chapterDropList items: lastOccurenceByChapter.
 						  searchText := searchInput text] on: SubscriptOutOfBounds  do: [ "nothing" ] ] ].
 
 	^ SpBoxLayout newHorizontal
@@ -221,9 +229,10 @@ DocLibraryPresenter class >> searchBar [
 				   label: 'Next Chapter';
 				   action: [ self nextChapterAction: occurenceCollection on: occurenceDisplay ])
 		  height: 20;
+		  add: chapterDropList;
 		  add: (SpBoxLayout newHorizontal
 				   add: (occurenceDisplay text: '0/0')
-				   width: 275) 
+				   width: 295) 
 			height: 20
 ]
 
@@ -236,6 +245,15 @@ DocLibraryPresenter class >> setHighlightAndClick: docSearch in: presenter [
 	DocRichTextComposer searchHighLightEnableOn: true.
 	presenter clickOnTree: docSearch actualOccurence asClickPath.
 	^ DocRichTextComposer searchHighLightEnableOn: false
+]
+
+{ #category : #initialization }
+DocLibraryPresenter class >> setLastOccurenceByChapter: occurenceCollection [
+	| lastChapterOccurence lastOccurenceByChapter |
+	lastOccurenceByChapter := OrderedCollection new.
+	lastChapterOccurence := 0.
+	occurenceCollection doWithIndex: [ :o :i |  lastChapterOccurence := lastChapterOccurence + o. lastOccurenceByChapter add: lastChapterOccurence ].
+	^ lastOccurenceByChapter
 ]
 
 { #category : #actions }
