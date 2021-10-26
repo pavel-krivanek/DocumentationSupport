@@ -42,6 +42,18 @@ DocLibraryPresenter class >> defaultSpec [
 ]
 
 { #category : #actions }
+DocLibraryPresenter class >> droplistChapterAction: occurenceCollection on: occurenceDisplay [
+
+	| indexOfActualOccurence |
+	indexOfActualOccurence := 0.
+	1  to: indexChapter - 1 do: [ :i | indexOfActualOccurence := indexOfActualOccurence + (occurenceCollection at: i) ].
+	occurence := 1.
+	searchInput owner docSearchObject actualOccurence: indexOfActualOccurence.
+	self nextActionDisplayOn: occurenceDisplay
+	
+]
+
+{ #category : #actions }
 DocLibraryPresenter class >> nextAction: occurenceCollection on: occurenceDisplay [
 
 	"check if we must increment the indexChapter"
