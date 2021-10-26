@@ -8,8 +8,17 @@ Class {
 		'source',
 		'nextChapter'
 	],
+	#classInstVars : [
+		'dictionaryOfChapters'
+	],
 	#category : #'DocumentationSupport-Model'
 }
+
+{ #category : #adding }
+DocChapter class >> addDictionaryOfChapters: aChapter [
+	dictionaryOfChapters ifNil: [ dictionaryOfChapters := OrderedDictionary new ].
+	dictionaryOfChapters at: aChapter key put: aChapter
+]
 
 { #category : #accessing }
 DocChapter >> aBookOrChapter [
@@ -162,7 +171,8 @@ DocChapter >> initialize [
 
 	super initialize.
 	
-	source := ''
+	source := ''.
+	self class addDictionaryOfChapters: self
 ]
 
 { #category : #testing }
