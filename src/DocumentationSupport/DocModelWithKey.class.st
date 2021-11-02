@@ -115,7 +115,7 @@ DocModelWithKey >> key [
 DocModelWithKey >> key: anObject [
 
 	key := anObject.
-	
+	self halt.
 	self makeDirty.
 	self aspectChanged: #title
 
