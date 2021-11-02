@@ -85,6 +85,24 @@ DocRichTextComposer >> indexOfOccurence: aText [
 	^ index
 ]
 
+{ #category : #testing }
+DocRichTextComposer >> isInclude: aLink [
+
+	^ (aLink url path segments at: 1) = 'include:'
+]
+
+{ #category : #testing }
+DocRichTextComposer >> isRef: aLink [
+
+	^ (aLink url path segments at: 1) = 'ref:'
+]
+
+{ #category : #testing }
+DocRichTextComposer >> isWeb: aLink [
+
+	^ (aLink url path segments at: 1) = 'http' or: [ (aLink url path segments at: 1) = 'https' ]
+]
+
 { #category : #visiting }
 DocRichTextComposer >> visit: aDocument [
 	| text |
@@ -107,34 +125,35 @@ DocRichTextComposer >> visitExternalLink: aLink [
 			[ attribute := TextAction new actOnClickBlock: [ self class browse: aLink urlEntry ] ].
 	url scheme = #ref
 		ifTrue:
-			[ attribute := TextAction new actOnClickBlock: [ executor openReference: aLink urlEntry ] ].
+			[ attribute := TextAction new actOnClickBlock: [ executor openReference: aLink urlEntry] ].
 	url scheme = #include
 		ifTrue:
 			[ attribute := TextAction new actOnClickBlock: [ executor openReference: aLink urlEntry ] ].
 	attribute
 		ifNotNil:
-			[ canvas includeAttribute: attribute in: [ self visitLink: aLink ] ]
+			[ canvas includeAttribute: attribute in: [ super visitLink: aLink ] ]
 		ifNil: [ self visitLink: aLink ]
+
 ]
 
 { #category : #visiting }
 DocRichTextComposer >> visitLink: aLink [
+
 	| attribute |
 	attribute := nil.
-	(#(http https) includes: aLink url scheme )
-		ifTrue: [ attribute := TextAction new actOnClickBlock: [ WebBrowser openOn: aLink url printString ]].
-		
-	aLink url scheme = #browse
-		ifTrue:
-			[ attribute := TextAction new actOnClickBlock: [ self class browse: aLink url ] ].
-	aLink url scheme = #ref
-		ifTrue:
-			[ attribute := TextAction new actOnClickBlock: [ executor openReference: aLink url ] ].
-	aLink url scheme = #include
-		ifTrue:
-			[ attribute := TextAction new actOnClickBlock: [ executor openReference: aLink url ] ].
+	(self isWeb: aLink) ifTrue: [ 
+		attribute := TextAction new
+							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ] ].
+	(self isRef: aLink) ifTrue: [ 
+		attribute := TextAction new
+			             actOnClickBlock: [ (DocChapter test at: '75d2wxrfmurei9q5bzs8hskrp')
+					             				  asPresenter openWithSpec ];
+			            							  yourself ].
+	(self isInclude: aLink) ifTrue: [ 
+		attribute := TextAction new
+							 actOnClickBlock: [ "to implement" ] ].
 	attribute
-		ifNotNil:
-			[ canvas includeAttribute: attribute in: [ super visitLink: aLink ] ]
+		ifNotNil: [ 
+		canvas includeAttribute: attribute in: [ super visitLink: aLink ] ]
 		ifNil: [ super visitLink: aLink ]
 ]
