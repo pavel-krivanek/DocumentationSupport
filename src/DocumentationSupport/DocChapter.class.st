@@ -177,7 +177,6 @@ DocChapter >> initialize [
 	super initialize.
 	
 	source := ''.
-	self class addDictionaryOfChapters: self
 ]
 
 { #category : #testing }
