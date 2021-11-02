@@ -21,8 +21,8 @@ DocChapter class >> addDictionaryOfChapters: aChapter [
 ]
 
 { #category : #tests }
-DocChapter class >> test [
-	^ dictionaryOfChapters
+DocChapter class >> chapterAt: aKey [
+	^ dictionaryOfChapters at: aKey
 ]
 
 { #category : #accessing }
