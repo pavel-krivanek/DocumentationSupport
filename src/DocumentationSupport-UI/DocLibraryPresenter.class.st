@@ -144,7 +144,7 @@ DocLibraryPresenter class >> searchActionDisplayOn: occurenceDisplay [
 DocLibraryPresenter class >> searchBar [
 
 	| occurenceDisplay searchText occurenceCollection |
-	occurenceCollection := searchInput owner docSearchObject nbOccurence.
+	occurenceCollection := OrderedCollection new.
 	indexChapter := 1.
 	occurence := 1.
 	occurenceDisplay := SpTextInputFieldPresenter new beNotEditable.
@@ -153,6 +153,7 @@ DocLibraryPresenter class >> searchBar [
 		searchText = searchInput text
 			ifTrue: [ [self nextAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ]
 			ifFalse: [ [self searchAction: occurence  on: occurenceDisplay.
+						  occurenceCollection := searchInput owner docSearchObject nbOccurence.
 						  searchText := searchInput text] on: SubscriptOutOfBounds  do: [ "nothing" ] ] ].
 
 	^ SpBoxLayout newHorizontal
