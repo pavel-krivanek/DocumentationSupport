@@ -20,6 +20,11 @@ DocChapter class >> addDictionaryOfChapters: aChapter [
 	dictionaryOfChapters at: aChapter key put: aChapter
 ]
 
+{ #category : #tests }
+DocChapter class >> test [
+	^ dictionaryOfChapters
+]
+
 { #category : #accessing }
 DocChapter >> aBookOrChapter [
 
