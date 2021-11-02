@@ -237,6 +237,7 @@ DocChapter >> printOn: aStream [
 DocChapter >> readMetadataFrom: aDictionary [
 
 	super readMetadataFrom: aDictionary.
+	DocChapter addDictionaryOfChapters: self.
 	aDictionary at: #nextChapter ifPresent: [ :value | nextChapter := DocParentReference key: value ].	
 	
 	

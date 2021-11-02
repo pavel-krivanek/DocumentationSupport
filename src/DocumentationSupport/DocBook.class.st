@@ -53,6 +53,7 @@ DocBook >> addNewChapter [
 	
 	newChapter := self addNewChapterWithoutNotification.
 	library aspectChanged: #chapters.
+	DocChapter addDictionaryOfChapters: newChapter.
 	^ newChapter
 ]
 
