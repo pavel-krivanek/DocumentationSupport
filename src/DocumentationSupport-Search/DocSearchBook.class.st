@@ -31,6 +31,11 @@ DocSearchBook >> actualOccurence [
 ]
 
 { #category : #accessing }
+DocSearchBook >> actualOccurence: anInteger [
+ actualOccurence := anInteger
+]
+
+{ #category : #accessing }
 DocSearchBook >> firstOccurence [
 	^ searchCache first
 		ifAbsent: [ ^ DocSearchIndex new ]
