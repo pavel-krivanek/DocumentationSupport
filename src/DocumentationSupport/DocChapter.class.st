@@ -25,6 +25,12 @@ DocChapter class >> dictionnaryOfChaptersAt: aKey [
 	^ dictionaryOfChapters at: aKey
 ]
 
+{ #category : #adding }
+DocChapter class >> removeDictionaryOfChapters: aChapter [
+	dictionaryOfChapters ifNotNil: [ dictionaryOfChapters removeKey: aChapter key ].
+
+]
+
 { #category : #accessing }
 DocChapter >> aBookOrChapter [
 
