@@ -101,6 +101,7 @@ DocBook >> children [
 { #category : #removing }
 DocBook >> delete [ 
 
+	self chapters do: [ :chapter | chapter ifNotNil: [ self deleteChapter: chapter ] ].
 	self library deleteBook: self.
 	self makeDirty.
 	library aspectChanged: #chapters.
@@ -117,6 +118,7 @@ DocBook >> deleteChapter: aChapter [
 	chapters remove: aChapter.
 	chapters do: [ :each | 
 		each chapterRemoved: aChapter ].
+	DocChapter removeDictionaryOfChapters: aChapter.
 	library aspectChanged: #chapters.
 
 	
