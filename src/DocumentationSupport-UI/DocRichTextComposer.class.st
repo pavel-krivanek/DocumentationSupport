@@ -146,7 +146,7 @@ DocRichTextComposer >> visitLink: aLink [
 							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ] ].
 	(self isRef: aLink) ifTrue: [ 
 		attribute := TextAction new
-			             actOnClickBlock: [ (DocChapter chapterAt: (aLink url path segments at: 2))
+			             actOnClickBlock: [ (DocChapter dictionnaryOfChaptersAt: (aLink url path segments at: 2))
 					             				  asPresenter openWithSpec ];
 			            							  yourself ].
 	(self isInclude: aLink) ifTrue: [ 
