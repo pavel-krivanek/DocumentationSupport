@@ -91,6 +91,7 @@ DocChapter >> addNewChapter [
 	newChapter := self book addNewChapterWithoutNotification. 
 	newChapter parent: self.
 	library aspectChanged: #chapters.
+	DocChapter addDictionaryOfChapters: newChapter.
 	^ newChapter
 ]
 
