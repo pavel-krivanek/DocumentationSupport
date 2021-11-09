@@ -141,19 +141,20 @@ DocRichTextComposer >> visitLink: aLink [
 
 	| attribute |
 	attribute := nil.
+	
 	(self isWeb: aLink) ifTrue: [ 
 		attribute := TextAction new
 							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ] ].
+						
 	(self isRef: aLink) ifTrue: [ 
 		attribute := TextAction new
-			             actOnClickBlock: [ (DocChapter dictionnaryOfChaptersAt: (aLink url path segments at: 2))
-					             				  asPresenter openWithSpec ];
-			            							  yourself ].
+			             actOnClickBlock: [ [(DocChapter dictionnaryOfChaptersAt: (aLink url path segments at: 2))
+					             				  asPresenter openWithSpec ;
+			            							  yourself] on: KeyNotFound do: [ "nothing" ]]].
 	(self isInclude: aLink) ifTrue: [ 
 		attribute := TextAction new
 							 actOnClickBlock: [ "to implement" ] ].
 	attribute
-		ifNotNil: [ 
-		canvas includeAttribute: attribute in: [ super visitLink: aLink ] ]
+		ifNotNil: [ canvas includeAttribute: attribute in: [ super visitLink: aLink ] ]
 		ifNil: [ super visitLink: aLink ]
 ]
