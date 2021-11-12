@@ -210,24 +210,24 @@ DocLibraryPresenter class >> searchBar [
 		  add: searchInput;
 		  add: (SpButtonPresenter new
 				   label: 'Search';
-				   action: [ self searchAction: occurence  on: occurenceDisplay.
-					   			 searchText := searchInput text ])
+				   action: [ [self searchAction: occurence  on: occurenceDisplay.
+					   			 searchText := searchInput text] on: SubscriptOutOfBounds  do: [ "nothing" ] ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Prev';
-				   action: [ self prevAction: occurenceCollection on: occurenceDisplay ])
+				   action: [ [self prevAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Next';
-				   action: [ self nextAction: occurenceCollection on: occurenceDisplay ])
+				   action: [ [self nextAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Prev Chapter';
-				   action: [ self prevChapterAction: occurenceCollection on: occurenceDisplay ])
+				   action: [ [self prevChapterAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				   label: 'Next Chapter';
-				   action: [ self nextChapterAction: occurenceCollection on: occurenceDisplay ])
+				   action: [ [self nextChapterAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ])
 		  height: 20;
 		  add: chapterDropList;
 		  add: (SpBoxLayout newHorizontal
