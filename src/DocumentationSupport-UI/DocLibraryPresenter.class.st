@@ -41,64 +41,6 @@ DocLibraryPresenter class >> defaultSpec [
 			yourself) expand: true
 ]
 
-{ #category : #actions }
-DocLibraryPresenter class >> droplistChapterAction: occurenceCollection on: occurenceDisplay [
-
-	| indexOfActualOccurence |
-	indexOfActualOccurence := 0.
-	1  to: indexChapter - 1 do: [ :i | indexOfActualOccurence := indexOfActualOccurence + (occurenceCollection at: i) ].
-	occurence := 1.
-	searchInput owner docSearchObject actualOccurence: indexOfActualOccurence.
-	self nextActionDisplayOn: occurenceDisplay
-	
-]
-
-{ #category : #actions }
-DocLibraryPresenter class >> nextAction: occurenceCollection on: occurenceDisplay [
-
-	"check if we must increment the indexChapter"
-	(occurence = (occurenceCollection at: indexChapter) and: [ indexChapter < occurenceCollection size ]) 
-		ifTrue: [ indexChapter := indexChapter + 1.
-					 occurence := 0 ].
-				
-	occurence < (occurenceCollection at: indexChapter)
-		"case where we can increment the occurence"
-		ifTrue: [ occurence := occurence + 1 ]
-		"else we return at the first occurrence"
-		ifFalse: [ indexChapter := 1.
-					  occurence := 1 ].
-	self nextActionDisplayOn: occurenceDisplay
-]
-
-{ #category : #actions }
-DocLibraryPresenter class >> nextActionDisplayOn: occurenceDisplay [
-
-	| docSearch presenter |
-	presenter := searchInput owner.
-	docSearch := presenter docSearchObject.
-	presenter docSearchObject next.
-	self setHighlightAndClick: docSearch in: presenter.
-	^ occurenceDisplay text: occurence asString , '/' , (docSearch nbOccurence at: indexChapter) asString , ' in ' , docSearch actualOccurence chapter title.
-		
-	
-
-]
-
-{ #category : #actions }
-DocLibraryPresenter class >> nextChapterAction: occurenceCollection on: occurenceDisplay [
-
-	 | indexOfActualOccurence |
-	indexOfActualOccurence := 0.
-	 1  to: indexChapter do: [ :i | indexOfActualOccurence := indexOfActualOccurence + (occurenceCollection at: i) ].
-	 indexChapter < occurenceCollection size 
-		ifTrue: [ searchInput owner docSearchObject actualOccurence: indexOfActualOccurence.
-					 indexChapter := indexChapter + 1 ]
-		ifFalse: [ indexChapter := 1 ].
-	occurence := 1.
-	self nextActionDisplayOn: occurenceDisplay
-	
-]
-
 { #category : #'instance creation' }
 DocLibraryPresenter class >> on: aLibrary [ 
 
@@ -119,68 +61,9 @@ DocLibraryPresenter class >> open: libraryName [
 ]
 
 { #category : #actions }
-DocLibraryPresenter class >> prevAction: occurenceCollection on: occurenceDisplay [
-	occurence > 1
-		"case where we can decrement the occurence"
-		ifTrue: [ occurence := occurence - 1 ]
-		
-		ifFalse: [ indexChapter > 1 
-						"case where we can decrement the index chapter"
-					  	ifTrue: [ indexChapter := indexChapter - 1 ]
-						"else we return at the last occurence found"
-						ifFalse: [ indexChapter := occurenceCollection size].
-						occurence := occurenceCollection at: indexChapter ].
-	self prevActionDisplayOn: occurenceDisplay
-					   
-]
-
-{ #category : #actions }
-DocLibraryPresenter class >> prevActionDisplayOn: occurenceDisplay [
-
-	| docSearch presenter |
-	presenter := searchInput owner.
-	docSearch := presenter docSearchObject.
-	presenter docSearchObject prev.
-	self setHighlightAndClick: docSearch in: presenter.
-	^ occurenceDisplay text: occurence asString , '/' , (docSearch nbOccurence at: indexChapter) asString , ' in ' , docSearch actualOccurence chapter title.
-		
-	
-
-]
-
-{ #category : #actions }
-DocLibraryPresenter class >> prevChapterAction: occurenceCollection on: occurenceDisplay [
-
-	| indexOfActualOccurence |
-	indexOfActualOccurence := 0.
-	 indexChapter > 1 
-		ifTrue: [ 1  to: (indexChapter - 2) do: [ :i | indexOfActualOccurence := indexOfActualOccurence + (occurenceCollection at: i) ].
-					 indexChapter := indexChapter - 1 ]
-		ifFalse: [ indexChapter := occurenceCollection size.
-					  1  to: indexChapter - 1 do: [ :i | indexOfActualOccurence := indexOfActualOccurence + (occurenceCollection at: i) ]. ].
-	occurence := 1.
-	searchInput owner docSearchObject actualOccurence: indexOfActualOccurence.
-	self nextActionDisplayOn: occurenceDisplay
-	
-]
-
-{ #category : #actions }
 DocLibraryPresenter class >> searchAction: searchText on: occurenceDisplay [
 	occurence := 1.
 	self searchActionDisplayOn: occurenceDisplay.
-]
-
-{ #category : #actions }
-DocLibraryPresenter class >> searchActionDisplayOn: occurenceDisplay [
-
-	| docSearch presenter |
-	presenter := searchInput owner.
-	docSearch := presenter docSearchObject.
-	docSearch search: searchInput text in: presenter library.
-	DocRichTextComposer searchWord: searchInput text.
-	self setHighlightAndClick: docSearch in: presenter.
-	^ occurenceDisplay text:
-		  occurence asString , '/' , (docSearch nbOccurence at: indexChapter) asString , ' in ' , docSearch actualOccurence chapter title
 ]
 
 { #category : #specs }
