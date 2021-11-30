@@ -209,6 +209,18 @@ DocChapter >> nextKeyOrNil [
 	^ nextChapter key
 ]
 
+{ #category : #accessing }
+DocChapter >> path [
+	"return the path to show the chapter in SpTreePresenter"
+	| col |
+	parent class = DocBook 
+		ifTrue: [ col := OrderedCollection new.
+					 col add: (parent library books indexOf: parent) ] 
+		ifFalse: [ col := parent path ].
+	col add: (parent children indexOf: self).
+	^ col
+]
+
 { #category : #printing }
 DocChapter >> printOn: aStream [
 
