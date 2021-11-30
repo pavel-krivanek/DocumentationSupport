@@ -61,62 +61,60 @@ DocLibraryPresenter class >> open: libraryName [
 ]
 
 { #category : #actions }
-DocLibraryPresenter class >> searchAction: searchText on: occurenceDisplay [
-	occurence := 1.
-	self searchActionDisplayOn: occurenceDisplay.
+DocLibraryPresenter class >> searchAction: searchPattern on: occurenceDisplay [
+	| chapters env |
+	"Create collection with all chapters of the library"
+	chapters := OrderedCollection new.
+	searchInput owner library books do: [ :book | 
+		chapters addAll: book chapters].
+	"Execute the search"
+	env:= DocSearchEnvironment on: (DocSearchRange new chaptersToSearch: chapters).
+	env search: searchPattern.
+	"Display the number of occurence"
+	occurenceDisplay text: searchPattern , ' is present in  ' , env resultEntries size asString , ' chapters'.
+	^ env
+
 ]
 
 { #category : #specs }
 DocLibraryPresenter class >> searchBar [
 
-	| occurenceDisplay searchText occurenceCollection chapterDropList lastOccurenceByChapter |
+	| occurenceDisplay searchPattern env position |
 	searchInput := SpTextInputFieldPresenter new placeholder: 'Enter you search'.
-	occurenceCollection := OrderedCollection new.
-	chapterDropList := (SpDropListPresenter new
-				display: [ :chapter | (searchInput owner docSearchObject actualOccurence: chapter) actualOccurence chapter title ];
-				whenSelectedItemChangedDo: [ :chapterOccurence |  
-					indexChapter := lastOccurenceByChapter indexOf: chapterOccurence. 
-					self droplistChapterAction: occurenceCollection on: occurenceDisplay ]).
-	indexChapter := 1.
-	occurence := 1.
 	occurenceDisplay := SpTextInputFieldPresenter new beNotEditable.
-	searchInput whenSubmitDo: [ 
-		searchText = searchInput text
-			ifTrue: [ [self nextAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ]
-			ifFalse: [ [self searchAction: occurence  on: occurenceDisplay.
-						  occurenceCollection  := searchInput owner docSearchObject nbOccurence.
-						  lastOccurenceByChapter := self setLastOccurenceByChapter: occurenceCollection.
-						  chapterDropList items: lastOccurenceByChapter.
-						  searchText := searchInput text] on: SubscriptOutOfBounds  do: [ "nothing" ] ] ].
+	searchInput whenSubmitDo: [ [ 
+			position := 1.
+			searchPattern := searchInput text.
+			env := self searchAction: searchPattern  on: occurenceDisplay.
+			"Display in presenter the first occurence"
+			searchInput owner clickAt: (env resultEntries at: position) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ].
 
 	^ SpBoxLayout newHorizontal
 		  add: searchInput;
+		  add: occurenceDisplay;
 		  add: (SpButtonPresenter new
 				   label: 'Search';
-				   action: [ [self searchAction: occurence  on: occurenceDisplay.
-					   			 searchText := searchInput text] on: SubscriptOutOfBounds  do: [ "nothing" ] ])
+				   action: [ [
+						position := 1.
+						searchPattern := searchInput text.
+						env := self searchAction: searchPattern  on: occurenceDisplay.
+						"Display in presenter the first occurence"
+						searchInput owner clickAt: (env resultEntries at: position) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ]  ])
 		  height: 20;
 		  add: (SpButtonPresenter new
-				   label: 'Prev';
-				   action: [ [self prevAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ])
+				     label: 'Next';
+				     action: [ 
+							env ifNotNil: [ [ 
+							position := env resultEntries size > position ifTrue: [ position + 1 ] ifFalse: [ 1 ].
+							searchInput owner clickAt: (env resultEntries at: position) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ])
 		  height: 20;
 		  add: (SpButtonPresenter new
-				   label: 'Next';
-				   action: [ [self nextAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ])
-		  height: 20;
-		  add: (SpButtonPresenter new
-				   label: 'Prev Chapter';
-				   action: [ [self prevChapterAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ])
-		  height: 20;
-		  add: (SpButtonPresenter new
-				   label: 'Next Chapter';
-				   action: [ [self nextChapterAction: occurenceCollection on: occurenceDisplay] on: SubscriptOutOfBounds  do: [ "nothing" ] ])
-		  height: 20;
-		  add: chapterDropList;
-		  add: (SpBoxLayout newHorizontal
-				   add: (occurenceDisplay text: '0/0')
-				   width: 295) 
-			height: 20
+				     label: 'Previous';
+				     action: [ 
+							env ifNotNil: [ [ 
+							position := 1 < position ifTrue: [ position - 1 ] ifFalse: [ env resultEntries size ].
+							searchInput owner clickAt: (env resultEntries at: position) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ])
+		  height: 20
 ]
 
 { #category : #specs }
@@ -174,6 +172,11 @@ DocLibraryPresenter >> aspect: anAspect changedFrom: anOrigin [
 	anAspect = #hierarchyNames ifTrue: [ self refreshTree ].
 ]
 
+{ #category : #actions }
+DocLibraryPresenter >> clickAt: path [
+	tree clickAtPath: path
+]
+
 { #category : #'as yet unclassified' }
 DocLibraryPresenter >> clickOnTree: aCollection [
 	tree clickAtPath: aCollection
@@ -215,7 +218,7 @@ DocLibraryPresenter >> export [
 DocLibraryPresenter >> initializePresenters [ 
 
 	super initializePresenters.
-	docSearchObject := DocSearchBook new.
+	docSearchObject := DocSearchEnvironment new.
 	tree := self newTree.
 	editor := self instantiate: DocPanePresenter.
 	editor parent: self.
