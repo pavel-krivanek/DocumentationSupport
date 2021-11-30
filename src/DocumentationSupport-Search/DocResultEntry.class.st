@@ -7,8 +7,7 @@ Class {
 	#instVars : [
 		'chapter',
 		'startPosition',
-		'endPosition',
-		'markupSize'
+		'endPosition'
 	],
 	#category : #'DocumentationSupport-Search'
 }
@@ -33,18 +32,6 @@ DocResultEntry >> endPosition [
 DocResultEntry >> endPosition: anObject [
 
 	endPosition := anObject
-]
-
-{ #category : #accessing }
-DocResultEntry >> markupSize [
-
-	^ markupSize
-]
-
-{ #category : #accessing }
-DocResultEntry >> markupSize: anObject [
-
-	markupSize := anObject
 ]
 
 { #category : #accessing }

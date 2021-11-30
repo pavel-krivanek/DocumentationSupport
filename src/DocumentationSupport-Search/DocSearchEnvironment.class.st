@@ -30,12 +30,6 @@ DocSearchEnvironment >> currentEntryIndex: anObject [
 	currentEntryIndex := anObject
 ]
 
-{ #category : #accessing }
-DocSearchEnvironment >> firstOccurence [
-	^ resultEntries first
-		ifAbsent: [ ^ DocResultEntry new ]
-]
-
 { #category : #initialization }
 DocSearchEnvironment >> initOn: aDocSearchRange [
 	searchRange := aDocSearchRange
@@ -46,12 +40,6 @@ DocSearchEnvironment >> initialize [
 	super initialize.
 	resultEntries := OrderedCollection new.
 	currentEntryIndex := 0
-]
-
-{ #category : #accessing }
-DocSearchEnvironment >> lastOccurence [
-	^ resultEntries last 
-		ifAbsent: [ ^ DocResultEntry new ]
 ]
 
 { #category : #accessing }
