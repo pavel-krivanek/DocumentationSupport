@@ -8,6 +8,11 @@ Class {
 	#category : #'DocumentationSupport-Search'
 }
 
+{ #category : #'instance creation' }
+DocSearchRange class >> chapters: aChaptersToSearch posInterval: aPosInterval [
+	^ self new initChapters: aChaptersToSearch posInterval: aPosInterval
+]
+
 { #category : #API }
 DocSearchRange >> chaptersDo: aBlock [
 	chaptersToSearch doWithIndex: [ :chapter :index | 
@@ -24,6 +29,12 @@ DocSearchRange >> chaptersToSearch [
 { #category : #accessing }
 DocSearchRange >> chaptersToSearch: aChapter [
 	chaptersToSearch := aChapter
+]
+
+{ #category : #initialize }
+DocSearchRange >> initChapters: aChapterToSearch posInterval: aPosInterval [
+	chaptersToSearch := aChapterToSearch.
+	posInterval := aPosInterval
 ]
 
 { #category : #accessing }

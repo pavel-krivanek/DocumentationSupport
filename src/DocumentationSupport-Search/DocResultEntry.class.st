@@ -12,6 +12,12 @@ Class {
 	#category : #'DocumentationSupport-Search'
 }
 
+{ #category : #initialization }
+DocResultEntry class >> chapter: aChapter startPosition: aStartPosition endPosition: anEndPosition [
+
+	^ self new initializeOnChapter: aChapter startPosition: aStartPosition endPosition: anEndPosition
+]
+
 { #category : #accessing }
 DocResultEntry >> chapter [
 	^ chapter
@@ -32,6 +38,14 @@ DocResultEntry >> endPosition [
 DocResultEntry >> endPosition: anObject [
 
 	endPosition := anObject
+]
+
+{ #category : #initialization }
+DocResultEntry >> initializeOnChapter: aChapter startPosition: aStartPosition endPosition: anEndPosition [
+
+	chapter := aChapter.
+	startPosition := aStartPosition.
+	endPosition := anEndPosition
 ]
 
 { #category : #accessing }

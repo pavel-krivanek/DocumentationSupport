@@ -38,6 +38,11 @@ DocSearchEnvironment >> initOn: aDocSearchRange [
 { #category : #initialization }
 DocSearchEnvironment >> initialize [
 	super initialize.
+	self resetResultEntries
+]
+
+{ #category : #private }
+DocSearchEnvironment >> resetResultEntries [
 	resultEntries := OrderedCollection new.
 	currentEntryIndex := 0
 ]
@@ -48,9 +53,10 @@ DocSearchEnvironment >> resultEntries [
 	^ resultEntries
 ]
 
-{ #category : #API }
+{ #category : #'API - search' }
 DocSearchEnvironment >> search: aString [
 	searchPattern := aString.
+	self resetResultEntries.
 	searchRange chaptersDo: [ :chapter :rangeInterval |
 		(self search: searchPattern in: chapter restrictedBy: rangeInterval) ifNotNil: [ :sre | 
 			resultEntries add: sre
@@ -62,16 +68,14 @@ DocSearchEnvironment >> search: aString [
 
 { #category : #private }
 DocSearchEnvironment >> search: aSearchPattern in: aChapter restrictedBy: aRangeInterval [
-	| chapterText startIndex resultEntry |
+	| chapterText startIndex |
 	chapterText := aChapter source.
 	startIndex := chapterText findString: aSearchPattern.
 	startIndex = 0 ifTrue: [ ^ nil ].
-	resultEntry := DocResultEntry new.
-	^ resultEntry chapter: aChapter;
-		startPosition: startIndex;
-		endPosition: startIndex + aSearchPattern size - 1;
-		markupSize: 0;
-		yourself.
+	^ DocResultEntry 
+		chapter: aChapter 
+		startPosition: startIndex 
+		endPosition: startIndex + aSearchPattern size - 1.
 ]
 
 { #category : #accessing }
