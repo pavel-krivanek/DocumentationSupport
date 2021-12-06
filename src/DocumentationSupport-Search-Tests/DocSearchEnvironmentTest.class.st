@@ -13,19 +13,67 @@ Class {
 DocSearchEnvironmentTest >> setUp [
 	super setUp.
 	library := DocLibrary new.
-	library addNewBook;
-	addNewBook.
+	self setUpLibrary.
+	
+	
+]
+
+{ #category : #running }
+DocSearchEnvironmentTest >> setUpChapterOfSecondBook [
+	| book |
+	book :=library books second. 
+	book chapters first title: 'chapitre 3'.
+	book chapters first source: 'this is a text for the chapter of the second book'
+]
+
+{ #category : #running }
+DocSearchEnvironmentTest >> setUpChapters [
 	library books first addNewChapter;
 	addNewChapter.
 	library books second addNewChapter.
-	library books first chapters first title: 'chapitre 1'.
-	library books first chapters second title: 'chapitre 2'.
-	library books second chapters first title: 'chapitre 3'.
-	library books first chapters first source: 'Eius populus ab incunabulis primis ad usque pueritiae tempus extremum, quod annis circumcluditur fere trecentis, circummurana pertulit bella, deinde aetatem ingressus adultam post multiplices bellorum aerumnas Alpes transcendit et fretum, in iuvenem erectus et virum ex omni plaga quam orbis ambit inmensus, reportavit laureas et triumphos, iamque vergens in senium et nomine solo aliquotiens vincens ad tranquilliora vitae discessit.'.
-	library books first chapters second source: 'Constituendi autem sunt qui sint in amicitia fines et quasi termini diligendi. De quibus tres video sententias ferri, quarum nullam probo, unam, ut eodem modo erga amicum adfecti simus, quo erga nosmet ipsos, alteram, ut nostra in amicos benevolentia illorum erga nos benevolentiae pariter aequaliterque respondeat, tertiam, ut, quanti quisque se ipse facit, tanti fiat ab amicis.'.
-	library books second chapters first source: 'Siquis enim militarium vel honoratorum aut nobilis inter suos rumore tenus esset insimulatus fovisse partes hostiles, iniecto onere catenarum in modum beluae trahebatur et inimico urgente vel nullo, quasi sufficiente hoc solo, quod nominatus esset aut delatus aut postulatus, capite vel multatione bonorum aut insulari solitudine damnabatur.'.
+	library books third addNewChapter;
+	addNewChapter.
+	self setUpChaptersOfFirstBook.
+	self setUpChapterOfSecondBook.
+	self setUpChaptersOfThirdBook
+]
+
+{ #category : #running }
+DocSearchEnvironmentTest >> setUpChaptersOfFirstBook [
+	| book |
+	book := library books first.
+	book chapters first title: 'chapitre 1'.
+	book chapters first source: 'This is a test for the DocSearchEnvironment'.
+	book chapters second title: 'chapitre 2'.
+	book chapters second source: 'this is a text for the second chapter of the first book'
+]
+
+{ #category : #running }
+DocSearchEnvironmentTest >> setUpChaptersOfThirdBook [
+	| book |
+	book := library books third.
+	book chapters first title: 'chapitre 4'.
+	book chapters first source: 'This is a test for the DocSearchEnvironment in the third book of this test'.
+	book chapters second title: 'chapitre 5'.
+	book chapters second source: 'this is a text for the tests of DocSearchEnvironment'
+]
+
+{ #category : #running }
+DocSearchEnvironmentTest >> setUpLibrary [
+	self setUpThreeBooks.
+	self setUpChapters.
 	chapters :=  library books flatCollect: [ :book | book chapters  ].
 	
+]
+
+{ #category : #running }
+DocSearchEnvironmentTest >> setUpThreeBooks [
+	library addNewBook;
+	addNewBook;
+	addNewBook.
+	library books first title: 'Books 1'.
+	library books second title: 'Books 2'.
+	library books third title: 'Books 3'
 	
 ]
 
@@ -33,22 +81,59 @@ DocSearchEnvironmentTest >> setUp [
 DocSearchEnvironmentTest >> testDocSearchEnvironmentInitialize [
 
 	docSearchEnv := DocSearchEnvironment on:
-		                (DocSearchRange chapters: chapters posInterval: (OrderedCollection with: 1 with: chapters first source size - 1)).
-	self assert: docSearchEnv ~= nil
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	self assert: docSearchEnv notNil
 ]
 
 { #category : #tests }
 DocSearchEnvironmentTest >> testDocSearchEnvironmentSearch [
 
 	docSearchEnv := DocSearchEnvironment on:
-		                (DocSearchRange chapters: chapters posInterval: (OrderedCollection with: 1 with: chapters first source size - 1)).
-	docSearchEnv search: 'lo'.
-	self assert: docSearchEnv resultEntries size equals: 5.
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'test'.
+	self assert: docSearchEnv resultEntries size equals: 4.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 1'.
-	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 1'.
-	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 2'.
-	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 3'.
-	self assert: docSearchEnv resultEntries fifth chapter title equals: 'chapitre 3'.
+	self assert: docSearchEnv resultEntries first startPosition equals: 11.
+	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries second startPosition equals: 11.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 71.
+	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 5'.
+	self assert: docSearchEnv resultEntries fourth startPosition equals: 24.
+	
+]
+
+{ #category : #tests }
+DocSearchEnvironmentTest >> testDocSearchEnvironmentSearchWithDocSearchRangeBeginAt14 [
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (14 to: chapters first lastPosition)).
+	docSearchEnv search: 'test'.
+	self assert: docSearchEnv resultEntries size equals: 3.
+	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries first startPosition equals: 11.
+	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries second startPosition equals: 71.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 5'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 24.
+	
+]
+
+{ #category : #tests }
+DocSearchEnvironmentTest >> testDocSearchEnvironmentSearchWithNotDocSearchRange [
+
+	docSearchEnv := DocSearchEnvironment new.
+	self should: [docSearchEnv search: 'dkhjsqokdjakl'] raise: MessageNotUnderstood.
+	
+
+]
+
+{ #category : #tests }
+DocSearchEnvironmentTest >> testDocSearchEnvironmentSearchWithNotOccurence [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'dkhjsqokdjakl'.
+	self assert: docSearchEnv resultEntries size equals: 0
 	
 ]
 
@@ -56,7 +141,7 @@ DocSearchEnvironmentTest >> testDocSearchEnvironmentSearch [
 DocSearchEnvironmentTest >> testDocSearchEnvironmentSearchWithNothing [
 
 	docSearchEnv := DocSearchEnvironment on:
-		                (DocSearchRange chapters: chapters posInterval: (OrderedCollection with: 1 with: chapters first source size - 1)).
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
 	docSearchEnv search: ''.
 	self assert: docSearchEnv resultEntries size equals: 0
 	
