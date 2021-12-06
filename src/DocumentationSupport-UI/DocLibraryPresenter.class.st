@@ -79,15 +79,14 @@ DocLibraryPresenter class >> searchAction: searchPattern on: occurenceDisplay [
 { #category : #specs }
 DocLibraryPresenter class >> searchBar [
 
-	| occurenceDisplay searchPattern env position |
+	| occurenceDisplay searchPattern env |
 	searchInput := SpTextInputFieldPresenter new placeholder: 'Enter you search'.
 	occurenceDisplay := SpTextInputFieldPresenter new beNotEditable.
 	searchInput whenSubmitDo: [ [ 
-			position := 1.
 			searchPattern := searchInput text.
 			env := self searchAction: searchPattern  on: occurenceDisplay.
 			"Display in presenter the first occurence"
-			searchInput owner clickAt: (env resultEntries at: position) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ].
+			searchInput owner clickAt: (env resultEntries at: env currentEntryIndex) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ].
 
 	^ SpBoxLayout newHorizontal
 		  add: searchInput;
@@ -95,25 +94,26 @@ DocLibraryPresenter class >> searchBar [
 		  add: (SpButtonPresenter new
 				   label: 'Search';
 				   action: [ [
-						position := 1.
 						searchPattern := searchInput text.
 						env := self searchAction: searchPattern  on: occurenceDisplay.
 						"Display in presenter the first occurence"
-						searchInput owner clickAt: (env resultEntries at: position) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ]  ])
+						searchInput owner clickAt: (env resultEntries at: env currentEntryIndex) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ]  ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				     label: 'Next';
 				     action: [ 
 							env ifNotNil: [ [ 
-							position := env resultEntries size > position ifTrue: [ position + 1 ] ifFalse: [ 1 ].
-							searchInput owner clickAt: (env resultEntries at: position) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ])
+							"increment or set at 1 the currentEntryIndex of env"
+							env resultEntries size > env currentEntryIndex ifTrue: [ env incCurrentEntryIndex] ifFalse: [ env currentEntryIndex: 1 ].
+							searchInput owner clickAt: (env resultEntries at: env currentEntryIndex) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				     label: 'Previous';
 				     action: [ 
 							env ifNotNil: [ [ 
-							position := 1 < position ifTrue: [ position - 1 ] ifFalse: [ env resultEntries size ].
-							searchInput owner clickAt: (env resultEntries at: position) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ])
+							"decrement or set at env resultEntries size the currentEntryIndex of env"
+							1 < env currentEntryIndex ifTrue: [ env decCurrentEntryIndex ] ifFalse: [ env currentEntryIndex: env resultEntries size ].
+							searchInput owner clickAt: (env resultEntries at: env currentEntryIndex) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ])
 		  height: 20
 ]
 

@@ -15,8 +15,9 @@ DocSearchRange class >> chapters: aChaptersToSearch posInterval: aPosInterval [
 
 { #category : #API }
 DocSearchRange >> chaptersDo: aBlock [
+	| |
 	chaptersToSearch doWithIndex: [ :chapter :index | 
-		aBlock value: chapter value: (index = 1 ifTrue: [ posInterval ]).
+		aBlock value: chapter value: (index = 1 ifTrue: [ posInterval ] ifFalse: [ 1 to: chapter source size ]).
 	]
 
 ]
@@ -43,6 +44,6 @@ DocSearchRange >> posInterval [
 ]
 
 { #category : #accessing }
-DocSearchRange >> posInterval: anInteger [
-	posInterval := anInteger
+DocSearchRange >> posInterval: anInterval [
+	posInterval := anInterval
 ]

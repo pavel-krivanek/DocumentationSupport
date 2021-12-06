@@ -105,6 +105,20 @@ DocChapter >> delete [
 
 ]
 
+{ #category : #'API - search' }
+DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition [
+
+	| foundPosition |
+
+	foundPosition := source findString: aSearchPattern startingAt: currentSearchPosition.
+	foundPosition = 0 ifTrue: [ ^ nil ].
+	
+	^ DocResultEntry 
+			chapter: self 
+			startPosition: foundPosition 
+			endPosition: foundPosition + aSearchPattern size - 1
+]
+
 { #category : #'serialization support' }
 DocChapter >> fixNextReferenceUsing: aDictionary [
 
@@ -169,6 +183,12 @@ DocChapter >> initialize [
 DocChapter >> isChapter [
 
 	^ true
+]
+
+{ #category : #accessing }
+DocChapter >> lastPosition [ 
+
+	^ source size - 1
 ]
 
 { #category : #serialization }
@@ -254,6 +274,12 @@ DocChapter >> readStonKey: aKey value: value [
 	aKey = #nextChapter ifTrue: [ nextChapter := DocParentReference key: value ].
 	
 	
+]
+
+{ #category : #'API - search' }
+DocChapter >> searchString: aSearchPattern restrictedBy: aRangeInterval [
+
+	^ source findString: aSearchPattern startingAt: aRangeInterval first.
 ]
 
 { #category : #serialization }
