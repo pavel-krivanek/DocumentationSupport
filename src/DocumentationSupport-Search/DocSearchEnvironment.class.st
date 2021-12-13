@@ -30,18 +30,6 @@ DocSearchEnvironment >> currentEntryIndex: anObject [
 	currentEntryIndex := anObject
 ]
 
-{ #category : #accessing }
-DocSearchEnvironment >> decCurrentEntryIndex [
-
-	currentEntryIndex := currentEntryIndex - 1
-]
-
-{ #category : #accessing }
-DocSearchEnvironment >> incCurrentEntryIndex [
-
-	currentEntryIndex := currentEntryIndex + 1
-]
-
 { #category : #initialization }
 DocSearchEnvironment >> initOn: aDocSearchRange [
 	searchRange := aDocSearchRange
@@ -51,6 +39,52 @@ DocSearchEnvironment >> initOn: aDocSearchRange [
 DocSearchEnvironment >> initialize [
 	super initialize.
 	self resetResultEntries
+]
+
+{ #category : #iteration }
+DocSearchEnvironment >> nextChapterInResultEntries [
+	| key index currentIndex |
+	currentIndex := currentEntryIndex.
+	index := currentEntryIndex + 1.
+	[ 	
+		currentIndex = currentEntryIndex and: [ index <= resultEntries size ]
+	] whileTrue: [ 
+		key := (resultEntries at: currentEntryIndex) chapter key.
+		currentEntryIndex := index = resultEntries size ifTrue: [ 1 ] ifFalse: [ currentEntryIndex ].
+	 	currentEntryIndex := (resultEntries at: index) chapter key ~= key ifTrue: [ index ] ifFalse: [ currentEntryIndex ].
+		index := index + 1
+	]
+]
+
+{ #category : #iteration }
+DocSearchEnvironment >> nextResultEntry [
+
+	currentEntryIndex := currentEntryIndex = resultEntries size
+		                     ifTrue: [ 1 ]
+		                     ifFalse: [ currentEntryIndex + 1 ]
+]
+
+{ #category : #iteration }
+DocSearchEnvironment >> prevChapterInResultEntries [
+	| key index currentIndex |
+	currentIndex := currentEntryIndex.
+	index := currentEntryIndex - 1.
+	[ 	
+		currentIndex = currentEntryIndex and: [ index >= 1 ]
+	] whileTrue: [ 
+		key := (resultEntries at: currentEntryIndex) chapter key.
+		currentEntryIndex := index = 1 ifTrue: [ resultEntries size ] ifFalse: [ currentEntryIndex ].
+	 	currentEntryIndex := (resultEntries at: index) chapter key ~= key ifTrue: [ index ] ifFalse: [ currentEntryIndex ].
+		index := index - 1
+	]
+]
+
+{ #category : #iteration }
+DocSearchEnvironment >> prevResultEntry [
+
+	currentEntryIndex := currentEntryIndex = 1
+		                     ifTrue: [ resultEntries size ]
+		                     ifFalse: [ currentEntryIndex - 1 ]
 ]
 
 { #category : #private }
@@ -65,55 +99,18 @@ DocSearchEnvironment >> resultEntries [
 	^ resultEntries
 ]
 
-{ #category : #private }
-DocSearchEnvironment >> search2: aSearchPattern in: aChapter restrictedBy: aRangeInterval [
-	| entryOrNil  docResultEntries currentSearchPosition |
-	
-	docResultEntries := OrderedCollection new.
-	currentSearchPosition := aRangeInterval first.
-	[ 
-		entryOrNil := aChapter findNextString: aSearchPattern startingAt: currentSearchPosition.
-		entryOrNil isNil 
-	] whileFalse: [ 
-		docResultEntries add: entryOrNil.
-		currentSearchPosition := entryOrNil endPosition + 1.
-	].
-	
-	^ docResultEntries
-	
-
-
-
-]
-
-{ #category : #private }
-DocSearchEnvironment >> search3: aSearchPattern in: aChapter restrictedBy: aRangeInterval [
-	| chapterText startIndex docResultEntryCol |
-	chapterText := aChapter source.
-	startIndex := chapterText findString: aSearchPattern startingAt: aRangeInterval first.
-	"startIndex := chapterText findString: aSearchPattern."
-	startIndex <= 0 ifTrue: [ ^ nil ].
-	docResultEntryCol := OrderedCollection new.
-	[startIndex ~= 0] whileTrue: [ 
-		docResultEntryCol add: (DocResultEntry 
-			chapter: aChapter 
-			startPosition: startIndex 
-			endPosition: startIndex + aSearchPattern size - 1).
-		startIndex := chapterText findString: aSearchPattern startingAt: startIndex + 1.
-		 ].
-	^ docResultEntryCol
-]
-
 { #category : #'API - search' }
 DocSearchEnvironment >> search: aString [
+	[ 
 	searchPattern := aString.
 	self resetResultEntries.
 	searchRange chaptersDo: [ :chapter :rangeInterval |
-		(self search2: searchPattern in: chapter restrictedBy: rangeInterval) ifNotNil: [ :sre | 
+		(self search: searchPattern in: chapter restrictedBy: rangeInterval) ifNotNil: [ :sre | 
 			resultEntries addAll: sre
 		]
 	].
 	currentEntryIndex := resultEntries ifNotEmpty: [ 1 ] ifEmpty: [ 0 ]
+	] on: MessageNotUnderstood do: [ Error signal: #environmentNotSet ]
 	
 ]
 
