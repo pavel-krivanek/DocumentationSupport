@@ -86,7 +86,7 @@ DocSearchEnvironmentTest >> testInitialize [
 ]
 
 { #category : #tests }
-DocSearchEnvironmentTest >> testNextChapterInCurrentEntryIndex [
+DocSearchEnvironmentTest >> testNextChapterInResultEntries [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
@@ -100,7 +100,7 @@ DocSearchEnvironmentTest >> testNextChapterInCurrentEntryIndex [
 ]
 
 { #category : #tests }
-DocSearchEnvironmentTest >> testNextChapterInCurrentEntryIndexWhenCurrentEntryIndexIsLast [
+DocSearchEnvironmentTest >> testNextChapterInResultEntriesWhenCurrentEntryIndexIsLast [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
@@ -113,7 +113,7 @@ DocSearchEnvironmentTest >> testNextChapterInCurrentEntryIndexWhenCurrentEntryIn
 ]
 
 { #category : #tests }
-DocSearchEnvironmentTest >> testNextChapterInCurrentEntryIndexWithNoResultEntry [
+DocSearchEnvironmentTest >> testNextChapterInResultEntriesWithNoResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
@@ -126,7 +126,7 @@ DocSearchEnvironmentTest >> testNextChapterInCurrentEntryIndexWithNoResultEntry 
 ]
 
 { #category : #tests }
-DocSearchEnvironmentTest >> testNextChapterInCurrentEntryIndexWithOneResultEntry [
+DocSearchEnvironmentTest >> testNextChapterInResultEntriesWithOneResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
@@ -139,19 +139,7 @@ DocSearchEnvironmentTest >> testNextChapterInCurrentEntryIndexWithOneResultEntry
 ]
 
 { #category : #tests }
-DocSearchEnvironmentTest >> testNextCurrentEntryIndex [
-
-	docSearchEnv := DocSearchEnvironment on:
-		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
-	self assert: docSearchEnv currentEntryIndex equals: 1.
-	docSearchEnv nextResultEntry.
-	self assert: docSearchEnv currentEntryIndex equals: 2
-	
-]
-
-{ #category : #tests }
-DocSearchEnvironmentTest >> testNextCurrentEntryIndexWhenCurrentEntryIndexIsLast [
+DocSearchEnvironmentTest >> testNextResultEntryWhenCurrentEntryIndexIsLast [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
@@ -164,7 +152,7 @@ DocSearchEnvironmentTest >> testNextCurrentEntryIndexWhenCurrentEntryIndexIsLast
 ]
 
 { #category : #tests }
-DocSearchEnvironmentTest >> testPrevCurrentEntryIndex [
+DocSearchEnvironmentTest >> testPrevResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
@@ -177,7 +165,7 @@ DocSearchEnvironmentTest >> testPrevCurrentEntryIndex [
 ]
 
 { #category : #tests }
-DocSearchEnvironmentTest >> testPrevCurrentEntryIndexWhenCurrentEntryIndexIsFirst [
+DocSearchEnvironmentTest >> testPrevResultEntryWhenCurrentEntryIndexIsFirst [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
