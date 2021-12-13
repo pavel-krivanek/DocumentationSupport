@@ -46,14 +46,21 @@ DocSearchEnvironment >> nextChapterInResultEntries [
 	| key index currentIndex |
 	currentIndex := currentEntryIndex.
 	index := currentEntryIndex + 1.
-	[ 	
-		currentIndex = currentEntryIndex and: [ index <= resultEntries size ]
-	] whileTrue: [ 
-		key := (resultEntries at: currentEntryIndex) chapter key.
-		currentEntryIndex := index = resultEntries size ifTrue: [ 1 ] ifFalse: [ currentEntryIndex ].
-	 	currentEntryIndex := (resultEntries at: index) chapter key ~= key ifTrue: [ index ] ifFalse: [ currentEntryIndex ].
-		index := index + 1
-	]
+	index <= resultEntries size 
+		ifTrue: [ 
+			[ 	
+				currentIndex = currentEntryIndex
+			] whileTrue: [ 
+				key := (resultEntries at: currentEntryIndex) chapter key.
+				currentEntryIndex := index = resultEntries size ifTrue: [ 1 ] ifFalse: [ currentEntryIndex ].
+	 			currentEntryIndex := (resultEntries at: index) chapter key ~= key ifTrue: [ index ] ifFalse: [ currentEntryIndex ].
+				index := index + 1
+			] 
+		] 
+		ifFalse: [ 
+			currentEntryIndex := resultEntries ifEmpty: [ 0 ] ifNotEmpty: [ 1 ]
+		]
+	
 ]
 
 { #category : #iteration }
@@ -69,14 +76,21 @@ DocSearchEnvironment >> prevChapterInResultEntries [
 	| key index currentIndex |
 	currentIndex := currentEntryIndex.
 	index := currentEntryIndex - 1.
-	[ 	
-		currentIndex = currentEntryIndex and: [ index >= 1 ]
-	] whileTrue: [ 
-		key := (resultEntries at: currentEntryIndex) chapter key.
-		currentEntryIndex := index = 1 ifTrue: [ resultEntries size ] ifFalse: [ currentEntryIndex ].
-	 	currentEntryIndex := (resultEntries at: index) chapter key ~= key ifTrue: [ index ] ifFalse: [ currentEntryIndex ].
-		index := index - 1
-	]
+	index >= 1 
+		ifTrue: [ 
+			[ 	
+			currentIndex = currentEntryIndex
+			] whileTrue: [ 
+				key := (resultEntries at: currentEntryIndex) chapter key.
+				currentEntryIndex := index = 1 ifTrue: [ resultEntries size ] ifFalse: [ currentEntryIndex ].
+	 			currentEntryIndex := (resultEntries at: index) chapter key ~= key ifTrue: [ index ] ifFalse: [ currentEntryIndex ].
+				index := index - 1
+			] 
+		] 
+		ifFalse: [ 
+			currentEntryIndex := resultEntries size
+	   ]
+	
 ]
 
 { #category : #iteration }

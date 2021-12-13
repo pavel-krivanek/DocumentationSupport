@@ -85,7 +85,7 @@ DocSearchEnvironmentTest >> testInitialize [
 	self assert: docSearchEnv notNil
 ]
 
-{ #category : #tests }
+{ #category : #'tests-next' }
 DocSearchEnvironmentTest >> testNextChapterInResultEntries [
 
 	docSearchEnv := DocSearchEnvironment on:
@@ -99,12 +99,12 @@ DocSearchEnvironmentTest >> testNextChapterInResultEntries [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-next' }
 DocSearchEnvironmentTest >> testNextChapterInResultEntriesWhenCurrentEntryIndexIsLast [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'third'.
+	docSearchEnv search: 'test'.
 	docSearchEnv currentEntryIndex: docSearchEnv resultEntries size.
 	self assert: docSearchEnv currentEntryIndex equals: docSearchEnv resultEntries size.
 	docSearchEnv nextChapterInResultEntries.
@@ -112,7 +112,7 @@ DocSearchEnvironmentTest >> testNextChapterInResultEntriesWhenCurrentEntryIndexI
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-next' }
 DocSearchEnvironmentTest >> testNextChapterInResultEntriesWithNoResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
@@ -125,7 +125,7 @@ DocSearchEnvironmentTest >> testNextChapterInResultEntriesWithNoResultEntry [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-next' }
 DocSearchEnvironmentTest >> testNextChapterInResultEntriesWithOneResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
@@ -138,7 +138,19 @@ DocSearchEnvironmentTest >> testNextChapterInResultEntriesWithOneResultEntry [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-next' }
+DocSearchEnvironmentTest >> testNextResultEntry [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'test'.
+	self assert: docSearchEnv currentEntryIndex equals: 1.
+	docSearchEnv nextResultEntry.
+	self assert: docSearchEnv currentEntryIndex equals: 2
+	
+]
+
+{ #category : #'tests-next' }
 DocSearchEnvironmentTest >> testNextResultEntryWhenCurrentEntryIndexIsLast [
 
 	docSearchEnv := DocSearchEnvironment on:
@@ -151,7 +163,46 @@ DocSearchEnvironmentTest >> testNextResultEntryWhenCurrentEntryIndexIsLast [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-prev' }
+DocSearchEnvironmentTest >> testPrevChapterInResultEntries [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'test'.
+	self assert: docSearchEnv currentEntryIndex equals: 1.
+	docSearchEnv prevChapterInResultEntries.
+	self assert: docSearchEnv currentEntryIndex equals: 4.
+	docSearchEnv prevChapterInResultEntries.
+	self assert: docSearchEnv currentEntryIndex equals: 3
+	
+]
+
+{ #category : #'tests-prev' }
+DocSearchEnvironmentTest >> testPrevChapterInResultEntriesWithNoResultEntry [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: ''.
+	self assert: docSearchEnv resultEntries size equals: 0.
+	self assert: docSearchEnv currentEntryIndex equals: 0.
+	docSearchEnv prevChapterInResultEntries.
+	self assert: docSearchEnv currentEntryIndex equals: 0
+]
+
+{ #category : #'tests-prev' }
+DocSearchEnvironmentTest >> testPrevChapterInResultEntriesWithOneResultEntry [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'third'.
+	self assert: docSearchEnv resultEntries size equals: 1.
+	self assert: docSearchEnv currentEntryIndex equals: 1.
+	docSearchEnv prevChapterInResultEntries.
+	self assert: docSearchEnv currentEntryIndex equals: 1
+	
+]
+
+{ #category : #'tests-prev' }
 DocSearchEnvironmentTest >> testPrevResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
@@ -164,7 +215,7 @@ DocSearchEnvironmentTest >> testPrevResultEntry [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-prev' }
 DocSearchEnvironmentTest >> testPrevResultEntryWhenCurrentEntryIndexIsFirst [
 
 	docSearchEnv := DocSearchEnvironment on:
@@ -176,7 +227,7 @@ DocSearchEnvironmentTest >> testPrevResultEntryWhenCurrentEntryIndexIsFirst [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-search' }
 DocSearchEnvironmentTest >> testSearch [
 
 	docSearchEnv := DocSearchEnvironment on:
@@ -194,7 +245,7 @@ DocSearchEnvironmentTest >> testSearch [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-search' }
 DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14 [
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (14 to: chapters first lastPosition)).
@@ -209,16 +260,34 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14 [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-search' }
+DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14WithShiftedChapter [
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: {chapters fourth. chapters second. chapters third. chapters first. chapters fifth.}  posInterval: (14 to: chapters first lastPosition)).
+	docSearchEnv search: 'test'.
+	self assert: docSearchEnv resultEntries size equals: 3.
+	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries first startPosition equals: 71.
+	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 1'.
+	self assert: docSearchEnv resultEntries second startPosition equals: 11.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 5'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 24.
+
+	
+]
+
+{ #category : #'tests-search' }
 DocSearchEnvironmentTest >> testSearchWithNotDocSearchRange [
 
 	docSearchEnv := DocSearchEnvironment new.
-	self should: [docSearchEnv search: 'dkhjsqokdjakl'] raise: Error withExceptionDo: [ :error | self assert: error tag = #environmentNotSet].
-	
-
+	self
+		should: [ docSearchEnv search: 'dkhjsqokdjakl' ]
+		raise: Error
+		withExceptionDo: [ :error | 
+		self assert: error tag equals: #environmentNotSet ]
 ]
 
-{ #category : #tests }
+{ #category : #'tests-search' }
 DocSearchEnvironmentTest >> testSearchWithNotOccurence [
 
 	docSearchEnv := DocSearchEnvironment on:
@@ -228,7 +297,17 @@ DocSearchEnvironmentTest >> testSearchWithNotOccurence [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-search' }
+DocSearchEnvironmentTest >> testSearchWithNotOccurenceWithShiftedChapter [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: {chapters fourth. chapters second. chapters third. chapters first. chapters fifth.}  posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'dkhjsqokdjakl'.
+	self assert: docSearchEnv resultEntries size equals: 0
+	
+]
+
+{ #category : #'tests-search' }
 DocSearchEnvironmentTest >> testSearchWithNothing [
 
 	docSearchEnv := DocSearchEnvironment on:
@@ -238,7 +317,17 @@ DocSearchEnvironmentTest >> testSearchWithNothing [
 	
 ]
 
-{ #category : #tests }
+{ #category : #'tests-search' }
+DocSearchEnvironmentTest >> testSearchWithNothingWhithShifted [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: {chapters fourth. chapters second. chapters third. chapters first. chapters fifth.}  posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: ''.
+	self assert: docSearchEnv resultEntries size equals: 0
+	
+]
+
+{ #category : #'tests-search' }
 DocSearchEnvironmentTest >> testSearchWithShiftedChapter [
 
 	docSearchEnv := DocSearchEnvironment on:
