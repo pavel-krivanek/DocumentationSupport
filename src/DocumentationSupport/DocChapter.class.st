@@ -105,6 +105,34 @@ DocChapter >> delete [
 
 ]
 
+{ #category : #'API - search' }
+DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition [
+
+	| foundPosition |
+
+	foundPosition := source findString: aSearchPattern startingAt: currentSearchPosition.
+	foundPosition = 0 ifTrue: [ ^ nil ].
+	
+	^ DocResultEntry 
+			chapter: self 
+			startPosition: foundPosition 
+			endPosition: foundPosition + aSearchPattern size - 1
+]
+
+{ #category : #'API - search' }
+DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: limitIndex [
+
+	| foundPosition |
+
+	foundPosition := source findString: aSearchPattern startingAt: currentSearchPosition.
+	(foundPosition = 0 or: [ foundPosition > limitIndex ]) ifTrue: [ ^ nil ].
+	
+	^ DocResultEntry 
+			chapter: self 
+			startPosition: foundPosition 
+			endPosition: foundPosition + aSearchPattern size - 1
+]
+
 { #category : #'serialization support' }
 DocChapter >> fixNextReferenceUsing: aDictionary [
 
@@ -171,6 +199,12 @@ DocChapter >> isChapter [
 	^ true
 ]
 
+{ #category : #accessing }
+DocChapter >> lastPosition [ 
+
+	^ source size - 1
+]
+
 { #category : #serialization }
 DocChapter >> materializeFrom: aStream [
 	
@@ -209,6 +243,18 @@ DocChapter >> nextKeyOrNil [
 	^ nextChapter key
 ]
 
+{ #category : #accessing }
+DocChapter >> path [
+	"return the path to show the chapter in SpTreePresenter"
+	| col |
+	parent class = DocBook 
+		ifTrue: [ col := OrderedCollection new.
+					 col add: (parent library books indexOf: parent) ] 
+		ifFalse: [ col := parent path ].
+	col add: (parent children indexOf: self).
+	^ col
+]
+
 { #category : #printing }
 DocChapter >> printOn: aStream [
 
@@ -242,6 +288,12 @@ DocChapter >> readStonKey: aKey value: value [
 	aKey = #nextChapter ifTrue: [ nextChapter := DocParentReference key: value ].
 	
 	
+]
+
+{ #category : #'API - search' }
+DocChapter >> searchString: aSearchPattern restrictedBy: aRangeInterval [
+
+	^ source findString: aSearchPattern startingAt: aRangeInterval first.
 ]
 
 { #category : #serialization }
