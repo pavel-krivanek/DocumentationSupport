@@ -8,8 +8,28 @@ Class {
 		'source',
 		'nextChapter'
 	],
+	#classInstVars : [
+		'dictionaryOfChapters'
+	],
 	#category : #'DocumentationSupport-Model'
 }
+
+{ #category : #adding }
+DocChapter class >> addDictionaryOfChapters: aChapter [
+	dictionaryOfChapters ifNil: [ dictionaryOfChapters := OrderedDictionary new ].
+	dictionaryOfChapters at: aChapter key put: aChapter
+]
+
+{ #category : #accessing }
+DocChapter class >> dictionnaryOfChaptersAt: aKey [
+	^ dictionaryOfChapters at: aKey
+]
+
+{ #category : #adding }
+DocChapter class >> removeDictionaryOfChapters: aChapter [
+	dictionaryOfChapters ifNotNil: [ dictionaryOfChapters removeKey: aChapter key ].
+
+]
 
 { #category : #accessing }
 DocChapter >> aBookOrChapter [
@@ -77,6 +97,7 @@ DocChapter >> addNewChapter [
 	newChapter := self book addNewChapterWithoutNotification. 
 	newChapter parent: self.
 	library aspectChanged: #chapters.
+	DocChapter addDictionaryOfChapters: newChapter.
 	^ newChapter
 ]
 
@@ -190,7 +211,7 @@ DocChapter >> initialize [
 
 	super initialize.
 	
-	source := ''
+	source := ''.
 ]
 
 { #category : #testing }
@@ -269,6 +290,7 @@ DocChapter >> printOn: aStream [
 DocChapter >> readMetadataFrom: aDictionary [
 
 	super readMetadataFrom: aDictionary.
+	DocChapter addDictionaryOfChapters: self.
 	aDictionary at: #nextChapter ifPresent: [ :value | nextChapter := DocParentReference key: value ].	
 	
 	

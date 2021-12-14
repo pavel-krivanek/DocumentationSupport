@@ -115,7 +115,6 @@ DocModelWithKey >> key [
 DocModelWithKey >> key: anObject [
 
 	key := anObject.
-	
 	self makeDirty.
 	self aspectChanged: #title
 
@@ -259,7 +258,6 @@ DocModelWithKey >> title: anObject [
 
 { #category : #serialization }
 DocModelWithKey >> writeStonKeysTo: aDictionary [ 
-
 	aDictionary
 		at: #title put: title;
 		at: #key put: key;
