@@ -231,7 +231,6 @@ DocChapterPresenter >> parent [
 
 { #category : #accessing }
 DocChapterPresenter >> parent: anObject [
-
 	parent := anObject
 ]
 
@@ -263,7 +262,6 @@ DocChapterPresenter >> textFor: aSource [
 		| parser tree |
 		parser := MicroDownParser new.
 		tree := parser parse: builder contents.
-		
 		DocRichTextComposer new 
 			executor: self;		
 			visit: tree. ]

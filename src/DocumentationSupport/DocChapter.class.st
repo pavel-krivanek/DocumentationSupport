@@ -119,6 +119,20 @@ DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition [
 			endPosition: foundPosition + aSearchPattern size - 1
 ]
 
+{ #category : #'API - search' }
+DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: limitIndex [
+
+	| foundPosition |
+
+	foundPosition := source findString: aSearchPattern startingAt: currentSearchPosition.
+	(foundPosition = 0 or: [ foundPosition > limitIndex ]) ifTrue: [ ^ nil ].
+	
+	^ DocResultEntry 
+			chapter: self 
+			startPosition: foundPosition 
+			endPosition: foundPosition + aSearchPattern size - 1
+]
+
 { #category : #'serialization support' }
 DocChapter >> fixNextReferenceUsing: aDictionary [
 

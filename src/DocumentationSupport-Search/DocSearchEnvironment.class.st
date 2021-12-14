@@ -135,8 +135,8 @@ DocSearchEnvironment >> search: aSearchPattern in: aChapter restrictedBy: aRange
 	docResultEntries := OrderedCollection new.
 	currentSearchPosition := aRangeInterval first.
 	[ 
-		entryOrNil := aChapter findNextString: aSearchPattern startingAt: currentSearchPosition.
-		entryOrNil isNil 
+		entryOrNil :=  aChapter findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: aRangeInterval last.
+		entryOrNil isNil
 	] whileFalse: [ 
 		docResultEntries add: entryOrNil.
 		currentSearchPosition := entryOrNil endPosition + 1.

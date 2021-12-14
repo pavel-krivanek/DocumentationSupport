@@ -68,10 +68,10 @@ DocLibraryPresenter class >> searchAction: searchPattern on: occurenceDisplay [
 	searchInput owner library books do: [ :book | 
 		chapters addAll: book chapters].
 	"Execute the search"
-	env:= DocSearchEnvironment on: (DocSearchRange new chaptersToSearch: chapters).
+	env:= DocSearchEnvironment on: (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
 	env search: searchPattern.
 	"Display the number of occurence"
-	occurenceDisplay text: searchPattern , ' is present in  ' , env resultEntries size asString , ' chapters'.
+	occurenceDisplay text: searchPattern , ' has  ' , env resultEntries size asString , ' occurences'.
 	^ env
 
 ]
@@ -103,16 +103,14 @@ DocLibraryPresenter class >> searchBar [
 				     label: 'Next';
 				     action: [ 
 							env ifNotNil: [ [ 
-							"increment or set at 1 the currentEntryIndex of env"
-							env resultEntries size > env currentEntryIndex ifTrue: [ env incCurrentEntryIndex] ifFalse: [ env currentEntryIndex: 1 ].
+							env nextResultEntry.
 							searchInput owner clickAt: (env resultEntries at: env currentEntryIndex) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ])
 		  height: 20;
 		  add: (SpButtonPresenter new
 				     label: 'Previous';
 				     action: [ 
 							env ifNotNil: [ [ 
-							"decrement or set at env resultEntries size the currentEntryIndex of env"
-							1 < env currentEntryIndex ifTrue: [ env decCurrentEntryIndex ] ifFalse: [ env currentEntryIndex: env resultEntries size ].
+							env prevResultEntry.
 							searchInput owner clickAt: (env resultEntries at: env currentEntryIndex) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ])
 		  height: 20
 ]

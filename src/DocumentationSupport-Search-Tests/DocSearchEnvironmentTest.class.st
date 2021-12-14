@@ -263,16 +263,48 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14 [
 { #category : #'tests-search' }
 DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14WithShiftedChapter [
 	docSearchEnv := DocSearchEnvironment on:
-		                (DocSearchRange chapters: {chapters fourth. chapters second. chapters third. chapters first. chapters fifth.}  posInterval: (14 to: chapters first lastPosition)).
+		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (14 to: chapters fourth lastPosition)).
 	docSearchEnv search: 'test'.
 	self assert: docSearchEnv resultEntries size equals: 3.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
 	self assert: docSearchEnv resultEntries first startPosition equals: 71.
-	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 1'.
-	self assert: docSearchEnv resultEntries second startPosition equals: 11.
-	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 5'.
-	self assert: docSearchEnv resultEntries third startPosition equals: 24.
+	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 5'.
+	self assert: docSearchEnv resultEntries second startPosition equals: 24.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 1'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 11.
 
+	
+]
+
+{ #category : #'tests-search' }
+DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt14 [
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: 14)).
+	docSearchEnv search: 'test'.
+		self assert: docSearchEnv resultEntries size equals: 4.
+	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 1'.
+	self assert: docSearchEnv resultEntries first startPosition equals: 11.
+	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries second startPosition equals: 11.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 71.
+	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 5'.
+	self assert: docSearchEnv resultEntries fourth startPosition equals: 24.
+	
+]
+
+{ #category : #'tests-search' }
+DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt14WithShiftedChapter [
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: 14)).
+	docSearchEnv search: 'test'.
+	self assert: docSearchEnv resultEntries size equals: 3.
+	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries first startPosition equals: 11.
+	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 5'.
+	self assert: docSearchEnv resultEntries second startPosition equals: 24.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 1'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 11.
 	
 ]
 
@@ -301,7 +333,7 @@ DocSearchEnvironmentTest >> testSearchWithNotOccurence [
 DocSearchEnvironmentTest >> testSearchWithNotOccurenceWithShiftedChapter [
 
 	docSearchEnv := DocSearchEnvironment on:
-		                (DocSearchRange chapters: {chapters fourth. chapters second. chapters third. chapters first. chapters fifth.}  posInterval: (1 to: chapters first lastPosition)).
+		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: chapters first lastPosition)).
 	docSearchEnv search: 'dkhjsqokdjakl'.
 	self assert: docSearchEnv resultEntries size equals: 0
 	
@@ -321,7 +353,7 @@ DocSearchEnvironmentTest >> testSearchWithNothing [
 DocSearchEnvironmentTest >> testSearchWithNothingWhithShifted [
 
 	docSearchEnv := DocSearchEnvironment on:
-		                (DocSearchRange chapters: {chapters fourth. chapters second. chapters third. chapters first. chapters fifth.}  posInterval: (1 to: chapters first lastPosition)).
+		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: chapters first lastPosition)).
 	docSearchEnv search: ''.
 	self assert: docSearchEnv resultEntries size equals: 0
 	
@@ -331,7 +363,7 @@ DocSearchEnvironmentTest >> testSearchWithNothingWhithShifted [
 DocSearchEnvironmentTest >> testSearchWithShiftedChapter [
 
 	docSearchEnv := DocSearchEnvironment on:
-		                (DocSearchRange chapters: {chapters fourth. chapters second. chapters third. chapters first. chapters fifth.} posInterval: (1 to: chapters first lastPosition)).
+		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.} posInterval: (1 to: chapters fourth lastPosition)).
 	docSearchEnv search: 'test'.
 	self assert: docSearchEnv resultEntries size equals: 4.
 
@@ -339,9 +371,9 @@ DocSearchEnvironmentTest >> testSearchWithShiftedChapter [
 	self assert: docSearchEnv resultEntries first startPosition equals: 11.
 	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 4'.
 	self assert: docSearchEnv resultEntries second  startPosition equals: 71.
-	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 1'.
-	self assert: docSearchEnv resultEntries third startPosition equals: 11.
-	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 5'.
-	self assert: docSearchEnv resultEntries fourth startPosition equals: 24.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 5'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 24.
+	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 1'.
+	self assert: docSearchEnv resultEntries fourth startPosition equals: 11.
 	
 ]
