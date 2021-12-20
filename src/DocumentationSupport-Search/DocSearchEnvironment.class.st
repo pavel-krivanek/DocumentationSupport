@@ -35,6 +35,18 @@ DocSearchEnvironment >> currentResultEntry [
 	^ resultEntries at: currentEntryIndex
 ]
 
+{ #category : #accessing }
+DocSearchEnvironment >> firstResultEntriesOfChapters [
+	| key res |
+	res := OrderedCollection new.
+	key := ''.
+	resultEntries do: [ :resultEntry | 
+		resultEntry chapter key = key 
+			ifFalse: [ key := resultEntry chapter key.
+				res add: resultEntry ] ].
+	^ res
+]
+
 { #category : #initialization }
 DocSearchEnvironment >> initOn: aDocSearchRange [
 	searchRange := aDocSearchRange
