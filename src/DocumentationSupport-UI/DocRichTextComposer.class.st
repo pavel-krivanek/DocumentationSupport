@@ -2,7 +2,9 @@ Class {
 	#name : #DocRichTextComposer,
 	#superclass : #MicRichTextComposer,
 	#instVars : [
-		'executor'
+		'executor',
+		'resultEntries',
+		'currentResultEntry'
 	],
 	#classInstVars : [
 		'searchIndex',
@@ -100,7 +102,7 @@ DocRichTextComposer >> isRef: aLink [
 { #category : #testing }
 DocRichTextComposer >> isWeb: aLink [
 
-	^ (aLink url path segments at: 1) = 'http' or: [ (aLink url path segments at: 1) = 'https' ]
+	^ (aLink url path scheme) = 'http' or: [ (aLink url path segments at: 1) = 'https' ]
 ]
 
 { #category : #visiting }
