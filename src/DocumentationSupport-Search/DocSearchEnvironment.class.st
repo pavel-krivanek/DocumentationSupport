@@ -30,6 +30,11 @@ DocSearchEnvironment >> currentEntryIndex: anObject [
 	currentEntryIndex := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+DocSearchEnvironment >> currentResultEntry [
+	^ resultEntries at: currentEntryIndex
+]
+
 { #category : #initialization }
 DocSearchEnvironment >> initOn: aDocSearchRange [
 	searchRange := aDocSearchRange
@@ -111,6 +116,11 @@ DocSearchEnvironment >> resetResultEntries [
 DocSearchEnvironment >> resultEntries [
 
 	^ resultEntries
+]
+
+{ #category : #accessing }
+DocSearchEnvironment >> resultEntriesOf: aChapterKey [
+	^ resultEntries select: [ :resultEntry | resultEntry chapter key = aChapterKey ]
 ]
 
 { #category : #'API - search' }
