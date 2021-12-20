@@ -81,11 +81,12 @@ DocRichTextComposer >> executor: anObject [
 
 { #category : #highlighting }
 DocRichTextComposer >> highlightText: aText [
-	| index |
-	index := self indexOfOccurence: aText.
-	(index > 0 and: [ self class searchHighLightEnableOn ]) ifTrue: [ 
-		aText  addAttribute: (TextBackgroundColor new color: Color lightGray ) from: index to: index + self class searchSize - 1
-		 ]
+	[ 
+	resultEntries do: [ :resultEntry |
+		resultEntry = currentResultEntry 
+			ifTrue: [ aText addAttribute: (TextBackgroundColor new color: Color green ) from: resultEntry startPosition to: resultEntry endPosition ] 
+			ifFalse: [ aText addAttribute: (TextBackgroundColor new color: Color lightGray ) from: resultEntry startPosition to: resultEntry endPosition ]
+	]] on: SubscriptOutOfBounds do: [ "nothing" ]
 	
 	
 ]
