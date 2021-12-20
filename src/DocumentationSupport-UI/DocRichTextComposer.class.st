@@ -56,6 +56,18 @@ DocRichTextComposer class >> searchWord: aString [
 ]
 
 { #category : #accessing }
+DocRichTextComposer >> currentResultEntry [
+
+	^ currentResultEntry
+]
+
+{ #category : #accessing }
+DocRichTextComposer >> currentResultEntry: anObject [
+
+	currentResultEntry := anObject
+]
+
+{ #category : #accessing }
 DocRichTextComposer >> executor [
 
 	^ executor
@@ -103,6 +115,18 @@ DocRichTextComposer >> isRef: aLink [
 DocRichTextComposer >> isWeb: aLink [
 
 	^ (aLink url path scheme) = 'http' or: [ (aLink url path segments at: 1) = 'https' ]
+]
+
+{ #category : #accessing }
+DocRichTextComposer >> resultEntries [
+
+	^ resultEntries
+]
+
+{ #category : #accessing }
+DocRichTextComposer >> resultEntries: anObject [
+
+	resultEntries := anObject
 ]
 
 { #category : #visiting }
