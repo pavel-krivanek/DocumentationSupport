@@ -25,7 +25,8 @@ Class {
 		'lastSearch',
 		'occurenceDisplay',
 		'searchPattern',
-		'searchEnv'
+		'searchEnv',
+		'chapterDropList'
 	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }
@@ -275,6 +276,7 @@ DocLibraryPresenter >> export [
 DocLibraryPresenter >> initializePresenters [ 
 
 	super initializePresenters.
+	DocLibraryPresenter resetSearchEnv.
 	docSearchObject := DocSearchEnvironment new.
 	tree := self newTree.
 	editor := self instantiate: DocPanePresenter.
