@@ -78,6 +78,22 @@ DocSearchEnvironmentTest >> setUpThreeBooks [
 ]
 
 { #category : #tests }
+DocSearchEnvironmentTest >> testFirstResultEntriesForEachChapter [
+	| res |
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'test'.
+	res := docSearchEnv firstResultEntriesForEachChapters.
+	self assert: res size equals: 3.
+	self assert: res first chapter title  equals: 'chapitre 1'.
+	self assert: res first startPosition  equals: 11.
+	self assert: res second chapter title equals: 'chapitre 4'.
+	self assert: res second startPosition equals: 11.
+	self assert: res third chapter title equals: 'chapitre 5'.
+	self assert: res third startPosition equals: 24
+]
+
+{ #category : #tests }
 DocSearchEnvironmentTest >> testInitialize [
 
 	docSearchEnv := DocSearchEnvironment on:
@@ -225,6 +241,20 @@ DocSearchEnvironmentTest >> testPrevResultEntryWhenCurrentEntryIndexIsFirst [
 	docSearchEnv prevResultEntry.
 	self assert: docSearchEnv currentEntryIndex equals: 4
 	
+]
+
+{ #category : #tests }
+DocSearchEnvironmentTest >> testResultEntriesOf [
+	| res |
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'test'.
+	res := docSearchEnv resultEntriesOf: library books third chapters first key.
+	self assert: res size equals: 2.
+	self assert: res first chapter title  equals: 'chapitre 4'.
+	self assert: res first startPosition  equals: 11.
+	self assert: res second chapter title equals: 'chapitre 4'.
+	self assert: res second startPosition equals: 71
 ]
 
 { #category : #'tests-search' }
