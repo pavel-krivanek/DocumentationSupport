@@ -202,7 +202,7 @@ DocLibraryPresenter class >> setSearchAction [
 					searchEnv := self searchAction.
 					"Display in presenter the first occurence"
 					searchInput owner clickAt: searchEnv currentResultEntry chapter path.
-					chapterDropList items: searchEnv firstResultEntriesOfChapters.
+					chapterDropList items: searchEnv firstResultEntriesForEachChapters.
 					self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ].		
 				]	].
 			
@@ -217,7 +217,7 @@ DocLibraryPresenter class >> setSearchButton [
 							searchEnv := self searchAction.
 							"Display in presenter the first occurence"
 							searchInput owner clickAt: searchEnv currentResultEntry chapter path.
-							chapterDropList items: searchEnv firstResultEntriesOfChapters.
+							chapterDropList items: searchEnv firstResultEntriesForEachChapters.
 							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ]  ]
 ]
 

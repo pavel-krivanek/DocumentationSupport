@@ -36,7 +36,7 @@ DocSearchEnvironment >> currentResultEntry [
 ]
 
 { #category : #accessing }
-DocSearchEnvironment >> firstResultEntriesOfChapters [
+DocSearchEnvironment >> firstResultEntriesForEachChapters [
 	| key res |
 	res := OrderedCollection new.
 	key := ''.
