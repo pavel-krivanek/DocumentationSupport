@@ -36,6 +36,16 @@ DocSearchEnvironment >> currentResultEntry [
 ]
 
 { #category : #accessing }
+DocSearchEnvironment >> firstOccurrenceOf: aChapter [
+	| index |
+	index := 1.
+	[ (resultEntries at: index) chapter key = aChapter key ]
+	whileFalse: 
+	[ index := index + 1 ].
+	currentEntryIndex := index
+]
+
+{ #category : #accessing }
 DocSearchEnvironment >> firstResultEntriesForEachChapters [
 	| key res |
 	res := OrderedCollection new.
