@@ -86,7 +86,7 @@ DocRichTextComposer >> highlightText: aText [
 		resultEntry = currentResultEntry 
 			ifTrue: [ aText addAttribute: (TextBackgroundColor new color: Color green ) from: resultEntry startPosition to: resultEntry endPosition ] 
 			ifFalse: [ aText addAttribute: (TextBackgroundColor new color: Color lightGray ) from: resultEntry startPosition to: resultEntry endPosition ]
-	]] on: SubscriptOutOfBounds do: [ "nothing" ]
+	]] on: SubscriptOutOfBounds,MessageNotUnderstood do: [ "nothing" ]
 	
 	
 ]

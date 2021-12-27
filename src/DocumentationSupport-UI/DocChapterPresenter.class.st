@@ -72,7 +72,6 @@ DocChapterPresenter >> getPreviewPresenter [
 	| textMorph presenter src |
 	
 	src := chapter ifNil: [ '' ] ifNotNil: [ chapter source ].
-	
 	textMorph := self previewMorphFor: src.
 
 	presenter := SpMorphPresenter new.
@@ -150,7 +149,6 @@ DocChapterPresenter >> initializePresenters [
 			layout := self layoutShowingEditor: showEditor ].
 		
 	layout := self layoutShowingEditor: showEditor.
-	
 	self updatePreview: self chapter source
 
 
@@ -231,7 +229,8 @@ DocChapterPresenter >> parent [
 
 { #category : #accessing }
 DocChapterPresenter >> parent: anObject [
-	parent := anObject
+	parent := anObject.
+	self updatePreview: self chapter source
 ]
 
 { #category : #preview }
@@ -264,14 +263,13 @@ DocChapterPresenter >> textFor: aSource [
 		tree := parser parse: builder contents.
 		richTextComposer := DocRichTextComposer new
 			executor: self.
-		DocLibraryPresenter searchEnv 
-			ifNotNil: [ richTextComposer resultEntries: (DocLibraryPresenter searchEnv resultEntriesOf: self chapter key).
-				richTextComposer currentResultEntry: DocLibraryPresenter searchEnv currentResultEntry ].
+		(self parent isNotNil and: [ self parent searchEnv isNotNil ])
+			ifTrue: [ richTextComposer resultEntries: (self parent searchEnv resultEntriesOf: self chapter key).
+				richTextComposer currentResultEntry: self parent searchEnv currentResultEntry ].
 		richTextComposer visit: tree
 		]
 		on: STONReaderError, MicParsingError, MessageNotUnderstood, SubclassResponsibility 
 			do: [ :e | builder contents ].
-
 	^ text
 ]
 
@@ -285,19 +283,16 @@ DocChapterPresenter >> updatePreview: newSource [
 			updateProcess terminate.
 			updateProcess := nil ] ].
 
-	updateProcess := [ 
-		"| newText |
-		newText := self textFor: newSource.
-	
-		previewUpdateMutex critical: [ 
-			self defer: [ 
-				preview morph setText: newText ] ]"
-	] fork.
-
+	"updateProcess := [ 
 		newText := self textFor: newSource.
 	
 		previewUpdateMutex critical: [ 
 			self defer: [ 
 				preview morph setText: newText ] ]
+	] fork."
+
+		previewUpdateMutex critical: [ 
+			self defer: [preview morph setText: (self textFor: newSource) ] ].
+		
 	
 ]
