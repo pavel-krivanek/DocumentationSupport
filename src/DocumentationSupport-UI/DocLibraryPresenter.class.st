@@ -18,7 +18,12 @@ Class {
 		'editor',
 		'toolbar',
 		'treeMenu',
-		'docSearchObject'
+		'docSearchObject',
+		'searchInput',
+		'occurenceDisplay',
+		'chapterDropList',
+		'searchPattern',
+		'searchEnv'
 	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }
@@ -87,11 +92,6 @@ DocLibraryPresenter >> aspect: anAspect changedFrom: anOrigin [
 { #category : #actions }
 DocLibraryPresenter >> clickAt: path [
 	tree clickAtPath: path
-]
-
-{ #category : #'as yet unclassified' }
-DocLibraryPresenter >> clickOnTree: aCollection [
-	tree clickAtPath: aCollection
 ]
 
 { #category : #actions }
