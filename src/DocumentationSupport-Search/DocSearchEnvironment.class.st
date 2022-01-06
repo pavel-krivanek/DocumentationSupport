@@ -30,7 +30,7 @@ DocSearchEnvironment >> currentEntryIndex: anObject [
 	currentEntryIndex := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 DocSearchEnvironment >> currentResultEntry [
 	^ resultEntries at: currentEntryIndex
 ]

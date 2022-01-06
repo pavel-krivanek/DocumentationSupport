@@ -77,6 +77,34 @@ DocSearchEnvironmentTest >> setUpThreeBooks [
 	
 ]
 
+{ #category : #'tests-search' }
+DocSearchEnvironmentTest >> testFirstOccurenceOfFourthChapter [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'test'.
+	docSearchEnv firstOccurrenceOf: library books third chapters first.
+	self assert: docSearchEnv currentEntryIndex equals: 2.
+	self assert: docSearchEnv resultEntries size equals: 4.
+	self assert: docSearchEnv currentResultEntry chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv currentResultEntry startPosition equals: 11
+	
+]
+
+{ #category : #'tests-search' }
+DocSearchEnvironmentTest >> testFirstOccurenceOfFourthChapterWithShiftedChapter [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: chapters fourth lastPosition)).
+	docSearchEnv search: 'test'.
+	docSearchEnv firstOccurrenceOf: library books third chapters first.
+	self assert: docSearchEnv currentEntryIndex equals: 1.
+	self assert: docSearchEnv resultEntries size equals: 4.
+	self assert: docSearchEnv currentResultEntry chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv currentResultEntry startPosition equals: 11
+	
+]
+
 { #category : #tests }
 DocSearchEnvironmentTest >> testFirstResultEntriesForEachChapter [
 	| res |
