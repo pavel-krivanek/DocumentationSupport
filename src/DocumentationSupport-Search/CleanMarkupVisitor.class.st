@@ -24,6 +24,43 @@ CleanMarkupVisitor >> visit: test [
 ]
 
 { #category : #visiting }
+CleanMarkupVisitor >> visitCode: aMicCodeBlock [
+	text := text , String cr.
+	text := text , aMicCodeBlock body.
+	text := text , String cr
+]
+
+{ #category : #visiting }
+CleanMarkupVisitor >> visitHeader: aMicHeaderBlock [
+	text := text , String cr.
+	super visitHeader: aMicHeaderBlock.
+	text := text , String cr
+]
+
+{ #category : #visiting }
+CleanMarkupVisitor >> visitHorizontalLine: aMicHorizontalLine [
+	super visitHorizontalLine: aMicHorizontalLine.
+	text := text , ('     ' repeat: 20) , String cr
+]
+
+{ #category : #visiting }
+CleanMarkupVisitor >> visitListItem: anItem [
+	anItem textElements do: [ :each | 
+		anItem parent class = MicUnorderedListBlock 
+			ifTrue: [ text := text , '- ' ] 
+			ifFalse: [ text := text , '1. '. ].		
+		each accept: self ].
+	self visitChildrenOf: anItem
+]
+
+{ #category : #visiting }
+CleanMarkupVisitor >> visitOrderedList: aMicOrderedList [
+	aMicOrderedList children do: [ :each | 
+		self visitOrderedListItem: each.
+		text := text , String cr ]
+]
+
+{ #category : #visiting }
 CleanMarkupVisitor >> visitParagraph: aMicParagraph [
 	text := text , String cr.
 	super visitParagraph: aMicParagraph.
@@ -33,4 +70,11 @@ CleanMarkupVisitor >> visitParagraph: aMicParagraph [
 { #category : #visiting }
 CleanMarkupVisitor >> visitText: aMicTextBlock [
 	text := text , aMicTextBlock substring
+]
+
+{ #category : #visiting }
+CleanMarkupVisitor >> visitUnorderedList: aMicUnorderedList [
+	aMicUnorderedList children do: [ :each | 
+		self visitUnorderedListItem: each.
+		text := text , String cr ]
 ]
