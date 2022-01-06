@@ -22,3 +22,15 @@ CleanMarkupVisitor >> text [
 CleanMarkupVisitor >> visit: test [
 	super visit: test
 ]
+
+{ #category : #visiting }
+CleanMarkupVisitor >> visitParagraph: aMicParagraph [
+	text := text , String cr.
+	super visitParagraph: aMicParagraph.
+	text := text , String cr
+]
+
+{ #category : #visiting }
+CleanMarkupVisitor >> visitText: aMicTextBlock [
+	text := text , aMicTextBlock substring
+]
