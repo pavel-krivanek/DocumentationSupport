@@ -28,6 +28,18 @@ This is a code
 ]
 
 { #category : #tests }
+CleanMarkupVisitorTest >> testVisitFigure [
+	| mic |
+	mic := parser parse: '![pharo logo](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Pharo_Logo_v3.0.svg/1200px-Pharo_Logo_v3.0.svg.png)'.
+	visitor visit: mic.
+	self assert: visitor text equals: '
+
+			pharo logo
+
+'
+]
+
+{ #category : #tests }
 CleanMarkupVisitorTest >> testVisitHeader [
 	| mic |
 	mic := parser parse: '### This is a header'.

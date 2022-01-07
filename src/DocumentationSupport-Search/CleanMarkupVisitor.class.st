@@ -31,6 +31,11 @@ CleanMarkupVisitor >> visitCode: aMicCodeBlock [
 ]
 
 { #category : #visiting }
+CleanMarkupVisitor >> visitFigure: aMicFigure [
+	text := text , String cr , (String tab repeat: 3), aMicFigure substring , String cr
+]
+
+{ #category : #visiting }
 CleanMarkupVisitor >> visitHeader: aMicHeaderBlock [
 	text := text , String cr.
 	super visitHeader: aMicHeaderBlock.
