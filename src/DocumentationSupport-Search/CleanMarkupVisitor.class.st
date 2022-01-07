@@ -64,6 +64,11 @@ CleanMarkupVisitor >> visitMath: aMicMathBlock [
 ]
 
 { #category : #visiting }
+CleanMarkupVisitor >> visitMathInline: aMicMathInlineBlock [
+	text := text , ' '
+]
+
+{ #category : #visiting }
 CleanMarkupVisitor >> visitOrderedList: aMicOrderedList [
 	aMicOrderedList children do: [ :each | 
 		self visitOrderedListItem: each.

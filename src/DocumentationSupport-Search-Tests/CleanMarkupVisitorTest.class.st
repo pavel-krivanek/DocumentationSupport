@@ -75,6 +75,16 @@ V_i = C_0 - C_3
 ]
 
 { #category : #tests }
+CleanMarkupVisitorTest >> testVisitMathInline [
+	| mic |
+	mic := parser parse: 'abc$	V_i = C_0 - C_3	$def'.
+	visitor visit: mic.
+	self assert: visitor text equals: '
+abc def
+'
+]
+
+{ #category : #tests }
 CleanMarkupVisitorTest >> testVisitOrderedList [
 	| mic |
 	mic := parser parse: '1. 1
