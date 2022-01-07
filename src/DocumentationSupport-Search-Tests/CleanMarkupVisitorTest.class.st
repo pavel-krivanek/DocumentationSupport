@@ -40,6 +40,18 @@ CleanMarkupVisitorTest >> testVisitFigure [
 ]
 
 { #category : #tests }
+CleanMarkupVisitorTest >> testVisitFigureWithNoCaption [
+	| mic |
+	mic := parser parse: '![](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Pharo_Logo_v3.0.svg/1200px-Pharo_Logo_v3.0.svg.png)'.
+	visitor visit: mic.
+	self assert: visitor text equals: '
+
+			
+
+'
+]
+
+{ #category : #tests }
 CleanMarkupVisitorTest >> testVisitHeader [
 	| mic |
 	mic := parser parse: '### This is a header'.
@@ -85,6 +97,19 @@ abc def
 ]
 
 { #category : #tests }
+CleanMarkupVisitorTest >> testVisitMathWithParameters [
+	| mic |
+	mic := parser parse: '&key=cite&label=42
+V_i = C_0 - C_3
+&'.
+	visitor visit: mic.
+	self assert: visitor text equals: '
+
+
+'
+]
+
+{ #category : #tests }
 CleanMarkupVisitorTest >> testVisitOrderedList [
 	| mic |
 	mic := parser parse: '1. 1
@@ -109,6 +134,16 @@ this a text for a test
 ]
 
 { #category : #tests }
+CleanMarkupVisitorTest >> testVisitParagraphWithFormat [
+	| mic |
+	mic := parser parse: 'this a _text_ for a **test**'.
+	visitor visit: mic.
+	self assert: visitor text equals: '
+this a text for a test
+'
+]
+
+{ #category : #tests }
 CleanMarkupVisitorTest >> testVisitUnorderedList [
 	| mic |
 	mic := parser parse: '- 1
@@ -119,5 +154,22 @@ CleanMarkupVisitorTest >> testVisitUnorderedList [
 	self assert: visitor text equals: '- 1
 - 2
 - 3
+'
+]
+
+{ #category : #tests }
+CleanMarkupVisitorTest >> testVisitUnorderedListWithNested [
+	| mic |
+	mic := parser parse: '- 1
+- 2- 3
+- 4
+
+- 5
+'.
+	visitor visit: mic.
+	self assert: visitor text equals: '- 1
+- 2- 3
+- 4
+- 5
 '
 ]
