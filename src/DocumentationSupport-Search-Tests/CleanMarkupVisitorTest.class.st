@@ -62,6 +62,19 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 ]
 
 { #category : #tests }
+CleanMarkupVisitorTest >> testVisitMath [
+	| mic |
+	mic := parser parse: '&
+V_i = C_0 - C_3
+&'.
+	visitor visit: mic.
+	self assert: visitor text equals: '
+
+
+'
+]
+
+{ #category : #tests }
 CleanMarkupVisitorTest >> testVisitOrderedList [
 	| mic |
 	mic := parser parse: '1. 1

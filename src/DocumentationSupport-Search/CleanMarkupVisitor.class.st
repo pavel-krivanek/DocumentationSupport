@@ -59,6 +59,11 @@ CleanMarkupVisitor >> visitListItem: anItem [
 ]
 
 { #category : #visiting }
+CleanMarkupVisitor >> visitMath: aMicMathBlock [
+	text := text , (String cr repeat: 3)
+]
+
+{ #category : #visiting }
 CleanMarkupVisitor >> visitOrderedList: aMicOrderedList [
 	aMicOrderedList children do: [ :each | 
 		self visitOrderedListItem: each.
