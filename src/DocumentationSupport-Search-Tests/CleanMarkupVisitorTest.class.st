@@ -28,6 +28,30 @@ This is a code
 ]
 
 { #category : #tests }
+CleanMarkupVisitorTest >> testVisitCodeWithCaption [
+	| mic |
+	mic := parser parse: '```language=pharo&caption=test for code block
+This is a code
+```'.
+	visitor visit: mic.
+	self assert: visitor text equals: '
+This is a code
+'
+]
+
+{ #category : #tests }
+CleanMarkupVisitorTest >> testVisitCodeWithParameters [
+	| mic |
+	mic := parser parse: '```language=pharo
+This is a code
+```'.
+	visitor visit: mic.
+	self assert: visitor text equals: '
+This is a code
+'
+]
+
+{ #category : #tests }
 CleanMarkupVisitorTest >> testVisitFigure [
 	| mic |
 	mic := parser parse: '![pharo logo](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Pharo_Logo_v3.0.svg/1200px-Pharo_Logo_v3.0.svg.png)'.
