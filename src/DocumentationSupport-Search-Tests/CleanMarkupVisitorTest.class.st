@@ -35,6 +35,7 @@ This is a code
 ```'.
 	visitor visit: mic.
 	self assert: visitor text equals: '
+test for code block
 This is a code
 '
 ]

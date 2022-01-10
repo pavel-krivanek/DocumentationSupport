@@ -26,6 +26,8 @@ CleanMarkupVisitor >> visit: test [
 { #category : #visiting }
 CleanMarkupVisitor >> visitCode: aMicCodeBlock [
 	text := text , String cr.
+	aMicCodeBlock caption 
+		ifNotEmpty: [ text := text , aMicCodeBlock caption, String cr ].
 	text := text , aMicCodeBlock body.
 	text := text , String cr
 ]
