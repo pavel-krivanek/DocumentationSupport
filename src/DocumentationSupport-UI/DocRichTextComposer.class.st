@@ -91,6 +91,15 @@ DocRichTextComposer >> highlightText: aText [
 	
 ]
 
+{ #category : #'as yet unclassified' }
+DocRichTextComposer >> include: aChapterKey [
+	
+	| text tree |
+	text := (DocChapter dictionnaryOfChaptersAt: aChapterKey) source.
+	tree := MicroDownParser parse: text.
+	tree accept: self
+]
+
 { #category : #highlighting }
 DocRichTextComposer >> indexOfOccurence: aText [
 	| index |
@@ -174,7 +183,7 @@ DocRichTextComposer >> visitLink: aLink [
 							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ] ].
 						
 	(self isRef: aLink) ifTrue: [ ].
-	(self isInclude: aLink) ifTrue: [ ].
+	(self isInclude: aLink) ifTrue: [ self include: aLink url path segments second ].
 	attribute
 		ifNotNil: [ canvas includeAttribute: attribute in: [ super visitLink: aLink ] ]
 		ifNil: [ super visitLink: aLink ]
