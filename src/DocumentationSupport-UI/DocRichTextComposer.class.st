@@ -102,20 +102,20 @@ DocRichTextComposer >> indexOfOccurence: aText [
 
 { #category : #testing }
 DocRichTextComposer >> isInclude: aLink [
-
-	^ aLink url path segments first = 'include:'
+	[ ^ aLink url path segments first = 'include:']
+		on: MessageNotUnderstood do: [ ^ false ] 
 ]
 
 { #category : #testing }
 DocRichTextComposer >> isRef: aLink [
-
-	^ aLink url path segments first = 'ref:'
+	[ ^ aLink url path segments first = 'ref:']
+		on: MessageNotUnderstood do: [ ^ false ] 
 ]
 
 { #category : #testing }
 DocRichTextComposer >> isWeb: aLink [
-
-	^ aLink url path segments first = 'http' or: [ aLink url path segments first = 'https' ]
+	[ ^ aLink url path scheme = 'http' or: [ aLink url path segments first = 'https' ]]
+		on: MessageNotUnderstood do: [ ^ false ] 
 ]
 
 { #category : #accessing }
