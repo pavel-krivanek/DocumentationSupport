@@ -186,15 +186,17 @@ CleanMarkupVisitorTest >> testVisitUnorderedList [
 CleanMarkupVisitorTest >> testVisitUnorderedListWithNested [
 	| mic |
 	mic := parser parse: '- 1
-- 2- 3
-- 4
-
-- 5
+- 2
+  - 3
+  - 4
+  - 5
 '.
 	visitor visit: mic.
 	self assert: visitor text equals: '- 1
-- 2- 3
+- 2
+- 3
 - 4
 - 5
+
 '
 ]

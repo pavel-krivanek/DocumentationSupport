@@ -115,7 +115,17 @@ CleanMarkupVisitor >> visitText: aMicTextBlock [
 
 { #category : #visiting }
 CleanMarkupVisitor >> visitUnorderedList: aMicUnorderedList [
+	
+	| mustChangeCr |
+	mustChangeCr := false.
+	crAtEnd 
+		ifTrue: [ text := text , String cr. ] 
+		ifFalse: [ crAtEnd := true.
+			mustChangeCr := true ].
+		
 	aMicUnorderedList children do: [ :each | 
 		self visitUnorderedListItem: each.
-		text := text , String cr ]
+		text := text , String cr ].
+	
+	mustChangeCr ifTrue: [ crAtEnd := false ]
 ]
