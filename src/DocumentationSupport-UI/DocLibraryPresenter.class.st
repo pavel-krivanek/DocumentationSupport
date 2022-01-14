@@ -20,10 +20,10 @@ Class {
 		'treeMenu',
 		'docSearchObject',
 		'searchInput',
-		'occurenceDisplay',
-		'chapterDropList',
 		'searchPattern',
-		'searchEnv'
+		'searchEnv',
+		'chapterDropList',
+		'occurenceDisplay'
 	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }

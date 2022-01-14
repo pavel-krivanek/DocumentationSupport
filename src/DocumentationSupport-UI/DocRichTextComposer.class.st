@@ -103,19 +103,19 @@ DocRichTextComposer >> indexOfOccurence: aText [
 { #category : #testing }
 DocRichTextComposer >> isInclude: aLink [
 
-	^ (aLink url path segments at: 1) = 'include:'
+	^ aLink url path segments first = 'include:'
 ]
 
 { #category : #testing }
 DocRichTextComposer >> isRef: aLink [
 
-	^ (aLink url path segments at: 1) = 'ref:'
+	^ aLink url path segments first = 'ref:'
 ]
 
 { #category : #testing }
 DocRichTextComposer >> isWeb: aLink [
 
-	^ (aLink url path scheme) = 'http' or: [ (aLink url path segments at: 1) = 'https' ]
+	^ aLink url path segments first = 'http' or: [ aLink url path segments first = 'https' ]
 ]
 
 { #category : #accessing }
@@ -173,14 +173,8 @@ DocRichTextComposer >> visitLink: aLink [
 		attribute := TextAction new
 							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ] ].
 						
-	(self isRef: aLink) ifTrue: [ 
-		attribute := TextAction new
-			             actOnClickBlock: [ [(DocChapter dictionnaryOfChaptersAt: (aLink url path segments at: 2))
-					             				  asPresenter openWithSpec ;
-			            							  yourself] on: KeyNotFound do: [ "nothing" ]]].
-	(self isInclude: aLink) ifTrue: [ 
-		attribute := TextAction new
-							 actOnClickBlock: [ "to implement" ] ].
+	(self isRef: aLink) ifTrue: [ ].
+	(self isInclude: aLink) ifTrue: [ ].
 	attribute
 		ifNotNil: [ canvas includeAttribute: attribute in: [ super visitLink: aLink ] ]
 		ifNil: [ super visitLink: aLink ]
