@@ -2,15 +2,32 @@ Class {
 	#name : #CleanMarkupVisitor,
 	#superclass : #MicrodownVisitor,
 	#instVars : [
-		'text'
+		'text',
+		'crAtEnd'
 	],
 	#category : #'DocumentationSupport-Search'
 }
 
+{ #category : #'as yet unclassified' }
+CleanMarkupVisitor >> include: aChapterKey [
+	
+	| src tree |
+	src := (DocChapter dictionnaryOfChaptersAt: aChapterKey) source.
+	tree := MicroDownParser parse: src.
+	tree accept: self
+]
+
 { #category : #initialization }
 CleanMarkupVisitor >> initialize [
 	super initialize.
-	text := ''
+	text := ''.
+	crAtEnd := false
+]
+
+{ #category : #'as yet unclassified' }
+CleanMarkupVisitor >> isInclude: aLink [
+	[ ^ aLink url path segments first = 'include:']
+		on: MessageNotUnderstood do: [ ^ false ] 
 ]
 
 { #category : #accessing }
@@ -48,6 +65,13 @@ CleanMarkupVisitor >> visitHeader: aMicHeaderBlock [
 CleanMarkupVisitor >> visitHorizontalLine: aMicHorizontalLine [
 	super visitHorizontalLine: aMicHorizontalLine.
 	text := text , ('     ' repeat: 20) , String cr
+]
+
+{ #category : #'as yet unclassified' }
+CleanMarkupVisitor >> visitLink: aLink [
+	(self isInclude: aLink) 
+		ifTrue: [ self include: aLink url path segments second ] 
+		ifFalse: [ super visitLink: aLink ]
 ]
 
 { #category : #visiting }
