@@ -87,7 +87,7 @@ DocSearchEnvironmentTest >> testFirstOccurenceOfFourthChapter [
 	self assert: docSearchEnv currentEntryIndex equals: 2.
 	self assert: docSearchEnv resultEntries size equals: 4.
 	self assert: docSearchEnv currentResultEntry chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv currentResultEntry startPosition equals: 11
+	self assert: docSearchEnv currentResultEntry startPosition equals: 12
 	
 ]
 
@@ -101,7 +101,7 @@ DocSearchEnvironmentTest >> testFirstOccurenceOfFourthChapterWithShiftedChapter 
 	self assert: docSearchEnv currentEntryIndex equals: 1.
 	self assert: docSearchEnv resultEntries size equals: 4.
 	self assert: docSearchEnv currentResultEntry chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv currentResultEntry startPosition equals: 11
+	self assert: docSearchEnv currentResultEntry startPosition equals: 12
 	
 ]
 
@@ -114,11 +114,11 @@ DocSearchEnvironmentTest >> testFirstResultEntriesForEachChapter [
 	res := docSearchEnv firstResultEntriesForEachChapters.
 	self assert: res size equals: 3.
 	self assert: res first chapter title  equals: 'chapitre 1'.
-	self assert: res first startPosition  equals: 11.
+	self assert: res first startPosition  equals: 12.
 	self assert: res second chapter title equals: 'chapitre 4'.
-	self assert: res second startPosition equals: 11.
+	self assert: res second startPosition equals: 12.
 	self assert: res third chapter title equals: 'chapitre 5'.
-	self assert: res third startPosition equals: 24
+	self assert: res third startPosition equals: 25
 ]
 
 { #category : #tests }
@@ -280,9 +280,9 @@ DocSearchEnvironmentTest >> testResultEntriesOf [
 	res := docSearchEnv resultEntriesOf: library books third chapters first key.
 	self assert: res size equals: 2.
 	self assert: res first chapter title  equals: 'chapitre 4'.
-	self assert: res first startPosition  equals: 11.
+	self assert: res first startPosition  equals: 12.
 	self assert: res second chapter title equals: 'chapitre 4'.
-	self assert: res second startPosition equals: 71
+	self assert: res second startPosition equals: 72
 ]
 
 { #category : #'tests-search' }
@@ -293,13 +293,13 @@ DocSearchEnvironmentTest >> testSearch [
 	docSearchEnv search: 'test'.
 	self assert: docSearchEnv resultEntries size equals: 4.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 1'.
-	self assert: docSearchEnv resultEntries first startPosition equals: 11.
+	self assert: docSearchEnv resultEntries first startPosition equals: 12.
 	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv resultEntries second startPosition equals: 11.
+	self assert: docSearchEnv resultEntries second startPosition equals: 12.
 	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv resultEntries third startPosition equals: 71.
+	self assert: docSearchEnv resultEntries third startPosition equals: 72.
 	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 5'.
-	self assert: docSearchEnv resultEntries fourth startPosition equals: 24.
+	self assert: docSearchEnv resultEntries fourth startPosition equals: 25.
 	
 ]
 
@@ -310,11 +310,11 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14 [
 	docSearchEnv search: 'test'.
 	self assert: docSearchEnv resultEntries size equals: 3.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv resultEntries first startPosition equals: 11.
+	self assert: docSearchEnv resultEntries first startPosition equals: 12.
 	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv resultEntries second startPosition equals: 71.
+	self assert: docSearchEnv resultEntries second startPosition equals: 72.
 	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 5'.
-	self assert: docSearchEnv resultEntries third startPosition equals: 24.
+	self assert: docSearchEnv resultEntries third startPosition equals: 25.
 	
 ]
 
@@ -325,11 +325,11 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14WithShiftedChap
 	docSearchEnv search: 'test'.
 	self assert: docSearchEnv resultEntries size equals: 3.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv resultEntries first startPosition equals: 71.
+	self assert: docSearchEnv resultEntries first startPosition equals: 72.
 	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 5'.
-	self assert: docSearchEnv resultEntries second startPosition equals: 24.
+	self assert: docSearchEnv resultEntries second startPosition equals: 25.
 	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 1'.
-	self assert: docSearchEnv resultEntries third startPosition equals: 11.
+	self assert: docSearchEnv resultEntries third startPosition equals: 12.
 
 	
 ]
@@ -341,13 +341,13 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt14 [
 	docSearchEnv search: 'test'.
 		self assert: docSearchEnv resultEntries size equals: 4.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 1'.
-	self assert: docSearchEnv resultEntries first startPosition equals: 11.
+	self assert: docSearchEnv resultEntries first startPosition equals: 12.
 	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv resultEntries second startPosition equals: 11.
+	self assert: docSearchEnv resultEntries second startPosition equals: 12.
 	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv resultEntries third startPosition equals: 71.
+	self assert: docSearchEnv resultEntries third startPosition equals: 72.
 	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 5'.
-	self assert: docSearchEnv resultEntries fourth startPosition equals: 24.
+	self assert: docSearchEnv resultEntries fourth startPosition equals: 25.
 	
 ]
 
@@ -358,11 +358,11 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt14WithShiftedCha
 	docSearchEnv search: 'test'.
 	self assert: docSearchEnv resultEntries size equals: 3.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv resultEntries first startPosition equals: 11.
+	self assert: docSearchEnv resultEntries first startPosition equals: 12.
 	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 5'.
-	self assert: docSearchEnv resultEntries second startPosition equals: 24.
+	self assert: docSearchEnv resultEntries second startPosition equals: 25.
 	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 1'.
-	self assert: docSearchEnv resultEntries third startPosition equals: 11.
+	self assert: docSearchEnv resultEntries third startPosition equals: 12.
 	
 ]
 
@@ -426,12 +426,12 @@ DocSearchEnvironmentTest >> testSearchWithShiftedChapter [
 	self assert: docSearchEnv resultEntries size equals: 4.
 
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv resultEntries first startPosition equals: 11.
+	self assert: docSearchEnv resultEntries first startPosition equals: 12.
 	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv resultEntries second  startPosition equals: 71.
+	self assert: docSearchEnv resultEntries second  startPosition equals: 72.
 	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 5'.
-	self assert: docSearchEnv resultEntries third startPosition equals: 24.
+	self assert: docSearchEnv resultEntries third startPosition equals: 25.
 	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 1'.
-	self assert: docSearchEnv resultEntries fourth startPosition equals: 11.
+	self assert: docSearchEnv resultEntries fourth startPosition equals: 12.
 	
 ]
