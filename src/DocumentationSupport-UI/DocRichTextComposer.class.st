@@ -140,6 +140,23 @@ DocRichTextComposer >> libraryPresenter: anObject [
 	libraryPresenter := anObject
 ]
 
+{ #category : #'API-link' }
+DocRichTextComposer >> ref: aChapterKey [
+	| chapter |
+	chapter := (libraryPresenter library chapterOfKey: aChapterKey).
+	chapter
+		ifNotNil: [ libraryPresenter clickAt: chapter path ]
+	 	ifNil:  [ self refInOtherLibrary: (DocChapter dictionnaryOfChaptersAt: aChapterKey) ]
+]
+
+{ #category : #'API-link' }
+DocRichTextComposer >> refInOtherLibrary: aChapter [
+	| libraryPresenter |
+	libraryPresenter := aChapter library asPresenter.
+	libraryPresenter openWithSpec.
+	libraryPresenter clickAt: aChapter path
+]
+
 { #category : #accessing }
 DocRichTextComposer >> resultEntries [
 
