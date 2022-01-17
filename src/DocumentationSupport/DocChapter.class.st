@@ -145,9 +145,9 @@ DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition r
 
 	| foundPosition tree text |
 	tree := MicroDownParser parse: source.
-	text := (CleanMarkupVisitor new visit: tree) text.
+	text := (DocRichTextComposer new visit: tree) string.
 	foundPosition := text findString: aSearchPattern startingAt: currentSearchPosition.
-	(foundPosition = 0 or: [ foundPosition > limitIndex ]) ifTrue: [ ^ nil ].
+	(foundPosition = 0 or: [ foundPosition > text size ]) ifTrue: [ ^ nil ].
 	
 	^ DocResultEntry 
 			chapter: self 
