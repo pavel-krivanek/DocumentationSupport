@@ -263,9 +263,13 @@ DocChapterPresenter >> textFor: aSource [
 		tree := parser parse: builder contents.
 		richTextComposer := DocRichTextComposer new
 			executor: self.
-		(self parent isNotNil and: [ self parent searchEnv isNotNil ])
-			ifTrue: [ richTextComposer resultEntries: (self parent searchEnv resultEntriesOf: self chapter key).
-				richTextComposer currentResultEntry: self parent searchEnv currentResultEntry ].
+		self parent 
+			ifNotNil: [ 
+				richTextComposer libraryPresenter: self parent.
+				self parent searchEnv 
+					ifNotNil: [ 
+						richTextComposer resultEntries: (self parent searchEnv resultEntriesOf: self chapter key).
+						richTextComposer currentResultEntry: self parent searchEnv currentResultEntry ] ].
 		richTextComposer visit: tree
 		]
 		on: STONReaderError, MicParsingError, MessageNotUnderstood, SubclassResponsibility 

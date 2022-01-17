@@ -212,7 +212,9 @@ DocRichTextComposer >> visitLink: aLink [
 		attribute := TextAction new
 							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ] ].
 						
-	(self isRef: aLink) ifTrue: [ ].
+	(self isRef: aLink) ifTrue: [ 
+		attribute := TextAction new 
+							actOnClickBlock: [ self ref: aLink url path segments second ]].
 	(self isInclude: aLink) ifTrue: [ self include: aLink url path segments second ].
 	attribute
 		ifNotNil: [ canvas includeAttribute: attribute in: [ super visitLink: aLink ] ]
