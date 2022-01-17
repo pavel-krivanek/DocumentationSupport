@@ -5,7 +5,7 @@ Class {
 		'executor',
 		'resultEntries',
 		'currentResultEntry',
-		'library'
+		'libraryPresenter'
 	],
 	#classInstVars : [
 		'searchIndex',
@@ -126,6 +126,18 @@ DocRichTextComposer >> isRef: aLink [
 DocRichTextComposer >> isWeb: aLink [
 	[ ^ aLink url path scheme = 'http' or: [ aLink url path segments first = 'https' ]]
 		on: MessageNotUnderstood do: [ ^ false ] 
+]
+
+{ #category : #accessing }
+DocRichTextComposer >> libraryPresenter [
+
+	^ libraryPresenter
+]
+
+{ #category : #accessing }
+DocRichTextComposer >> libraryPresenter: anObject [
+
+	libraryPresenter := anObject
 ]
 
 { #category : #accessing }
