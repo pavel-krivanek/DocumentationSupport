@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'executor',
 		'resultEntries',
-		'currentResultEntry'
+		'currentResultEntry',
+		'library'
 	],
 	#classInstVars : [
 		'searchIndex',
@@ -91,7 +92,7 @@ DocRichTextComposer >> highlightText: aText [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'API-link' }
 DocRichTextComposer >> include: aChapterKey [
 	
 	| text tree |
