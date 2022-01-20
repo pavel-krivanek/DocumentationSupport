@@ -59,7 +59,7 @@ DocRichTextComposer class >> searchWord: aString [
 { #category : #accessing }
 DocRichTextComposer >> currentResultEntry [
 
-	^ currentResultEntry
+	^ currentResultEntry ifNil: [ ^ DocResultEntry new ]
 ]
 
 { #category : #accessing }

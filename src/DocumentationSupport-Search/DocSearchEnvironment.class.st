@@ -32,7 +32,7 @@ DocSearchEnvironment >> currentEntryIndex: anObject [
 
 { #category : #accessing }
 DocSearchEnvironment >> currentResultEntry [
-	^ resultEntries at: currentEntryIndex
+	resultEntries ifNotEmpty: [ ^ resultEntries at: currentEntryIndex ]
 ]
 
 { #category : #accessing }

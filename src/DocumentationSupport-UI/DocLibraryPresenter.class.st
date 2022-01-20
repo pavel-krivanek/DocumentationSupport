@@ -23,7 +23,8 @@ Class {
 		'searchPattern',
 		'searchEnv',
 		'chapterDropList',
-		'occurenceDisplay'
+		'occurenceDisplay',
+		'actualChapter'
 	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }
@@ -87,6 +88,12 @@ DocLibraryPresenter >> aspect: anAspect changedFrom: anOrigin [
 	anAspect = #books ifTrue: [ self updateTree ].	
 	anAspect = #chapters ifTrue: [ self updateTree ].
 	anAspect = #hierarchyNames ifTrue: [ self refreshTree ].
+]
+
+{ #category : #actions }
+DocLibraryPresenter >> clickAt [
+	actualChapter ifNotNil: [ tree clickAtPath: actualChapter path ]
+	
 ]
 
 { #category : #actions }
@@ -285,9 +292,12 @@ DocLibraryPresenter >> setChapterDropList [
 		help: 'Select the chapter.';
 		display: [ :resultEntry | resultEntry chapter title ];
 		whenSelectedItemChangedDo: [ :resultEntry | 
-			searchEnv firstOccurrenceOf: resultEntry chapter.
-			searchInput owner clickAt: resultEntry chapter path.
-			self updateOccurenceDisplay ];
+			resultEntry ifNotNil: [ 
+				searchEnv firstOccurrenceOf: resultEntry chapter.
+				actualChapter := resultEntry chapter.
+				searchInput owner clickAt.
+				self updateOccurenceDisplay ]
+			 ];
 		extent: 400@20;
 		yourself
 ]
@@ -308,8 +318,9 @@ DocLibraryPresenter >> setNextButton [
 				     action: [ 
 							searchEnv ifNotNil: [ [ 
 							searchEnv nextResultEntry.
-							searchInput owner clickAt: searchEnv currentResultEntry chapter path.
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ]
+							actualChapter := searchEnv currentResultEntry chapter.
+							searchInput owner clickAt.
+							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
 { #category : #'search bar' }
@@ -319,8 +330,9 @@ DocLibraryPresenter >> setNextChapterButton [
 				     action: [ 
 							searchEnv ifNotNil: [ [ 
 							searchEnv nextChapterInResultEntries.
-							searchInput owner clickAt: searchEnv currentResultEntry chapter path.
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ]
+							actualChapter := searchEnv currentResultEntry chapter.
+							searchInput owner clickAt.
+							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
 { #category : #'search bar' }
@@ -330,8 +342,9 @@ DocLibraryPresenter >> setPreviousButton [
 					     action: [ 
 								searchEnv ifNotNil: [ [ 
 								searchEnv prevResultEntry.
-								searchInput owner clickAt: searchEnv currentResultEntry chapter path.
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ]
+								actualChapter := searchEnv currentResultEntry chapter.
+								searchInput owner clickAt.
+							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
 { #category : #'search bar' }
@@ -341,8 +354,9 @@ DocLibraryPresenter >> setPreviousChapterButton [
 				     action: [ 
 							searchEnv ifNotNil: [ [ 
 							searchEnv prevChapterInResultEntries.
-							searchInput owner clickAt: searchEnv currentResultEntry chapter path.
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ]
+							actualChapter := searchEnv currentResultEntry chapter.
+							searchInput owner clickAt.
+							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
 { #category : #'search bar' }
@@ -352,16 +366,20 @@ DocLibraryPresenter >> setSearchAction [
 				ifTrue: [ 
 					searchEnv ifNotNil: [ [ 
 							searchEnv nextResultEntry.
-							searchInput owner clickAt: searchEnv currentResultEntry chapter path.
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]
+							self updateOccurenceDisplay.
+							actualChapter := searchEnv currentResultEntry chapter.
+							searchInput owner clickAt.
+							] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]
 			   ] 
 				ifFalse: [ 
 					[ searchPattern := searchInput text.
 					searchEnv := self searchAction.
 					"Display in presenter the first occurence"
-					searchInput owner clickAt: searchEnv currentResultEntry chapter path.
+					self updateOccurenceDisplay.
 					chapterDropList items: searchEnv firstResultEntriesForEachChapters.
-					self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ].		
+					actualChapter := searchEnv currentResultEntry chapter.
+					searchInput owner clickAt.
+					 ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ self clickAt ].		
 				]	].
 			
 ]
@@ -374,9 +392,11 @@ DocLibraryPresenter >> setSearchButton [
 							searchPattern := searchInput text.
 							searchEnv := self searchAction.
 							"Display in presenter the first occurence"
-							searchInput owner clickAt: searchEnv currentResultEntry chapter path.
+							self updateOccurenceDisplay.
 							chapterDropList items: searchEnv firstResultEntriesForEachChapters.
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ]  ]
+							actualChapter := searchEnv currentResultEntry chapter.
+							searchInput owner clickAt.
+							] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ self clickAt ]  ]
 ]
 
 { #category : #tree }
@@ -422,7 +442,7 @@ DocLibraryPresenter >> toolbarActions [
 
 { #category : #'search bar' }
 DocLibraryPresenter >> updateOccurenceDisplay [
-	occurenceDisplay text: searchEnv currentEntryIndex asString , '/' , searchEnv resultEntries size asString , ' in ', searchEnv currentResultEntry chapter title
+	[occurenceDisplay text: searchEnv currentEntryIndex asString , '/' , searchEnv resultEntries size asString , ' in ', searchEnv currentResultEntry chapter title] on: MessageNotUnderstood do: [ occurenceDisplay text: '0/0' ] 
 ]
 
 { #category : #tree }
