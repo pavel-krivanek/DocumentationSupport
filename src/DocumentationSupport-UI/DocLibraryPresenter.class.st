@@ -106,7 +106,11 @@ DocLibraryPresenter >> aspect: anAspect changedFrom: anOrigin [
 
 { #category : #actions }
 DocLibraryPresenter >> clickAt [
-	actualChapter ifNotNil: [ tree clickAtPath: actualChapter path ]
+	actualChapter ifNotNil: [ 
+		lastChapterPresenter := actualChapterPresenter.
+		tree clickAtPath: actualChapter path.
+		self halt.
+		actualChapterPresenter scrollValue: (lastChapterPresenter scrollValue truncateTo: 0.01)   ]
 	
 ]
 

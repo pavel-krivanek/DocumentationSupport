@@ -258,9 +258,7 @@ DocChapterPresenter >> scrollValue [
 { #category : #accessing }
 DocChapterPresenter >> scrollValue: aScrollValue [
 	| scrollpane |
-	self halt.
-	scrollpane := preview morph scrollPane vScrollbarValue: 0.06.
-	self halt.
+	scrollpane := preview morph scrollPane vScrollbarValue: aScrollValue.
 ]
 
 { #category : #preview }
