@@ -72,7 +72,6 @@ DocChapterPresenter >> getPreviewPresenter [
 	| textMorph presenter src |
 	
 	src := chapter ifNil: [ '' ] ifNotNil: [ chapter source ].
-	
 	textMorph := self previewMorphFor: src.
 
 	presenter := SpMorphPresenter new.
@@ -150,7 +149,6 @@ DocChapterPresenter >> initializePresenters [
 			layout := self layoutShowingEditor: showEditor ].
 		
 	layout := self layoutShowingEditor: showEditor.
-	
 	self updatePreview: self chapter source
 
 
@@ -231,7 +229,8 @@ DocChapterPresenter >> parent [
 
 { #category : #accessing }
 DocChapterPresenter >> parent: anObject [
-	parent := anObject
+	parent := anObject.
+	self updatePreview: self chapter source
 ]
 
 { #category : #preview }
@@ -254,7 +253,7 @@ DocChapterPresenter >> previewMorphFor: aSource [
 { #category : #preview }
 DocChapterPresenter >> textFor: aSource [
 
-	|  builder text |
+	|  builder text richTextComposer |
 
 	builder := MicroDownParser builder.
 	builder text: aSource.
@@ -262,12 +261,19 @@ DocChapterPresenter >> textFor: aSource [
 		| parser tree |
 		parser := MicroDownParser new.
 		tree := parser parse: builder contents.
-		DocRichTextComposer new 
-			executor: self;		
-			visit: tree. ]
+		richTextComposer := DocRichTextComposer new
+			executor: self.
+		self parent 
+			ifNotNil: [ 
+				richTextComposer libraryPresenter: self parent.
+				self parent searchEnv 
+					ifNotNil: [ 
+						richTextComposer resultEntries: (self parent searchEnv resultEntriesOf: self chapter key).
+						richTextComposer currentResultEntry: self parent searchEnv currentResultEntry ] ].
+		richTextComposer visit: tree
+		]
 		on: STONReaderError, MicParsingError, MessageNotUnderstood, SubclassResponsibility 
 			do: [ :e | builder contents ].
-
 	^ text
 ]
 
@@ -281,19 +287,16 @@ DocChapterPresenter >> updatePreview: newSource [
 			updateProcess terminate.
 			updateProcess := nil ] ].
 
-	updateProcess := [ 
-		"| newText |
-		newText := self textFor: newSource.
-	
-		previewUpdateMutex critical: [ 
-			self defer: [ 
-				preview morph setText: newText ] ]"
-	] fork.
-
+	"updateProcess := [ 
 		newText := self textFor: newSource.
 	
 		previewUpdateMutex critical: [ 
 			self defer: [ 
 				preview morph setText: newText ] ]
+	] fork."
+
+		previewUpdateMutex critical: [ 
+			self defer: [preview morph setText: (self textFor: newSource) ] ].
+		
 	
 ]

@@ -143,10 +143,11 @@ DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition [
 { #category : #'API - search' }
 DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: limitIndex [
 
-	| foundPosition |
-
-	foundPosition := source findString: aSearchPattern startingAt: currentSearchPosition.
-	(foundPosition = 0 or: [ foundPosition > limitIndex ]) ifTrue: [ ^ nil ].
+	| foundPosition tree text |
+	tree := MicroDownParser parse: source.
+	text := (DocRichTextComposer new visit: tree) string.
+	foundPosition := text findString: aSearchPattern startingAt: currentSearchPosition.
+	(foundPosition = 0 or: [ foundPosition > text size ]) ifTrue: [ ^ nil ].
 	
 	^ DocResultEntry 
 			chapter: self 

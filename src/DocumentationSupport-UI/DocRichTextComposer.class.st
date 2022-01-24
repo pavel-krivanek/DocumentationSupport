@@ -2,7 +2,10 @@ Class {
 	#name : #DocRichTextComposer,
 	#superclass : #MicRichTextComposer,
 	#instVars : [
-		'executor'
+		'executor',
+		'resultEntries',
+		'currentResultEntry',
+		'libraryPresenter'
 	],
 	#classInstVars : [
 		'searchIndex',
@@ -54,6 +57,18 @@ DocRichTextComposer class >> searchWord: aString [
 ]
 
 { #category : #accessing }
+DocRichTextComposer >> currentResultEntry [
+
+	^ currentResultEntry ifNil: [ ^ DocResultEntry new ]
+]
+
+{ #category : #accessing }
+DocRichTextComposer >> currentResultEntry: anObject [
+
+	currentResultEntry := anObject
+]
+
+{ #category : #accessing }
 DocRichTextComposer >> executor [
 
 	^ executor
@@ -67,13 +82,23 @@ DocRichTextComposer >> executor: anObject [
 
 { #category : #highlighting }
 DocRichTextComposer >> highlightText: aText [
-	| index |
-	index := self indexOfOccurence: aText.
-	(index > 0 and: [ self class searchHighLightEnableOn ]) ifTrue: [ 
-		aText  addAttribute: (TextBackgroundColor new color: Color lightGray ) from: index to: index + self class searchSize - 1
-		 ]
+	[ 
+	resultEntries do: [ :resultEntry |
+		resultEntry = currentResultEntry 
+			ifTrue: [ aText addAttribute: (TextBackgroundColor new color: Color green ) from: resultEntry startPosition to: resultEntry endPosition ] 
+			ifFalse: [ aText addAttribute: (TextBackgroundColor new color: Color lightGray ) from: resultEntry startPosition to: resultEntry endPosition ]
+	]] on: SubscriptOutOfBounds,MessageNotUnderstood do: [ "nothing" ]
 	
 	
+]
+
+{ #category : #'API-link' }
+DocRichTextComposer >> include: aChapterKey [
+	
+	| text tree |
+	text := (DocChapter dictionnaryOfChaptersAt: aChapterKey) source.
+	tree := MicroDownParser parse: text.
+	tree accept: self
 ]
 
 { #category : #highlighting }
@@ -87,20 +112,61 @@ DocRichTextComposer >> indexOfOccurence: aText [
 
 { #category : #testing }
 DocRichTextComposer >> isInclude: aLink [
-
-	^ (aLink url path segments at: 1) = 'include:'
+	[ ^ aLink url path segments first = 'include:']
+		on: MessageNotUnderstood do: [ ^ false ] 
 ]
 
 { #category : #testing }
 DocRichTextComposer >> isRef: aLink [
-
-	^ (aLink url path segments at: 1) = 'ref:'
+	[ ^ aLink url path segments first = 'ref:']
+		on: MessageNotUnderstood do: [ ^ false ] 
 ]
 
 { #category : #testing }
 DocRichTextComposer >> isWeb: aLink [
+	[ ^ aLink url path scheme = 'http' or: [ aLink url path segments first = 'https' ]]
+		on: MessageNotUnderstood do: [ ^ false ] 
+]
 
-	^ (aLink url path segments at: 1) = 'http' or: [ (aLink url path segments at: 1) = 'https' ]
+{ #category : #accessing }
+DocRichTextComposer >> libraryPresenter [
+
+	^ libraryPresenter
+]
+
+{ #category : #accessing }
+DocRichTextComposer >> libraryPresenter: anObject [
+
+	libraryPresenter := anObject
+]
+
+{ #category : #'API-link' }
+DocRichTextComposer >> ref: aChapterKey [
+	| chapter |
+	chapter := (libraryPresenter library chapterOfKey: aChapterKey).
+	chapter
+		ifNotNil: [ libraryPresenter clickAt: chapter path ]
+	 	ifNil:  [ self refInOtherLibrary: (DocChapter dictionnaryOfChaptersAt: aChapterKey) ]
+]
+
+{ #category : #'API-link' }
+DocRichTextComposer >> refInOtherLibrary: aChapter [
+	| libraryPresenter |
+	libraryPresenter := aChapter library asPresenter.
+	libraryPresenter openWithSpec.
+	libraryPresenter clickAt: aChapter path
+]
+
+{ #category : #accessing }
+DocRichTextComposer >> resultEntries [
+
+	^ resultEntries
+]
+
+{ #category : #accessing }
+DocRichTextComposer >> resultEntries: anObject [
+
+	resultEntries := anObject
 ]
 
 { #category : #visiting }
@@ -147,13 +213,9 @@ DocRichTextComposer >> visitLink: aLink [
 							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ] ].
 						
 	(self isRef: aLink) ifTrue: [ 
-		attribute := TextAction new
-			             actOnClickBlock: [ [(DocChapter dictionnaryOfChaptersAt: (aLink url path segments at: 2))
-					             				  asPresenter openWithSpec ;
-			            							  yourself] on: KeyNotFound do: [ "nothing" ]]].
-	(self isInclude: aLink) ifTrue: [ 
-		attribute := TextAction new
-							 actOnClickBlock: [ "to implement" ] ].
+		attribute := TextAction new 
+							actOnClickBlock: [ self ref: aLink url path segments second ]].
+	(self isInclude: aLink) ifTrue: [ self include: aLink url path segments second ].
 	attribute
 		ifNotNil: [ canvas includeAttribute: attribute in: [ super visitLink: aLink ] ]
 		ifNil: [ super visitLink: aLink ]

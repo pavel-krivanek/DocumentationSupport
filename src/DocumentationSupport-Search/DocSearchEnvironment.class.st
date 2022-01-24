@@ -30,6 +30,33 @@ DocSearchEnvironment >> currentEntryIndex: anObject [
 	currentEntryIndex := anObject
 ]
 
+{ #category : #accessing }
+DocSearchEnvironment >> currentResultEntry [
+	resultEntries ifNotEmpty: [ ^ resultEntries at: currentEntryIndex ]
+]
+
+{ #category : #accessing }
+DocSearchEnvironment >> firstOccurrenceOf: aChapter [
+	| index |
+	index := 1.
+	[ (resultEntries at: index) chapter key = aChapter key ]
+	whileFalse: 
+	[ index := index + 1 ].
+	currentEntryIndex := index
+]
+
+{ #category : #accessing }
+DocSearchEnvironment >> firstResultEntriesForEachChapters [
+	| key res |
+	res := OrderedCollection new.
+	key := ''.
+	resultEntries do: [ :resultEntry | 
+		resultEntry chapter key = key 
+			ifFalse: [ key := resultEntry chapter key.
+				res add: resultEntry ] ].
+	^ res
+]
+
 { #category : #initialization }
 DocSearchEnvironment >> initOn: aDocSearchRange [
 	searchRange := aDocSearchRange
@@ -111,6 +138,11 @@ DocSearchEnvironment >> resetResultEntries [
 DocSearchEnvironment >> resultEntries [
 
 	^ resultEntries
+]
+
+{ #category : #accessing }
+DocSearchEnvironment >> resultEntriesOf: aChapterKey [
+	^ resultEntries select: [ :resultEntry | resultEntry chapter key = aChapterKey ]
 ]
 
 { #category : #'API - search' }
