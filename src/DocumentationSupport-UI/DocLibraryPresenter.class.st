@@ -24,7 +24,9 @@ Class {
 		'searchEnv',
 		'chapterDropList',
 		'occurenceDisplay',
-		'actualChapter'
+		'actualChapter',
+		'lastChapterPresenter',
+		'actualChapterPresenter'
 	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }
@@ -53,6 +55,18 @@ DocLibraryPresenter class >> open: libraryName [
 		DocLibrary loadFromRepositories ].
 	^ (self on: (DocLibrary named: libraryName)) openWithSpec.
 
+]
+
+{ #category : #accessing }
+DocLibraryPresenter >> actualChapterPresenter [
+
+	^ actualChapterPresenter
+]
+
+{ #category : #accessing }
+DocLibraryPresenter >> actualChapterPresenter: anObject [
+
+	actualChapterPresenter := anObject
 ]
 
 { #category : #actions }
