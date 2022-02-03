@@ -224,7 +224,7 @@ DocLibraryPresenter >> next [
 			text := actualChapterPresenter text.
 			text addAttribute: (TextBackgroundColor new color: Color lightGray ) from: oldEntry startPosition to: oldEntry endPosition.
 			text addAttribute: (TextBackgroundColor new color: Color green ) from: searchEnv currentResultEntry startPosition to: searchEnv currentResultEntry endPosition.
-			actualChapterPresenter updateText: text scrollAt: searchEnv currentResultEntry endPosition ]
+			actualChapterPresenter updateText: text scrollAt: searchEnv currentResultEntry scrollValue ]
 		ifFalse: [ 
 			actualChapter := searchEnv currentResultEntry chapter.
 			searchInput owner clickAt ].
@@ -380,7 +380,7 @@ DocLibraryPresenter >> setPreviousButton [
 										text := actualChapterPresenter text.
 										text addAttribute: (TextBackgroundColor new color: Color lightGray ) from: oldEntry startPosition to: oldEntry endPosition.
 										text addAttribute: (TextBackgroundColor new color: Color green ) from: searchEnv currentResultEntry startPosition to: searchEnv currentResultEntry endPosition.
-										actualChapterPresenter updateText: text scrollAt: searchEnv currentResultEntry endPosition ]
+										actualChapterPresenter updateText: text scrollAt: searchEnv currentResultEntry scrollValue ]
 									ifFalse: [ 
 										actualChapter := searchEnv currentResultEntry chapter.
 										searchInput owner clickAt ].

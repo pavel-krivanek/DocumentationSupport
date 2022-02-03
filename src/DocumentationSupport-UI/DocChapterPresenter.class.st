@@ -320,11 +320,10 @@ DocChapterPresenter >> updatePreview: newSource [
 ]
 
 { #category : #tests }
-DocChapterPresenter >> updateText: aText scrollAt: anInteger [
-	| morph scroll scrollValue |
+DocChapterPresenter >> updateText: aText scrollAt: aScrollValue [
+	| morph scroll |
 	morph := preview morph.
 	morph  textArea  paragraphReplacedTextFrom: 1 to: aText size with: aText.
 	scroll := morph scrollPane.
-	scrollValue := (anInteger / aText size) asFloat.
-	scroll vScrollbarValue: scrollValue.
+	scroll vScrollbarValue: aScrollValue.
 ]

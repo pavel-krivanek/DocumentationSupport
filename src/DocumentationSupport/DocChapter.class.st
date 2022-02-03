@@ -143,16 +143,18 @@ DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition [
 { #category : #'API - search' }
 DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: limitIndex [
 
-	| foundPosition tree text |
+	| foundPosition tree text lines1 lines2 |
 	tree := MicroDownParser parse: source.
 	text := (DocRichTextComposer new visit: tree) string.
 	foundPosition := text findString: aSearchPattern startingAt: currentSearchPosition.
 	(foundPosition = 0 or: [ foundPosition > text size ]) ifTrue: [ ^ nil ].
-	
+	lines1 := self numberOfLineOf: text from: 1 to: currentSearchPosition.
+	lines2 := self numberOfLineOf: text from: 1 to: text size.
 	^ DocResultEntry 
 			chapter: self 
 			startPosition: foundPosition 
 			endPosition: foundPosition + aSearchPattern size - 1
+			scrollValue: (lines1 /lines2 ) asFloat
 ]
 
 { #category : #'serialization support' }
@@ -263,6 +265,23 @@ DocChapter >> nextKeyOrNil [
 	nextChapter ifNil: [ ^ nil ].
 	
 	^ nextChapter key
+]
+
+{ #category : #'API - search' }
+DocChapter >> numberOfLineOf: aText from: aBegin to: aEnd [
+	| numberOfLine index start |
+	numberOfLine := 0.
+	start := aBegin.
+	[ 
+	index := aText findString: String cr startingAt: start.
+	index > 0 and: [ index < aEnd ]
+	]	
+	whileTrue: 
+	[ 
+	numberOfLine := numberOfLine + 1.
+	start := index + 1
+	].
+	^ numberOfLine 
 ]
 
 { #category : #accessing }
