@@ -108,9 +108,7 @@ DocLibraryPresenter >> aspect: anAspect changedFrom: anOrigin [
 DocLibraryPresenter >> clickAt [
 	actualChapter ifNotNil: [ 
 		lastChapterPresenter := actualChapterPresenter.
-		tree clickAtPath: actualChapter path.
-		self halt.
-		actualChapterPresenter scrollValue: (lastChapterPresenter scrollValue truncateTo: 0.01)   ]
+		tree clickAtPath: actualChapter path ]
 	
 ]
 
@@ -335,9 +333,20 @@ DocLibraryPresenter >> setNextButton [
 				     label: 'Next';
 				     action: [ 
 							searchEnv ifNotNil: [ [ 
-							searchEnv nextResultEntry.
-							actualChapter := searchEnv currentResultEntry chapter.
-							searchInput owner clickAt.
+								| oldEntry |
+								oldEntry := searchEnv currentResultEntry.
+								searchEnv nextResultEntry.
+								actualChapter key = searchEnv currentResultEntry chapter key 
+									ifTrue: [ 
+										| text |
+										text := actualChapterPresenter text.
+										text addAttribute: (TextBackgroundColor new color: Color lightGray ) from: oldEntry startPosition to: oldEntry endPosition.
+										text addAttribute: (TextBackgroundColor new color: Color green ) from: searchEnv currentResultEntry startPosition to: searchEnv currentResultEntry endPosition.
+										actualChapterPresenter updateText: text ]
+									ifFalse: [ 
+										actualChapter := searchEnv currentResultEntry chapter.
+										searchInput owner clickAt ].
+									
 							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
@@ -359,9 +368,19 @@ DocLibraryPresenter >> setPreviousButton [
 					     label: 'Previous';
 					     action: [ 
 								searchEnv ifNotNil: [ [ 
+								| oldEntry |
+								oldEntry := searchEnv currentResultEntry.
 								searchEnv prevResultEntry.
-								actualChapter := searchEnv currentResultEntry chapter.
-								searchInput owner clickAt.
+								actualChapter key = searchEnv currentResultEntry chapter key 
+									ifTrue: [ 
+										| text |
+										text := actualChapterPresenter text.
+										text addAttribute: (TextBackgroundColor new color: Color lightGray ) from: oldEntry startPosition to: oldEntry endPosition.
+										text addAttribute: (TextBackgroundColor new color: Color green ) from: searchEnv currentResultEntry startPosition to: searchEnv currentResultEntry endPosition.
+										actualChapterPresenter updateText: text ]
+									ifFalse: [ 
+										actualChapter := searchEnv currentResultEntry chapter.
+										searchInput owner clickAt ].
 							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
