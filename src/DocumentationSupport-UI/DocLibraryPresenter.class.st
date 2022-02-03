@@ -213,6 +213,24 @@ DocLibraryPresenter >> library: anObject [
 	library := anObject
 ]
 
+{ #category : #'search bar' }
+DocLibraryPresenter >> next [
+	| oldEntry |
+	oldEntry := searchEnv currentResultEntry.
+	searchEnv nextResultEntry.
+	actualChapter key = searchEnv currentResultEntry chapter key 
+		ifTrue: [ 
+			| text |
+			text := actualChapterPresenter text.
+			text addAttribute: (TextBackgroundColor new color: Color lightGray ) from: oldEntry startPosition to: oldEntry endPosition.
+			text addAttribute: (TextBackgroundColor new color: Color green ) from: searchEnv currentResultEntry startPosition to: searchEnv currentResultEntry endPosition.
+			actualChapterPresenter updateText: text scrollAt: searchEnv currentResultEntry endPosition ]
+		ifFalse: [ 
+			actualChapter := searchEnv currentResultEntry chapter.
+			searchInput owner clickAt ].
+	self updateOccurenceDisplay.
+]
+
 { #category : #actions }
 DocLibraryPresenter >> openChapter: aKey [
 
@@ -332,22 +350,7 @@ DocLibraryPresenter >> setNextButton [
 	^ SpButtonPresenter new
 				     label: 'Next';
 				     action: [ 
-							searchEnv ifNotNil: [ [ 
-								| oldEntry |
-								oldEntry := searchEnv currentResultEntry.
-								searchEnv nextResultEntry.
-								actualChapter key = searchEnv currentResultEntry chapter key 
-									ifTrue: [ 
-										| text |
-										text := actualChapterPresenter text.
-										text addAttribute: (TextBackgroundColor new color: Color lightGray ) from: oldEntry startPosition to: oldEntry endPosition.
-										text addAttribute: (TextBackgroundColor new color: Color green ) from: searchEnv currentResultEntry startPosition to: searchEnv currentResultEntry endPosition.
-										actualChapterPresenter updateText: text ]
-									ifFalse: [ 
-										actualChapter := searchEnv currentResultEntry chapter.
-										searchInput owner clickAt ].
-									
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
+							searchEnv ifNotNil: [ [ self next ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
 { #category : #'search bar' }
@@ -377,7 +380,7 @@ DocLibraryPresenter >> setPreviousButton [
 										text := actualChapterPresenter text.
 										text addAttribute: (TextBackgroundColor new color: Color lightGray ) from: oldEntry startPosition to: oldEntry endPosition.
 										text addAttribute: (TextBackgroundColor new color: Color green ) from: searchEnv currentResultEntry startPosition to: searchEnv currentResultEntry endPosition.
-										actualChapterPresenter updateText: text ]
+										actualChapterPresenter updateText: text scrollAt: searchEnv currentResultEntry endPosition ]
 									ifFalse: [ 
 										actualChapter := searchEnv currentResultEntry chapter.
 										searchInput owner clickAt ].
@@ -401,12 +404,7 @@ DocLibraryPresenter >> setSearchAction [
 	searchInput whenSubmitDo: [ 
 		searchPattern = searchInput text 
 				ifTrue: [ 
-					searchEnv ifNotNil: [ [ 
-							searchEnv nextResultEntry.
-							self updateOccurenceDisplay.
-							actualChapter := searchEnv currentResultEntry chapter.
-							searchInput owner clickAt.
-							] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]
+					searchEnv ifNotNil: [ [ self next	] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]
 			   ] 
 				ifFalse: [ 
 					[ searchPattern := searchInput text.
