@@ -261,6 +261,12 @@ DocChapterPresenter >> scrollValue: aScrollValue [
 	scrollpane := preview morph scrollPane vScrollbarValue: aScrollValue.
 ]
 
+{ #category : #accessing }
+DocChapterPresenter >> text [
+
+	^ preview morph textArea text 
+]
+
 { #category : #preview }
 DocChapterPresenter >> textFor: aSource [
 
@@ -311,4 +317,11 @@ DocChapterPresenter >> updatePreview: newSource [
 			self defer: [preview morph setText: (self textFor: newSource) ] ].
 		
 	
+]
+
+{ #category : #tests }
+DocChapterPresenter >> updateText: aText [
+	| morph |
+	morph := preview morph.
+	morph  textArea  paragraphReplacedTextFrom: 1 to: aText size with: aText.
 ]
