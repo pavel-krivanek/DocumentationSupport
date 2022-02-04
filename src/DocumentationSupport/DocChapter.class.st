@@ -148,7 +148,7 @@ DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition r
 	text := (DocRichTextComposer new visit: tree) string.
 	foundPosition := text findString: aSearchPattern startingAt: currentSearchPosition.
 	(foundPosition = 0 or: [ foundPosition > text size ]) ifTrue: [ ^ nil ].
-	lines1 := self numberOfLineOf: text from: 1 to: currentSearchPosition.
+	lines1 := self numberOfLineOf: text from: 1 to: foundPosition.
 	lines2 := self numberOfLineOf: text from: 1 to: text size.
 	^ DocResultEntry 
 			chapter: self 
