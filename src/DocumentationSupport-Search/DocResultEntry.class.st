@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'chapter',
 		'startPosition',
-		'endPosition'
+		'endPosition',
+		'scrollValue'
 	],
 	#category : #'DocumentationSupport-Search'
 }
@@ -16,6 +17,12 @@ Class {
 DocResultEntry class >> chapter: aChapter startPosition: aStartPosition endPosition: anEndPosition [
 
 	^ self new initializeOnChapter: aChapter startPosition: aStartPosition endPosition: anEndPosition
+]
+
+{ #category : #initialization }
+DocResultEntry class >> chapter: aChapter startPosition: aStartPosition endPosition: anEndPosition scrollValue: aScrollValue [
+
+	^ self new initializeOnChapter: aChapter startPosition: aStartPosition endPosition: anEndPosition scrollValue: aScrollValue
 ]
 
 { #category : #accessing }
@@ -46,6 +53,27 @@ DocResultEntry >> initializeOnChapter: aChapter startPosition: aStartPosition en
 	chapter := aChapter.
 	startPosition := aStartPosition.
 	endPosition := anEndPosition
+]
+
+{ #category : #initialization }
+DocResultEntry >> initializeOnChapter: aChapter startPosition: aStartPosition endPosition: anEndPosition scrollValue: aScrollValue [
+
+	chapter := aChapter.
+	startPosition := aStartPosition.
+	endPosition := anEndPosition.
+	scrollValue := aScrollValue 
+]
+
+{ #category : #accessing }
+DocResultEntry >> scrollValue [
+
+	^ scrollValue
+]
+
+{ #category : #accessing }
+DocResultEntry >> scrollValue: anObject [
+
+	scrollValue := anObject
 ]
 
 { #category : #accessing }

@@ -24,7 +24,11 @@ Class {
 		'searchEnv',
 		'chapterDropList',
 		'occurenceDisplay',
-		'actualChapter'
+		'actualChapter',
+		'lastChapterPresenter',
+		'actualChapterPresenter',
+		'hasNextChapterChange',
+		'hasPrevChapterChange'
 	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }
@@ -53,6 +57,18 @@ DocLibraryPresenter class >> open: libraryName [
 		DocLibrary loadFromRepositories ].
 	^ (self on: (DocLibrary named: libraryName)) openWithSpec.
 
+]
+
+{ #category : #accessing }
+DocLibraryPresenter >> actualChapterPresenter [
+
+	^ actualChapterPresenter
+]
+
+{ #category : #accessing }
+DocLibraryPresenter >> actualChapterPresenter: anObject [
+
+	actualChapterPresenter := anObject
 ]
 
 { #category : #actions }
@@ -92,7 +108,9 @@ DocLibraryPresenter >> aspect: anAspect changedFrom: anOrigin [
 
 { #category : #actions }
 DocLibraryPresenter >> clickAt [
-	actualChapter ifNotNil: [ tree clickAtPath: actualChapter path ]
+	actualChapter ifNotNil: [ 
+		lastChapterPresenter := actualChapterPresenter.
+		tree clickAtPath: actualChapter path ]
 	
 ]
 
@@ -137,6 +155,8 @@ DocLibraryPresenter >> export [
 DocLibraryPresenter >> initializePresenters [ 
 
 	super initializePresenters.
+	hasPrevChapterChange := false.
+	hasNextChapterChange := false.
 	docSearchObject := DocSearchEnvironment new.
 	tree := self newTree.
 	editor := self instantiate: DocPanePresenter.
@@ -197,6 +217,30 @@ DocLibraryPresenter >> library: anObject [
 	library := anObject
 ]
 
+{ #category : #'search bar' }
+DocLibraryPresenter >> next [
+
+	| oldEntry |
+	oldEntry := searchEnv currentResultEntry.
+	searchEnv nextResultEntry.
+	actualChapter key = searchEnv currentResultEntry chapter key
+		ifTrue: [ self updateText: oldEntry ]
+		ifFalse: [ 
+			actualChapter := searchEnv currentResultEntry chapter.
+			searchInput owner clickAt.
+			hasNextChapterChange := true ].
+	self updateOccurenceDisplay
+]
+
+{ #category : #'search bar' }
+DocLibraryPresenter >> nextAction [
+	hasNextChapterChange 
+		ifTrue: [ 
+			actualChapterPresenter scrollValue: searchEnv currentResultEntry scrollValue. 
+			hasNextChapterChange := false ] 
+		ifFalse: [ self next ]
+]
+
 { #category : #actions }
 DocLibraryPresenter >> openChapter: aKey [
 
@@ -214,6 +258,20 @@ DocLibraryPresenter >> openChapter: aKey [
 DocLibraryPresenter >> openInWindow: item [
 
 	item openIn: self application
+]
+
+{ #category : #'search bar' }
+DocLibraryPresenter >> prev [
+	| oldEntry |
+	oldEntry := searchEnv currentResultEntry.
+	searchEnv prevResultEntry.
+	actualChapter key = searchEnv currentResultEntry chapter key 
+		ifTrue: [ self updateText: oldEntry ]
+		ifFalse: [ 
+			actualChapter := searchEnv currentResultEntry chapter.
+			searchInput owner clickAt.
+			hasPrevChapterChange := true ].
+	self updateOccurenceDisplay
 ]
 
 { #category : #tree }
@@ -296,6 +354,7 @@ DocLibraryPresenter >> setChapterDropList [
 				searchEnv firstOccurrenceOf: resultEntry chapter.
 				actualChapter := resultEntry chapter.
 				searchInput owner clickAt.
+				hasNextChapterChange := true.
 				self updateOccurenceDisplay ]
 			 ];
 		extent: 400@20;
@@ -314,13 +373,9 @@ DocLibraryPresenter >> setLastOccurenceByChapter: occurenceCollection [
 { #category : #'search bar' }
 DocLibraryPresenter >> setNextButton [
 	^ SpButtonPresenter new
-				     label: 'Next';
-				     action: [ 
-							searchEnv ifNotNil: [ [ 
-							searchEnv nextResultEntry.
-							actualChapter := searchEnv currentResultEntry chapter.
-							searchInput owner clickAt.
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
+		label: 'Next';
+		action: [ 	searchEnv 
+			ifNotNil: [ [ self nextAction ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
 { #category : #'search bar' }
@@ -338,13 +393,13 @@ DocLibraryPresenter >> setNextChapterButton [
 { #category : #'search bar' }
 DocLibraryPresenter >> setPreviousButton [
 	^ SpButtonPresenter new
-					     label: 'Previous';
-					     action: [ 
-								searchEnv ifNotNil: [ [ 
-								searchEnv prevResultEntry.
-								actualChapter := searchEnv currentResultEntry chapter.
-								searchInput owner clickAt.
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
+	  	label: 'Previous';
+		action: [ searchEnv ifNotNil: [ [ 
+			hasPrevChapterChange  
+				ifTrue: [ 
+					actualChapterPresenter scrollValue: searchEnv currentResultEntry scrollValue. 
+					hasPrevChapterChange := false ] 
+				ifFalse: [ self prev ]] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
 { #category : #'search bar' }
@@ -364,12 +419,7 @@ DocLibraryPresenter >> setSearchAction [
 	searchInput whenSubmitDo: [ 
 		searchPattern = searchInput text 
 				ifTrue: [ 
-					searchEnv ifNotNil: [ [ 
-							searchEnv nextResultEntry.
-							self updateOccurenceDisplay.
-							actualChapter := searchEnv currentResultEntry chapter.
-							searchInput owner clickAt.
-							] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]
+					searchEnv ifNotNil: [ [ self nextAction	] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]
 			   ] 
 				ifFalse: [ 
 					[ searchPattern := searchInput text.
@@ -443,6 +493,15 @@ DocLibraryPresenter >> toolbarActions [
 { #category : #'search bar' }
 DocLibraryPresenter >> updateOccurenceDisplay [
 	[occurenceDisplay text: searchEnv currentEntryIndex asString , '/' , searchEnv resultEntries size asString , ' in ', searchEnv currentResultEntry chapter title] on: MessageNotUnderstood do: [ occurenceDisplay text: '0/0' ] 
+]
+
+{ #category : #'search bar' }
+DocLibraryPresenter >> updateText: previousEntry [
+	| text |
+	text := actualChapterPresenter text.
+	text addAttribute: (TextBackgroundColor new color: Color lightGray) from: previousEntry startPosition to: previousEntry endPosition.
+	text addAttribute: (TextBackgroundColor new color: Color green) from: searchEnv currentResultEntry startPosition to: searchEnv currentResultEntry endPosition.
+	actualChapterPresenter updateText: text	scrollAt: searchEnv currentResultEntry scrollValue
 ]
 
 { #category : #tree }

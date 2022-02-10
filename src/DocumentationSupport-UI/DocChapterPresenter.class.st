@@ -250,6 +250,23 @@ DocChapterPresenter >> previewMorphFor: aSource [
 	 ^ textMorph
 ]
 
+{ #category : #accessing }
+DocChapterPresenter >> scrollValue [ 
+	^ preview morph scrollPane vScrollbarValue
+]
+
+{ #category : #accessing }
+DocChapterPresenter >> scrollValue: aScrollValue [
+	| scrollpane |
+	scrollpane := preview morph scrollPane vScrollbarValue: aScrollValue.
+]
+
+{ #category : #accessing }
+DocChapterPresenter >> text [
+
+	^ preview morph textArea text 
+]
+
 { #category : #preview }
 DocChapterPresenter >> textFor: aSource [
 
@@ -266,6 +283,7 @@ DocChapterPresenter >> textFor: aSource [
 		self parent 
 			ifNotNil: [ 
 				richTextComposer libraryPresenter: self parent.
+				self parent actualChapterPresenter: self.
 				self parent searchEnv 
 					ifNotNil: [ 
 						richTextComposer resultEntries: (self parent searchEnv resultEntriesOf: self chapter key).
@@ -299,4 +317,13 @@ DocChapterPresenter >> updatePreview: newSource [
 			self defer: [preview morph setText: (self textFor: newSource) ] ].
 		
 	
+]
+
+{ #category : #tests }
+DocChapterPresenter >> updateText: aText scrollAt: aScrollValue [
+	| morph scroll |
+	morph := preview morph.
+	morph  textArea  paragraphReplacedTextFrom: 1 to: aText size with: aText.
+	scroll := morph scrollPane.
+	scroll vScrollbarValue: aScrollValue.
 ]
