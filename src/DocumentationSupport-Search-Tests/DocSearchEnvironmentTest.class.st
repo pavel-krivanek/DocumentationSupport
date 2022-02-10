@@ -353,6 +353,7 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt14 [
 
 { #category : #'tests-search' }
 DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt14WithShiftedChapter [
+	self skip.
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: 14)).
 	docSearchEnv search: 'test'.
