@@ -354,6 +354,7 @@ DocLibraryPresenter >> setChapterDropList [
 				searchEnv firstOccurrenceOf: resultEntry chapter.
 				actualChapter := resultEntry chapter.
 				searchInput owner clickAt.
+				hasNextChapterChange := true.
 				self updateOccurenceDisplay ]
 			 ];
 		extent: 400@20;
