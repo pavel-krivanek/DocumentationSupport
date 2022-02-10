@@ -232,6 +232,15 @@ DocLibraryPresenter >> next [
 	self updateOccurenceDisplay
 ]
 
+{ #category : #'search bar' }
+DocLibraryPresenter >> nextAction [
+	hasNextChapterChange 
+		ifTrue: [ 
+			actualChapterPresenter scrollValue: searchEnv currentResultEntry scrollValue. 
+			hasNextChapterChange := false ] 
+		ifFalse: [ self next ]
+]
+
 { #category : #actions }
 DocLibraryPresenter >> openChapter: aKey [
 
@@ -365,13 +374,7 @@ DocLibraryPresenter >> setNextButton [
 	^ SpButtonPresenter new
 		label: 'Next';
 		action: [ 	searchEnv 
-			ifNotNil: [ [ 
-					hasNextChapterChange 
-						ifTrue: [ 
-							actualChapterPresenter scrollValue: searchEnv currentResultEntry scrollValue. 
-							hasNextChapterChange := false ] 
-						ifFalse: [ self next ]
-					 ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
+			ifNotNil: [ [ self nextAction ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
 { #category : #'search bar' }
@@ -415,7 +418,7 @@ DocLibraryPresenter >> setSearchAction [
 	searchInput whenSubmitDo: [ 
 		searchPattern = searchInput text 
 				ifTrue: [ 
-					searchEnv ifNotNil: [ [ self next	] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]
+					searchEnv ifNotNil: [ [ self nextAction	] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]
 			   ] 
 				ifFalse: [ 
 					[ searchPattern := searchInput text.
