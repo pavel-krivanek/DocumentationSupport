@@ -58,61 +58,6 @@ DocLibraryPresenter class >> open: libraryName [
 	^ (self on: (DocLibrary named: libraryName)) open
 ]
 
-{ #category : #opening }
-DocLibraryPresenter class >> searchAction: searchPattern on: occurenceDisplay [
-	| chapters env |
-	"Create collection with all chapters of the library"
-	chapters := OrderedCollection new.
-	searchInput owner library books do: [ :book | 
-		chapters addAll: book chapters].
-	"Execute the search"
-	env:= DocSearchEnvironment on: (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	env search: searchPattern.
-	"Display the number of occurence"
-	occurenceDisplay text: searchPattern , ' has  ' , env resultEntries size asString , ' occurences'.
-	^ env
-
-]
-
-{ #category : #opening }
-DocLibraryPresenter class >> searchBar [
-
-	| occurenceDisplay searchPattern env |
-	searchInput := SpTextInputFieldPresenter new placeholder: 'Enter you search'.
-	occurenceDisplay := SpTextInputFieldPresenter new beNotEditable.
-	searchInput whenSubmitDo: [ [ 
-			searchPattern := searchInput text.
-			env := self searchAction: searchPattern  on: occurenceDisplay.
-			"Display in presenter the first occurence"
-			searchInput owner clickAt: (env resultEntries at: env currentEntryIndex) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ].
-
-	^ SpBoxLayout newHorizontal
-		  add: searchInput;
-		  add: occurenceDisplay;
-		  add: (SpButtonPresenter new
-				   label: 'Search';
-				   action: [ [
-						searchPattern := searchInput text.
-						env := self searchAction: searchPattern  on: occurenceDisplay.
-						"Display in presenter the first occurence"
-						searchInput owner clickAt: (env resultEntries at: env currentEntryIndex) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ]  ])
-		  height: 20;
-		  add: (SpButtonPresenter new
-				     label: 'Next';
-				     action: [ 
-							env ifNotNil: [ [ 
-							env nextResultEntry.
-							searchInput owner clickAt: (env resultEntries at: env currentEntryIndex) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ])
-		  height: 20;
-		  add: (SpButtonPresenter new
-				     label: 'Previous';
-				     action: [ 
-							env ifNotNil: [ [ 
-							env prevResultEntry.
-							searchInput owner clickAt: (env resultEntries at: env currentEntryIndex) chapter path ] on: SubscriptOutOfBounds  do: [ "nothing" ] ]  ])
-		  height: 20
-]
-
 { #category : #accessing }
 DocLibraryPresenter >> actualChapterPresenter [
 
