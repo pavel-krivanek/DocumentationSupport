@@ -39,14 +39,7 @@ Class {
 { #category : #layout }
 DocLibraryPresenter class >> defaultLayout [
 	^ SpBoxLayout newVertical
-		spacing: 3;
-		add: #toolbar expand: false;
-		add: self searchBar withConstraints: [  :constraints | constraints height: 20 ];		
-		add: (SpBoxLayout newHorizontal
-			spacing: 10;
-			add: #tree withConstraints: [  :constraints | constraints width: 300 ];
-			add: #editor expand: true fill: true  ;
-			yourself) expand: true
+		spacing: 3.
 ]
 
 { #category : #'instance creation' }
