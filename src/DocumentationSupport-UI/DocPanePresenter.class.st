@@ -11,8 +11,8 @@ Class {
 	#category : #'DocumentationSupport-UI-Presenters'
 }
 
-{ #category : #specs }
-DocPanePresenter class >> defaultSpec [
+{ #category : #layout }
+DocPanePresenter class >> defaultLayout [
 
 	^ SpBoxLayout newVertical 
 		add: #child;
