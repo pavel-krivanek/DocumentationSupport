@@ -302,6 +302,19 @@ DocLibraryPresenter >> nextAction [
 		ifFalse: [ self next ]
 ]
 
+{ #category : #'instance creation' }
+DocLibraryPresenter >> open [
+	self layout 
+		add: #toolbar expand: false;
+		add: self searchBar withConstraints: [  :constraints | constraints height: 20 ];	
+		add: (SpBoxLayout newHorizontal
+			spacing: 10;
+			add: #tree withConstraints: [  :constraints | constraints width: 300 ];
+			add: #editor expand: true fill: true  ;
+			yourself) expand: true.
+		super open.
+]
+
 { #category : #actions }
 DocLibraryPresenter >> openChapter: aKey [
 
@@ -351,6 +364,7 @@ DocLibraryPresenter >> resetSearchEnv [
 { #category : #api }
 DocLibraryPresenter >> retrieveSpec: aSelector [
 	| searchLayout |
+	self halt.
 	searchLayout := super retrieveSpec: aSelector.
 	searchLayout add: self searchBar withConstraints: [  :constraints | constraints height: 20 ];
 	add: (SpBoxLayout newHorizontal
