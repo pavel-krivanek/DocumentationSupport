@@ -299,20 +299,6 @@ DocLibraryPresenter >> resetSearchEnv [
 	searchPattern := ''
 ]
 
-{ #category : #api }
-DocLibraryPresenter >> retrieveSpec: aSelector [
-	| searchLayout |
-	self halt.
-	searchLayout := super retrieveSpec: aSelector.
-	searchLayout add: self searchBar withConstraints: [  :constraints | constraints height: 20 ];
-	add: (SpBoxLayout newHorizontal
-			spacing: 10;
-			add: #tree withConstraints: [  :constraints | constraints width: 300 ];
-			add: #editor expand: true fill: true  ;
-			yourself) expand: true.
-	^ searchLayout
-]
-
 { #category : #'search bar' }
 DocLibraryPresenter >> searchAction [
 	| chapters env |
