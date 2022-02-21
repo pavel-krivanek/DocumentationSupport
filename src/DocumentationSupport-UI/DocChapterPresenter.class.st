@@ -159,9 +159,8 @@ DocChapterPresenter >> headerLayout [
 DocChapterPresenter >> initializePresenters [ 
 
 	super initializePresenters.
-	
 	previewUpdateMutex := Mutex new.
-	
+
 	titleInput := self newTextInput.
 	titleInput text: self chapter title.
 	titleInput whenTextChangedDo: [ :aText | self chapter title: aText ].
@@ -222,7 +221,10 @@ DocChapterPresenter >> initializePresenters [
 		action: [ 
 			showEditor := showEditor not.
 			layout := self layoutShowingEditor: showEditor ].
-		
+	
+	headerEnable := false.
+	editEnable := false.
+	
 	layout := self layoutShowingEditor: showEditor.
 	self updatePreview: self chapter source
 
