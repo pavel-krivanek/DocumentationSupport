@@ -233,9 +233,8 @@ DocChapterPresenter >> initializePresenters [
 
 { #category : #initialization }
 DocChapterPresenter >> initializeWindow: aWindowPresenter [
-
 	aWindowPresenter
-		title: 'Documentation';
+		title: self chapter title;
 		initialExtent: 1100@850;
 		windowIcon: (self iconNamed: #book)
 ]

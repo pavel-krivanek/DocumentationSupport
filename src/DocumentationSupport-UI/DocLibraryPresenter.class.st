@@ -197,9 +197,8 @@ DocLibraryPresenter >> initializeToolbar [
 
 { #category : #initialization }
 DocLibraryPresenter >> initializeWindow: aWindowPresenter [
-
 	aWindowPresenter
-		title: 'Library';
+		title: self library name;
 		initialExtent: 1100@850;
 		windowIcon: (self iconNamed: #book)
 ]
