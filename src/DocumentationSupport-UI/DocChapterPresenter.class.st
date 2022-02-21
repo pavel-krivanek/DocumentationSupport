@@ -308,6 +308,15 @@ DocChapterPresenter >> setOpenButton [
 		action: [ self chapter asPresenter open ]
 ]
 
+{ #category : #layout }
+DocChapterPresenter >> setShowHeaderButton [
+	^ SpButtonPresenter new
+		label: 'Header hide/show';
+		action: [ 
+			headerEnable := headerEnable not.
+			layout := self layoutShowingEditor: showEditor ]
+]
+
 { #category : #accessing }
 DocChapterPresenter >> text [
 
