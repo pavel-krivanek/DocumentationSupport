@@ -292,6 +292,15 @@ DocChapterPresenter >> scrollValue: aScrollValue [
 	scrollpane := preview morph scrollPane vScrollbarValue: aScrollValue.
 ]
 
+{ #category : #layout }
+DocChapterPresenter >> setEditButton [
+	^ SpButtonPresenter new
+		label: 'Edit/Preview';
+		action: [ 
+			editEnable := editEnable not.
+			layout := self layoutShowingEditor: showEditor ]
+]
+
 { #category : #accessing }
 DocChapterPresenter >> text [
 
