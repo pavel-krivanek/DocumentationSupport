@@ -55,6 +55,15 @@ DocChapterPresenter >> aspect: anAspect changedFrom: anOrigin [
 
 ]
 
+{ #category : #layout }
+DocChapterPresenter >> buttonLayout [
+	^ SpBoxLayout newHorizontal 
+		beNotHomogeneous;
+		add: self setShowHeaderButton;
+		add: self setEditButton;
+		add: self setOpenButton
+]
+
 { #category : #accessing }
 DocChapterPresenter >> chapter [
 
