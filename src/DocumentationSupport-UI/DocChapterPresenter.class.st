@@ -19,7 +19,9 @@ Class {
 		'clearNext',
 		'goToNext',
 		'splitButton',
-		'showEditor'
+		'showEditor',
+		'headerEnable',
+		'editEnable'
 	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }
@@ -78,6 +80,35 @@ DocChapterPresenter >> getPreviewPresenter [
 	presenter morph: textMorph.
 
 	^ presenter.
+]
+
+{ #category : #layout }
+DocChapterPresenter >> headerLayout [
+	^ SpBoxLayout newVertical
+		beNotHomogeneous;
+		add: (SpGridLayout new
+			add: 'Title:' at: 1@1;
+			add: #titleInput at: 2@1 span: 4@1;
+			add: 'Key:' at: 1@2;
+			add: (
+				SpBoxLayout newHorizontal
+					spacing: 5;
+					add: #keyInput expand: true fill: true;
+					add: #copyRefButton expand: false;
+					add: #copyIncludeButton expand: false;
+					yourself
+			) at: 2@2 span: 4@1;
+			add: 'Next:' at: 1@3;
+			add: (
+				SpBoxLayout newHorizontal
+					spacing: 5;
+					add: #nextInput expand: true fill: true;
+					add: #clearNext expand: false;
+					add: #goToNext expand: false;
+					yourself
+			) at: 2@3 span: 4@1;
+			
+			yourself) height: 120
 ]
 
 { #category : #initialization }
