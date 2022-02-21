@@ -77,6 +77,41 @@ DocChapterPresenter >> chapter: aChapter [
 
 ]
 
+{ #category : #layout }
+DocChapterPresenter >> chapterLayout: aLayout [
+	headerEnable 
+		ifTrue:  [ 
+			^ SpBoxLayout newVertical
+			add: self headerLayout height:120;
+			add: self buttonLayout height: 24;
+			add: aLayout expand: true ]
+		ifFalse: [ 
+			^ SpBoxLayout newVertical 
+			add: self buttonLayout height: 24;
+			add: aLayout expand: true ]
+	
+]
+
+{ #category : #layout }
+DocChapterPresenter >> editOrPreviewLayout: aBoolean [
+	| tmplayout |
+	aBoolean traceCr.
+	tmplayout := SpBoxLayout newHorizontal spacing: 5.
+	editEnable 
+		ifTrue:  [ 
+			aBoolean ifTrue: [ tmplayout  add: #preview expand: true ].
+			tmplayout 
+				add: #splitButton withConstraints: [ :con | con expand: false; width: 24];
+				add: #srcInput expand: true ]
+		ifFalse: [ 
+			aBoolean ifTrue: [ tmplayout  add: #srcInput expand: true ].
+			tmplayout 
+				add: #splitButton withConstraints: [ :con | con expand: false; width: 24];
+				add: #preview expand: true ].
+	^ tmplayout
+	
+]
+
 { #category : #preview }
 DocChapterPresenter >> getPreviewPresenter [ 
 
@@ -206,41 +241,8 @@ DocChapterPresenter >> initializeWindow: aWindowPresenter [
 { #category : #layout }
 DocChapterPresenter >> layoutShowingEditor: aBoolean [
 
-	| previewLayout |
-	
 	aBoolean traceCr.
-	previewLayout := SpBoxLayout newHorizontal spacing: 5.
-	aBoolean ifTrue: [ previewLayout add: #srcInput expand: true ].
-	previewLayout 
-		add: #splitButton withConstraints: [ :con | con expand: false; width: 24];
-		add: #preview expand: true.
-
-	^ SpBoxLayout newVertical
-		beNotHomogeneous;
-		add: (SpGridLayout new
-			add: 'Title:' at: 1@1;
-			add: #titleInput at: 2@1 span: 4@1;
-			add: 'Key:' at: 1@2;
-			add: (
-				SpBoxLayout newHorizontal
-					spacing: 5;
-					add: #keyInput expand: true fill: true;
-					add: #copyRefButton expand: false;
-					add: #copyIncludeButton expand: false;
-					yourself
-			) at: 2@2 span: 4@1;
-			add: 'Next:' at: 1@3;
-			add: (
-				SpBoxLayout newHorizontal
-					spacing: 5;
-					add: #nextInput expand: true fill: true;
-					add: #clearNext expand: false;
-					add: #goToNext expand: false;
-					yourself
-			) at: 2@3 span: 4@1;
-			
-			yourself) height: 120;
-		add: previewLayout expand: true
+	^ self chapterLayout: (self editOrPreviewLayout: aBoolean)
 ]
 
 { #category : #actions }
