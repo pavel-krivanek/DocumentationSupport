@@ -301,6 +301,13 @@ DocChapterPresenter >> setEditButton [
 			layout := self layoutShowingEditor: showEditor ]
 ]
 
+{ #category : #layout }
+DocChapterPresenter >> setOpenButton [
+	^ SpButtonPresenter new
+		label: 'Open';
+		action: [ self chapter asPresenter open ]
+]
+
 { #category : #accessing }
 DocChapterPresenter >> text [
 
