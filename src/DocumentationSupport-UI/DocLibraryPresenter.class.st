@@ -28,7 +28,10 @@ Class {
 		'lastChapterPresenter',
 		'actualChapterPresenter',
 		'hasNextChapterChange',
-		'hasPrevChapterChange'
+		'hasPrevChapterChange',
+		'hideHeaderCheckBox',
+		'editCheckBox',
+		'showCheckBox'
 	],
 	#classInstVars : [
 		'searchInput'
@@ -215,7 +218,7 @@ DocLibraryPresenter >> library: anObject [
 	library := anObject
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-actions' }
 DocLibraryPresenter >> next [
 
 	| oldEntry |
@@ -230,7 +233,7 @@ DocLibraryPresenter >> next [
 	self updateOccurenceDisplay
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-actions' }
 DocLibraryPresenter >> nextAction [
 	hasNextChapterChange 
 		ifTrue: [ 
@@ -243,7 +246,8 @@ DocLibraryPresenter >> nextAction [
 DocLibraryPresenter >> open [
 	self layout 
 		add: #toolbar expand: false;
-		add: self searchBar withConstraints: [  :constraints | constraints height: 20 ];	
+		add: self searchBar withConstraints: [  :constraints | constraints height: 20 ];
+		add: self parametersBar height: 20;	
 		add: (SpBoxLayout newHorizontal
 			spacing: 10;
 			add: #tree withConstraints: [  :constraints | constraints width: 300 ];
@@ -256,7 +260,6 @@ DocLibraryPresenter >> open [
 DocLibraryPresenter >> openChapter: aKey [
 
 	| aChapter | 
-	
 	aChapter := library chapterOfKey: aKey.
 	tree selectItem: aChapter.
 		
@@ -271,7 +274,7 @@ DocLibraryPresenter >> openInWindow: item [
 	item openIn: self application
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-actions' }
 DocLibraryPresenter >> prev [
 	| oldEntry |
 	oldEntry := searchEnv currentResultEntry.
@@ -292,13 +295,13 @@ DocLibraryPresenter >> refreshTree [
 
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-bar' }
 DocLibraryPresenter >> resetSearchEnv [
 	searchEnv := nil.
 	searchPattern := ''
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-actions' }
 DocLibraryPresenter >> searchAction [
 	| chapters env |
 	"Create collection with all chapters of the library"
@@ -313,7 +316,7 @@ DocLibraryPresenter >> searchAction [
 
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-bar' }
 DocLibraryPresenter >> searchBar [
 	searchInput := SpTextInputFieldPresenter new placeholder: 'Enter you search'.
 	occurenceDisplay := SpTextInputFieldPresenter new beNotEditable.
@@ -342,7 +345,7 @@ DocLibraryPresenter >> searchEnv [
 	^ searchEnv
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-buttons' }
 DocLibraryPresenter >> setChapterDropList [
 	chapterDropList := SpDropListPresenter new 
 		help: 'Select the chapter.';
@@ -359,7 +362,7 @@ DocLibraryPresenter >> setChapterDropList [
 		yourself
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-bar' }
 DocLibraryPresenter >> setLastOccurenceByChapter: occurenceCollection [
 	| lastChapterOccurence lastOccurenceByChapter |
 	lastOccurenceByChapter := OrderedCollection new.
@@ -368,7 +371,7 @@ DocLibraryPresenter >> setLastOccurenceByChapter: occurenceCollection [
 	^ lastOccurenceByChapter
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-buttons' }
 DocLibraryPresenter >> setNextButton [
 	^ SpButtonPresenter new
 		label: 'Next';
@@ -376,7 +379,7 @@ DocLibraryPresenter >> setNextButton [
 			ifNotNil: [ [ self nextAction ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-buttons' }
 DocLibraryPresenter >> setNextChapterButton [
 	^ SpButtonPresenter new
 				     label: 'Next chapter';
@@ -388,7 +391,7 @@ DocLibraryPresenter >> setNextChapterButton [
 							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-buttons' }
 DocLibraryPresenter >> setPreviousButton [
 	^ SpButtonPresenter new
 	  	label: 'Previous';
@@ -400,7 +403,7 @@ DocLibraryPresenter >> setPreviousButton [
 				ifFalse: [ self prev ]] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-buttons' }
 DocLibraryPresenter >> setPreviousChapterButton [
 	^ SpButtonPresenter new
 				     label: 'Previous chapter';
@@ -412,7 +415,7 @@ DocLibraryPresenter >> setPreviousChapterButton [
 							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-bar' }
 DocLibraryPresenter >> setSearchAction [
 	searchInput whenSubmitDo: [ 
 		searchPattern = searchInput text 
@@ -432,7 +435,7 @@ DocLibraryPresenter >> setSearchAction [
 			
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-buttons' }
 DocLibraryPresenter >> setSearchButton [
 	^ SpButtonPresenter new
 					   label: 'Search';
@@ -488,12 +491,12 @@ DocLibraryPresenter >> toolbarActions [
 		  yourself
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-bar' }
 DocLibraryPresenter >> updateOccurenceDisplay [
 	[occurenceDisplay text: searchEnv currentEntryIndex asString , '/' , searchEnv resultEntries size asString , ' in ', searchEnv currentResultEntry chapter title] on: MessageNotUnderstood do: [ occurenceDisplay text: '0/0' ] 
 ]
 
-{ #category : #'search bar' }
+{ #category : #'search-bar' }
 DocLibraryPresenter >> updateText: previousEntry [
 	| text |
 	text := actualChapterPresenter text.

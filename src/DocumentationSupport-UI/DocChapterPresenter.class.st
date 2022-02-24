@@ -304,7 +304,7 @@ DocChapterPresenter >> scrollValue: aScrollValue [
 	scrollpane := preview morph scrollPane vScrollbarValue: aScrollValue.
 ]
 
-{ #category : #layout }
+{ #category : #buttons }
 DocChapterPresenter >> setEditButton [
 	^ SpButtonPresenter new
 		label: 'Edit/Preview';
@@ -313,14 +313,14 @@ DocChapterPresenter >> setEditButton [
 			layout := self layoutShowingEditor: showEditor ]
 ]
 
-{ #category : #layout }
+{ #category : #buttons }
 DocChapterPresenter >> setOpenButton [
 	^ SpButtonPresenter new
 		label: 'Open';
 		action: [ self chapter asPresenter open ]
 ]
 
-{ #category : #layout }
+{ #category : #buttons }
 DocChapterPresenter >> setShowHeaderButton [
 	^ SpButtonPresenter new
 		label: 'Header hide/show';
