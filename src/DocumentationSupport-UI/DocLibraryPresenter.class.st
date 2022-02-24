@@ -312,6 +312,13 @@ DocLibraryPresenter >> prev [
 	self updateOccurenceDisplay
 ]
 
+{ #category : #'parameters-bar' }
+DocLibraryPresenter >> refreshChapter [
+	[tree clickAtPath: actualChapterPresenter path] 
+		on: MessageNotUnderstood 
+		do: [ "nothing" ] 
+]
+
 { #category : #tree }
 DocLibraryPresenter >> refreshTree [ 
 
