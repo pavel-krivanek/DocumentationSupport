@@ -276,6 +276,11 @@ DocChapterPresenter >> parent: anObject [
 	self updatePreview: self chapter source
 ]
 
+{ #category : #accessing }
+DocChapterPresenter >> path [
+	^ chapter path
+]
+
 { #category : #preview }
 DocChapterPresenter >> previewMorphFor: aSource [
 
