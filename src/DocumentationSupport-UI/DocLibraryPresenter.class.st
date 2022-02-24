@@ -145,12 +145,22 @@ DocLibraryPresenter >> docSearchObject: aDocSearchObject [
 	docSearchObject := aDocSearchObject
 ]
 
+{ #category : #'parameters-bar' }
+DocLibraryPresenter >> editModeEnable [
+	^ editCheckBox state
+]
+
 { #category : #actions }
 DocLibraryPresenter >> export [ 
 
 	library repository export: library.
 	library makeClean
 
+]
+
+{ #category : #'parameters-bar' }
+DocLibraryPresenter >> hideHeaderModeEnable [
+	^ hideHeaderCheckBox state
 ]
 
 { #category : #initialization }
@@ -488,6 +498,11 @@ DocLibraryPresenter >> setupTreeMenu [
 
 	tree contextMenu: treeMenu.
 
+]
+
+{ #category : #'parameters-bar' }
+DocLibraryPresenter >> showModeEnable [
+	^ showCheckBox state
 ]
 
 { #category : #actions }
