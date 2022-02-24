@@ -274,6 +274,20 @@ DocLibraryPresenter >> openInWindow: item [
 	item openIn: self application
 ]
 
+{ #category : #'parameters-bar' }
+DocLibraryPresenter >> parametersBar [
+	hideHeaderCheckBox := SpCheckBoxPresenter new label: 'Hide header'.
+	editCheckBox := SpCheckBoxPresenter new label: 'Edit mode'.
+	showCheckBox := SpCheckBoxPresenter new label: 'Show preview/edit mode'.
+	hideHeaderCheckBox whenChangedDo: [ self refreshChapter ].
+	editCheckBox whenChangedDo: [ self refreshChapter ].
+	showCheckBox whenChangedDo: [ self refreshChapter ].
+	^ SpBoxLayout newHorizontal
+		  add: hideHeaderCheckBox height: 20;
+		  add: editCheckBox height: 20;
+		  add: showCheckBox height: 20
+]
+
 { #category : #'search-actions' }
 DocLibraryPresenter >> prev [
 	| oldEntry |
