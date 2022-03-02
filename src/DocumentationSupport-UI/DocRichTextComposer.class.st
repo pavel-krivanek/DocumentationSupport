@@ -172,7 +172,11 @@ DocRichTextComposer >> resultEntries: anObject [
 { #category : #visiting }
 DocRichTextComposer >> visit: aDocument [
 	| text |
-	text := super visit: aDocument.
+	canvas := DocRichTextCanvas new
+		          textStyler: self textStyler;
+		          yourself.
+	aDocument accept: self.
+	text := canvas contents.
 	self highlightText: text.
 	^ text.
 ]
