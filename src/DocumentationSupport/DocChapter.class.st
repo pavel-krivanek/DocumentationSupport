@@ -21,6 +21,11 @@ DocChapter class >> addDictionaryOfChapters: aChapter [
 ]
 
 { #category : #accessing }
+DocChapter class >> dictionnaryOfChapters [
+	^ dictionaryOfChapters
+]
+
+{ #category : #accessing }
 DocChapter class >> dictionnaryOfChaptersAt: aKey [
 	^ dictionaryOfChapters at: aKey
 ]
