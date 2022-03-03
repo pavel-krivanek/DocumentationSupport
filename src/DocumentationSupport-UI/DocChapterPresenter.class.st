@@ -273,7 +273,7 @@ DocChapterPresenter >> parent [
 { #category : #accessing }
 DocChapterPresenter >> parent: anObject [
 	parent := anObject.
-	headerEnable := parent hideHeaderModeEnable not.
+	headerEnable := parent showHeaderModeEnable.
 	editEnable := parent editModeEnable.
 	showEditor := parent showModeEnable.
 	layout := self layoutShowingEditor: showEditor.

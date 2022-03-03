@@ -29,9 +29,9 @@ Class {
 		'actualChapterPresenter',
 		'hasNextChapterChange',
 		'hasPrevChapterChange',
-		'hideHeaderCheckBox',
 		'editCheckBox',
-		'showCheckBox'
+		'showCheckBox',
+		'showHeaderCheckBox'
 	],
 	#classInstVars : [
 		'searchInput'
@@ -158,11 +158,6 @@ DocLibraryPresenter >> export [
 
 ]
 
-{ #category : #'parameters-bar' }
-DocLibraryPresenter >> hideHeaderModeEnable [
-	^ hideHeaderCheckBox state
-]
-
 { #category : #initialization }
 DocLibraryPresenter >> initializePresenters [ 
 
@@ -286,14 +281,14 @@ DocLibraryPresenter >> openInWindow: item [
 
 { #category : #'parameters-bar' }
 DocLibraryPresenter >> parametersBar [
-	hideHeaderCheckBox := SpCheckBoxPresenter new label: 'Hide header'.
+	showHeaderCheckBox := SpCheckBoxPresenter new label: 'Show header'.
 	editCheckBox := SpCheckBoxPresenter new label: 'Edit mode'.
 	showCheckBox := SpCheckBoxPresenter new label: 'Show preview/edit mode'.
-	hideHeaderCheckBox whenChangedDo: [ self refreshChapter ].
+	showHeaderCheckBox whenChangedDo: [ self refreshChapter ].
 	editCheckBox whenChangedDo: [ self refreshChapter ].
 	showCheckBox whenChangedDo: [ self refreshChapter ].
 	^ SpBoxLayout newHorizontal
-		  add: hideHeaderCheckBox height: 20;
+		  add: showHeaderCheckBox height: 20;
 		  add: editCheckBox height: 20;
 		  add: showCheckBox height: 20
 ]
@@ -505,6 +500,11 @@ DocLibraryPresenter >> setupTreeMenu [
 
 	tree contextMenu: treeMenu.
 
+]
+
+{ #category : #'parameters-bar' }
+DocLibraryPresenter >> showHeaderModeEnable [
+	^ showHeaderCheckBox state
 ]
 
 { #category : #'parameters-bar' }
