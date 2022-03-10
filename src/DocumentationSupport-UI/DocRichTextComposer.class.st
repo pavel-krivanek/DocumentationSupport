@@ -112,19 +112,19 @@ DocRichTextComposer >> indexOfOccurence: aText [
 
 { #category : #testing }
 DocRichTextComposer >> isInclude: aLink [
-	[ ^ aLink url path segments first = 'include:']
+	[ ^ aLink url beginsWith: 'include://']
 		on: MessageNotUnderstood do: [ ^ false ] 
 ]
 
 { #category : #testing }
 DocRichTextComposer >> isRef: aLink [
-	[ ^ aLink url path segments first = 'ref:']
+	[ ^ aLink url beginsWith: 'ref://']
 		on: MessageNotUnderstood do: [ ^ false ] 
 ]
 
 { #category : #testing }
 DocRichTextComposer >> isWeb: aLink [
-	[ ^ aLink url path scheme = 'http' or: [ aLink url path segments first = 'https' ]]
+	[ ^ aLink url beginsWith: 'http']
 		on: MessageNotUnderstood do: [ ^ false ] 
 ]
 
@@ -172,7 +172,11 @@ DocRichTextComposer >> resultEntries: anObject [
 { #category : #visiting }
 DocRichTextComposer >> visit: aDocument [
 	| text |
-	text := super visit: aDocument.
+	canvas := DocRichTextCanvas new
+		          textStyler: self textStyler;
+		          yourself.
+	aDocument accept: self.
+	text := canvas contents.
 	self highlightText: text.
 	^ text.
 ]
@@ -205,18 +209,25 @@ DocRichTextComposer >> visitExternalLink: aLink [
 { #category : #visiting }
 DocRichTextComposer >> visitLink: aLink [
 
-	| attribute |
-	attribute := nil.
-	
+	| attributes |
+	attributes := OrderedCollection new.
 	(self isWeb: aLink) ifTrue: [ 
-		attribute := TextAction new
-							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ] ].
+		attributes add: (TextAction new
+							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ]).
+		(DocLinkResolver isValidAddressForName: aLink url asUrl host timeout: 60) 
+			ifFalse: [ attributes add: (TextBackgroundColor new color: (Color orange alpha: 0.5)) ] ].
 						
 	(self isRef: aLink) ifTrue: [ 
-		attribute := TextAction new 
-							actOnClickBlock: [ self ref: aLink url path segments second ]].
-	(self isInclude: aLink) ifTrue: [ self include: aLink url path segments second ].
-	attribute
-		ifNotNil: [ canvas includeAttribute: attribute in: [ super visitLink: aLink ] ]
-		ifNil: [ super visitLink: aLink ]
+		(DocLinkResolver isValidChapterForName: aLink url asUrl host) 
+			ifFalse: [ attributes add: (TextBackgroundColor new color: (Color orange alpha: 0.5))]
+			ifTrue: [ attributes add: (TextAction new actOnClickBlock: [ self ref: aLink url asUrl host ]) ] ].
+		
+	(self isInclude: aLink) ifTrue: [ 
+		(DocLinkResolver isValidChapterForName: aLink url asUrl host) 
+			ifFalse: [ attributes add: (TextBackgroundColor new color: (Color orange alpha: 0.5))]
+			ifTrue: [ self include: aLink url asUrl host ] ].
+			
+	attributes
+		ifNotEmpty: [ canvas includeAttributes: attributes in: [ super visitLink: aLink ] ]
+		ifEmpty: [ super visitLink: aLink ]
 ]

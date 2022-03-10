@@ -19,7 +19,9 @@ Class {
 		'clearNext',
 		'goToNext',
 		'splitButton',
-		'showEditor'
+		'showEditor',
+		'headerEnable',
+		'editEnable'
 	],
 	#category : #'DocumentationSupport-UI-Presenters'
 }
@@ -53,6 +55,15 @@ DocChapterPresenter >> aspect: anAspect changedFrom: anOrigin [
 
 ]
 
+{ #category : #layout }
+DocChapterPresenter >> buttonLayout [
+	^ SpBoxLayout newHorizontal 
+		beNotHomogeneous;
+		add: self setShowHeaderButton;
+		add: self setEditButton;
+		add: self setOpenButton
+]
+
 { #category : #accessing }
 DocChapterPresenter >> chapter [
 
@@ -64,6 +75,41 @@ DocChapterPresenter >> chapter: aChapter [
 
 	chapter := aChapter.
 
+]
+
+{ #category : #layout }
+DocChapterPresenter >> chapterLayout: aLayout [
+	headerEnable 
+		ifTrue:  [ 
+			^ SpBoxLayout newVertical
+			add: self headerLayout height:120;
+			add: self buttonLayout height: 24;
+			add: aLayout expand: true ]
+		ifFalse: [ 
+			^ SpBoxLayout newVertical 
+			add: self buttonLayout height: 24;
+			add: aLayout expand: true ]
+	
+]
+
+{ #category : #layout }
+DocChapterPresenter >> editOrPreviewLayout: aBoolean [
+	| tmplayout |
+	aBoolean traceCr.
+	tmplayout := SpBoxLayout newHorizontal spacing: 5.
+	editEnable 
+		ifTrue:  [ 
+			aBoolean ifTrue: [ tmplayout  add: #preview expand: true ].
+			tmplayout 
+				add: #splitButton withConstraints: [ :con | con expand: false; width: 24];
+				add: #srcInput expand: true ]
+		ifFalse: [ 
+			aBoolean ifTrue: [ tmplayout  add: #srcInput expand: true ].
+			tmplayout 
+				add: #splitButton withConstraints: [ :con | con expand: false; width: 24];
+				add: #preview expand: true ].
+	^ tmplayout
+	
 ]
 
 { #category : #preview }
@@ -80,13 +126,41 @@ DocChapterPresenter >> getPreviewPresenter [
 	^ presenter.
 ]
 
+{ #category : #layout }
+DocChapterPresenter >> headerLayout [
+	^ SpBoxLayout newVertical
+		beNotHomogeneous;
+		add: (SpGridLayout new
+			add: 'Title:' at: 1@1;
+			add: #titleInput at: 2@1 span: 4@1;
+			add: 'Key:' at: 1@2;
+			add: (
+				SpBoxLayout newHorizontal
+					spacing: 5;
+					add: #keyInput expand: true fill: true;
+					add: #copyRefButton expand: false;
+					add: #copyIncludeButton expand: false;
+					yourself
+			) at: 2@2 span: 4@1;
+			add: 'Next:' at: 1@3;
+			add: (
+				SpBoxLayout newHorizontal
+					spacing: 5;
+					add: #nextInput expand: true fill: true;
+					add: #clearNext expand: false;
+					add: #goToNext expand: false;
+					yourself
+			) at: 2@3 span: 4@1;
+			
+			yourself) height: 120
+]
+
 { #category : #initialization }
 DocChapterPresenter >> initializePresenters [ 
 
 	super initializePresenters.
-	
 	previewUpdateMutex := Mutex new.
-	
+
 	titleInput := self newTextInput.
 	titleInput text: self chapter title.
 	titleInput whenTextChangedDo: [ :aText | self chapter title: aText ].
@@ -147,7 +221,10 @@ DocChapterPresenter >> initializePresenters [
 		action: [ 
 			showEditor := showEditor not.
 			layout := self layoutShowingEditor: showEditor ].
-		
+	
+	headerEnable := false.
+	editEnable := false.
+	
 	layout := self layoutShowingEditor: showEditor.
 	self updatePreview: self chapter source
 
@@ -156,9 +233,8 @@ DocChapterPresenter >> initializePresenters [
 
 { #category : #initialization }
 DocChapterPresenter >> initializeWindow: aWindowPresenter [
-
 	aWindowPresenter
-		title: 'Documentation';
+		title: self chapter title;
 		initialExtent: 1100@850;
 		windowIcon: (self iconNamed: #book)
 ]
@@ -166,41 +242,8 @@ DocChapterPresenter >> initializeWindow: aWindowPresenter [
 { #category : #layout }
 DocChapterPresenter >> layoutShowingEditor: aBoolean [
 
-	| previewLayout |
-	
 	aBoolean traceCr.
-	previewLayout := SpBoxLayout newHorizontal spacing: 5.
-	aBoolean ifTrue: [ previewLayout add: #srcInput expand: true ].
-	previewLayout 
-		add: #splitButton withConstraints: [ :con | con expand: false; width: 24];
-		add: #preview expand: true.
-
-	^ SpBoxLayout newVertical
-		beNotHomogeneous;
-		add: (SpGridLayout new
-			add: 'Title:' at: 1@1;
-			add: #titleInput at: 2@1 span: 4@1;
-			add: 'Key:' at: 1@2;
-			add: (
-				SpBoxLayout newHorizontal
-					spacing: 5;
-					add: #keyInput expand: true fill: true;
-					add: #copyRefButton expand: false;
-					add: #copyIncludeButton expand: false;
-					yourself
-			) at: 2@2 span: 4@1;
-			add: 'Next:' at: 1@3;
-			add: (
-				SpBoxLayout newHorizontal
-					spacing: 5;
-					add: #nextInput expand: true fill: true;
-					add: #clearNext expand: false;
-					add: #goToNext expand: false;
-					yourself
-			) at: 2@3 span: 4@1;
-			
-			yourself) height: 120;
-		add: previewLayout expand: true
+	^ self chapterLayout: (self editOrPreviewLayout: aBoolean)
 ]
 
 { #category : #actions }
@@ -230,7 +273,16 @@ DocChapterPresenter >> parent [
 { #category : #accessing }
 DocChapterPresenter >> parent: anObject [
 	parent := anObject.
+	headerEnable := parent showHeaderModeEnable.
+	editEnable := parent editModeEnable.
+	showEditor := parent showModeEnable.
+	layout := self layoutShowingEditor: showEditor.
 	self updatePreview: self chapter source
+]
+
+{ #category : #accessing }
+DocChapterPresenter >> path [
+	^ chapter path
 ]
 
 { #category : #preview }
@@ -259,6 +311,31 @@ DocChapterPresenter >> scrollValue [
 DocChapterPresenter >> scrollValue: aScrollValue [
 	| scrollpane |
 	scrollpane := preview morph scrollPane vScrollbarValue: aScrollValue.
+]
+
+{ #category : #buttons }
+DocChapterPresenter >> setEditButton [
+	^ SpButtonPresenter new
+		label: 'Edit/Preview';
+		action: [ 
+			editEnable := editEnable not.
+			layout := self layoutShowingEditor: showEditor ]
+]
+
+{ #category : #buttons }
+DocChapterPresenter >> setOpenButton [
+	^ SpButtonPresenter new
+		label: 'Open';
+		action: [ self chapter asPresenter open ]
+]
+
+{ #category : #buttons }
+DocChapterPresenter >> setShowHeaderButton [
+	^ SpButtonPresenter new
+		label: 'Header hide/show';
+		action: [ 
+			headerEnable := headerEnable not.
+			layout := self layoutShowingEditor: showEditor ]
 ]
 
 { #category : #accessing }
