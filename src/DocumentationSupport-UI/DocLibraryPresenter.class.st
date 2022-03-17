@@ -317,13 +317,6 @@ DocLibraryPresenter >> openInWindow: item [
 	item openIn: self application
 ]
 
-{ #category : #shortcuts }
-DocLibraryPresenter >> openShortcut: aCategory [
-	aCategory
-			addKeymapEntry:
-				(KMKeymap named: #OpenShortcut shortcut: $o command shift mac | $o ctrl shift win | $o ctrl shift unix | $o alt  action: [ self actualChapterPresenter chapter asPresenter open ])
-]
-
 { #category : #'parameters-bar' }
 DocLibraryPresenter >> parametersBar [
 	showHeaderCheckBox := SpCheckBoxPresenter new label: 'Show header'.
@@ -528,10 +521,12 @@ DocLibraryPresenter >> setShortcuts [
 		category := KMCategory named: #DocChapterShortcut.
 		KMRepository default addCategory: category.
 		morph attachKeymapCategory: #DocChapterShortcut.
-		self openShortcut: category.
-		self headerShortcut: category.
-		self editShortcut: category.
-		self showShortcut: category
+		self openChapterShortcut: category;
+		headerChapterShortcut: category;
+		editChapterShortcut: category;
+		headerShortcut: category;
+		editShortcut: category;
+		showShortcut: category.
 	
 ]
 
