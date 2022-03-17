@@ -528,6 +528,14 @@ DocLibraryPresenter >> showModeEnable [
 	^ showCheckBox state
 ]
 
+{ #category : #shortcuts }
+DocLibraryPresenter >> showShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #ShowShortcut shortcut: $p command shift mac | $p ctrl shift win | $p ctrl shift unix | $p alt  action: [ 
+					 showCheckBox state: showCheckBox state not ])
+]
+
 { #category : #actions }
 DocLibraryPresenter >> toolbarActions [
 
