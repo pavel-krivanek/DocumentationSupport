@@ -145,6 +145,13 @@ DocLibraryPresenter >> docSearchObject: aDocSearchObject [
 	docSearchObject := aDocSearchObject
 ]
 
+{ #category : #shortcuts }
+DocLibraryPresenter >> editChapterShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #EditChapterShortcut shortcut: $e ctrl shift mac | $e alt shift win | $e alt shift unix "| $e alt"  action: [ actualChapterPresenter changeEditView ])
+]
+
 { #category : #'parameters-bar' }
 DocLibraryPresenter >> editModeEnable [
 	^ editCheckBox state
