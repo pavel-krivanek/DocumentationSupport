@@ -275,6 +275,7 @@ DocLibraryPresenter >> open [
 			add: #editor expand: true fill: true  ;
 			yourself) expand: true.
 		super open.
+		self setShortcuts.
 ]
 
 { #category : #actions }
@@ -497,6 +498,20 @@ DocLibraryPresenter >> setSearchButton [
 							actualChapter := searchEnv currentResultEntry chapter.
 							searchInput owner clickAt.
 							] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ self clickAt ]  ]
+]
+
+{ #category : #shortcuts }
+DocLibraryPresenter >> setShortcuts [
+	| category morph |
+		morph := self owner window submorphs last.
+		category := KMCategory named: #DocChapterShortcut.
+		KMRepository default addCategory: category.
+		morph attachKeymapCategory: #DocChapterShortcut.
+		self openShortcut: category.
+		self headerShortcut: category.
+		self editShortcut: category.
+		self showShortcut: category
+	
 ]
 
 { #category : #tree }
