@@ -304,6 +304,13 @@ DocLibraryPresenter >> openChapter: aKey [
 
 ]
 
+{ #category : #shortcuts }
+DocLibraryPresenter >> openChapterShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #OpenChapterShortcut shortcut: $o ctrl shift mac | $o alt shift win | $o alt shift unix "| $o alt"  action: [ actualChapterPresenter chapter asPresenter open ])
+]
+
 { #category : #actions }
 DocLibraryPresenter >> openInWindow: item [
 
