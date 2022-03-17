@@ -166,6 +166,14 @@ DocLibraryPresenter >> export [
 
 ]
 
+{ #category : #shortcuts }
+DocLibraryPresenter >> headerShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #HeaderShortcut shortcut: $h command shift mac | $h ctrl shift win | $h ctrl shift unix | $h alt  action: [ 
+					showHeaderCheckBox state: showHeaderCheckBox state not ])
+]
+
 { #category : #initialization }
 DocLibraryPresenter >> initializePresenters [ 
 
