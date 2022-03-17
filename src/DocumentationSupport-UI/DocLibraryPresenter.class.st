@@ -150,6 +150,14 @@ DocLibraryPresenter >> editModeEnable [
 	^ editCheckBox state
 ]
 
+{ #category : #shortcuts }
+DocLibraryPresenter >> editShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #EditShortcut shortcut: $e command shift mac | $e ctrl shift win | $e ctrl shift unix | $e alt  action: [ 
+					editCheckBox  state: editCheckBox state not ])
+]
+
 { #category : #actions }
 DocLibraryPresenter >> export [ 
 
