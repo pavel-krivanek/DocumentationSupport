@@ -64,6 +64,18 @@ DocChapterPresenter >> buttonLayout [
 		add: self setOpenButton
 ]
 
+{ #category : #buttons }
+DocChapterPresenter >> changeEditView [
+	editEnable := editEnable not.
+	layout := self layoutShowingEditor: showEditor
+]
+
+{ #category : #buttons }
+DocChapterPresenter >> changeHeaderView [
+	headerEnable := headerEnable not.
+	layout := self layoutShowingEditor: showEditor
+]
+
 { #category : #accessing }
 DocChapterPresenter >> chapter [
 
@@ -323,9 +335,7 @@ DocChapterPresenter >> scrollValue: aScrollValue [
 DocChapterPresenter >> setEditButton [
 	^ SpButtonPresenter new
 		label: 'Edit/Preview';
-		action: [ 
-			editEnable := editEnable not.
-			layout := self layoutShowingEditor: showEditor ]
+		action: [ self changeEditView ]
 ]
 
 { #category : #buttons }
@@ -362,9 +372,7 @@ DocChapterPresenter >> setShortcut [
 DocChapterPresenter >> setShowHeaderButton [
 	^ SpButtonPresenter new
 		label: 'Header hide/show';
-		action: [ 
-			headerEnable := headerEnable not.
-			layout := self layoutShowingEditor: showEditor ]
+		action: [ self changeHeaderView ]
 ]
 
 { #category : #accessing }
