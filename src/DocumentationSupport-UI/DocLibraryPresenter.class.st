@@ -174,6 +174,13 @@ DocLibraryPresenter >> export [
 ]
 
 { #category : #shortcuts }
+DocLibraryPresenter >> headerChapterShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #HeaderChapterShortcut shortcut: $h ctrl shift mac | $h alt shift win | $h alt shift unix "| $h alt"  action: [ actualChapterPresenter changeHeaderView ])
+]
+
+{ #category : #shortcuts }
 DocLibraryPresenter >> headerShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
