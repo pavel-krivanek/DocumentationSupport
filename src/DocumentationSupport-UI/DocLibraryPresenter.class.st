@@ -145,7 +145,7 @@ DocLibraryPresenter >> docSearchObject: aDocSearchObject [
 	docSearchObject := aDocSearchObject
 ]
 
-{ #category : #shortcuts }
+{ #category : #'shortcuts-chapter' }
 DocLibraryPresenter >> editChapterShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
@@ -159,10 +159,11 @@ DocLibraryPresenter >> editModeEnable [
 
 { #category : #shortcuts }
 DocLibraryPresenter >> editShortcut: aCategory [
+	self flag: #toFix.
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: $e command shift mac | $e ctrl shift win | $e ctrl shift unix | $e alt  action: [ 
-					editCheckBox  state: editCheckBox state not ])
+				(KMKeymap named: #EditShortcut shortcut: $e ctrl mac | $m ctrl shift win | $e ctrl shift unix | $e alt  action: [ 
+					editCheckBox state: editCheckBox state not ])
 ]
 
 { #category : #actions }
@@ -173,7 +174,7 @@ DocLibraryPresenter >> export [
 
 ]
 
-{ #category : #shortcuts }
+{ #category : #'shortcuts-chapter' }
 DocLibraryPresenter >> headerChapterShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
@@ -184,7 +185,7 @@ DocLibraryPresenter >> headerChapterShortcut: aCategory [
 DocLibraryPresenter >> headerShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #HeaderShortcut shortcut: $h command shift mac | $h ctrl shift win | $h ctrl shift unix | $h alt  action: [ 
+				(KMKeymap named: #HeaderShortcut shortcut: $h ctrl mac | $h ctrl shift win | $h ctrl shift unix | $h alt  action: [ 
 					showHeaderCheckBox state: showHeaderCheckBox state not ])
 ]
 
@@ -304,7 +305,7 @@ DocLibraryPresenter >> openChapter: aKey [
 
 ]
 
-{ #category : #shortcuts }
+{ #category : #'shortcuts-chapter' }
 DocLibraryPresenter >> openChapterShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
@@ -445,14 +446,10 @@ DocLibraryPresenter >> setNextButton [
 
 { #category : #'search-buttons' }
 DocLibraryPresenter >> setNextChapterButton [
+
 	^ SpButtonPresenter new
-				     label: 'Next chapter';
-				     action: [ 
-							searchEnv ifNotNil: [ [ 
-							searchEnv nextChapterInResultEntries.
-							actualChapter := searchEnv currentResultEntry chapter.
-							searchInput owner clickAt.
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
+		  label: 'Next chapter';
+		  action: [ self nextChapter ]
 ]
 
 { #category : #'search-buttons' }
@@ -469,14 +466,10 @@ DocLibraryPresenter >> setPreviousButton [
 
 { #category : #'search-buttons' }
 DocLibraryPresenter >> setPreviousChapterButton [
+
 	^ SpButtonPresenter new
-				     label: 'Previous chapter';
-				     action: [ 
-							searchEnv ifNotNil: [ [ 
-							searchEnv prevChapterInResultEntries.
-							actualChapter := searchEnv currentResultEntry chapter.
-							searchInput owner clickAt.
-							self updateOccurenceDisplay ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
+		  label: 'Previous chapter';
+		  action: [ self prevChapter ]
 ]
 
 { #category : #'search-bar' }
@@ -522,11 +515,16 @@ DocLibraryPresenter >> setShortcuts [
 		KMRepository default addCategory: category.
 		morph attachKeymapCategory: #DocChapterShortcut.
 		self openChapterShortcut: category;
-		headerChapterShortcut: category;
-		editChapterShortcut: category;
+		headerChapterShortcut: category.
+		self editChapterShortcut: category;
 		headerShortcut: category;
 		editShortcut: category;
-		showShortcut: category.
+		showShortcut: category;
+		nextShortcut: category;
+		prevShortcut: category;
+		nextChapterShortcut: category;
+		prevChapterShortcut: category;
+		searchShortcut: category 
 	
 ]
 
@@ -568,6 +566,7 @@ DocLibraryPresenter >> showModeEnable [
 
 { #category : #shortcuts }
 DocLibraryPresenter >> showShortcut: aCategory [
+	self flag: #toFix.
 	aCategory
 			addKeymapEntry:
 				(KMKeymap named: #ShowShortcut shortcut: $p command shift mac | $p ctrl shift win | $p ctrl shift unix | $p alt  action: [ 
