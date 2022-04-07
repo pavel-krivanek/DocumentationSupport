@@ -303,7 +303,7 @@ DocLibraryPresenter >> nextShortcut: aCategory [
 	self flag: #toFix.
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: Character arrowRight alt mac | Character arrowRight alt win | Character arrowRight alt unix action: [ 
+				(KMKeymap named: #EditShortcut shortcut: Character arrowRight meta mac | Character arrowRight alt win | Character arrowRight alt unix action: [ 
 					self editModeEnable ifFalse: [ self next ]  ])
 ]
 
@@ -419,7 +419,7 @@ DocLibraryPresenter >> prevShortcut: aCategory [
 	self flag: #toFix.
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: Character arrowLeft command ctrl mac | Character arrowLeft alt win | Character arrowLeft alt unix action: [ 
+				(KMKeymap named: #EditShortcut shortcut: Character arrowLeft alt mac | Character arrowLeft alt win | Character arrowLeft alt unix action: [ 
 					self editModeEnable ifFalse: [ self prev ]  ])
 ]
 
@@ -492,7 +492,7 @@ DocLibraryPresenter >> searchShortcut: aCategory [
 	self flag: #toFix.
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: $l command shift mac | $l ctrl shift win | $l ctrl shift unix | $l alt  action: [ 
+				(KMKeymap named: #EditShortcut shortcut: $l command mac | $l ctrl shift win | $l ctrl shift unix  action: [ 
 					searchInput adapter takeKeyboardFocus ])
 ]
 
