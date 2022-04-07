@@ -597,21 +597,19 @@ DocLibraryPresenter >> setSearchButton [
 DocLibraryPresenter >> setShortcuts [
 	| category morph |
 		morph := self owner window submorphs last.
-		category := KMCategory named: #DocChapterShortcut.
+		category := KMCategory named: #DocLibraryShortcut.
 		KMRepository default addCategory: category.
-		morph attachKeymapCategory: #DocChapterShortcut.
+		morph attachKeymapCategory: #DocLibraryShortcut.
+		
+		"Set chapter shortcuts"
 		self openChapterShortcut: category;
-		headerChapterShortcut: category.
-		self editChapterShortcut: category;
-		headerShortcut: category;
+		headerChapterShortcut: category;
+		editChapterShortcut: category.
+		
+		"Set library shortcuts"
+		self headerShortcut: category;
 		editShortcut: category;
-		showShortcut: category;
-		nextShortcut: category;
-		prevShortcut: category;
-		nextChapterShortcut: category;
-		prevChapterShortcut: category;
-		searchShortcut: category 
-	
+		showShortcut: category
 ]
 
 { #category : #tree }
