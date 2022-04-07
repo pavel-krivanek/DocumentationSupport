@@ -640,8 +640,10 @@ DocLibraryPresenter >> updateOccurenceDisplay [
 
 { #category : #'search-bar' }
 DocLibraryPresenter >> updateText: previousEntry [
-	| text |
+	| text tmpPresenter |
+	tmpPresenter := actualChapter asPresenter.
 	text := actualChapterPresenter text.
+	actualChapterPresenter chapter key = actualChapter key ifFalse: [ text := tmpPresenter text ].
 	text addAttribute: (TextBackgroundColor new color: Color lightGray) from: previousEntry startPosition to: previousEntry endPosition.
 	text addAttribute: (TextBackgroundColor new color: Color green) from: searchEnv currentResultEntry startPosition to: searchEnv currentResultEntry endPosition.
 	actualChapterPresenter updateText: text	scrollAt: searchEnv currentResultEntry scrollValue
