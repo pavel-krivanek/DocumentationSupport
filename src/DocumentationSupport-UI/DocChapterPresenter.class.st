@@ -406,6 +406,13 @@ DocChapterPresenter >> setShowHeaderButton [
 		action: [ self changeHeaderView ]
 ]
 
+{ #category : #initialization }
+DocChapterPresenter >> splitLayoutOrNot [
+
+	showEditor := showEditor not.
+	^ layout := self layoutShowingEditor: showEditor
+]
+
 { #category : #accessing }
 DocChapterPresenter >> text [
 
