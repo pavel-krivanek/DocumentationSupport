@@ -149,7 +149,7 @@ DocLibraryPresenter >> docSearchObject: aDocSearchObject [
 DocLibraryPresenter >> editChapterShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #EditChapterShortcut shortcut: $e ctrl shift mac | $e alt shift win | $e alt shift unix "| $e alt"  action: [ actualChapterPresenter changeEditView ])
+				(KMKeymap named: #EditChapterShortcut shortcut: $e meta shift mac | $e alt shift win | $e alt shift unix "| $e alt"  action: [ actualChapterPresenter changeEditView ])
 ]
 
 { #category : #'parameters-bar' }
@@ -178,7 +178,7 @@ DocLibraryPresenter >> export [
 DocLibraryPresenter >> headerChapterShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #HeaderChapterShortcut shortcut: $h ctrl shift mac | $h alt shift win | $h alt shift unix "| $h alt"  action: [ actualChapterPresenter changeHeaderView ])
+				(KMKeymap named: #HeaderChapterShortcut shortcut: $h meta shift mac | $h alt shift win | $h alt shift unix "| $h alt"  action: [ actualChapterPresenter changeHeaderView ])
 ]
 
 { #category : #shortcuts }
@@ -336,10 +336,27 @@ DocLibraryPresenter >> openChapter: aKey [
 ]
 
 { #category : #'shortcuts-chapter' }
+DocLibraryPresenter >> openChapterAction [
+
+	| morph presenter category |
+	presenter := actualChapterPresenter chapter asPresenter open.
+	morph := presenter window submorphs last.
+	category := KMCategory named: #DocChapterShortcut.
+	KMRepository default addCategory: category.
+	morph attachKeymapCategory: #DocChapterShortcut.
+	
+	presenter presenter headerShortcut: category;
+	editShortcut: category;
+	openShortcut: category
+]
+
+{ #category : #'shortcuts-chapter' }
 DocLibraryPresenter >> openChapterShortcut: aCategory [
-	aCategory
-			addKeymapEntry:
-				(KMKeymap named: #OpenChapterShortcut shortcut: $o ctrl shift mac | $o alt shift win | $o alt shift unix "| $o alt"  action: [ actualChapterPresenter chapter asPresenter open ])
+
+	aCategory addKeymapEntry: (KMKeymap
+			 named: #OpenChapterShortcut
+			 shortcut: $o meta shift mac | $o alt shift win | $o alt shift unix
+			 action: [ self openChapterAction ])
 ]
 
 { #category : #actions }
