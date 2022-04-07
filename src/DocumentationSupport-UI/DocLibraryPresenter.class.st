@@ -159,10 +159,9 @@ DocLibraryPresenter >> editModeEnable [
 
 { #category : #shortcuts }
 DocLibraryPresenter >> editShortcut: aCategory [
-	self flag: #toFix.
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: $e ctrl mac | $m ctrl shift win | $e ctrl shift unix | $e alt  action: [ 
+				(KMKeymap named: #EditShortcut shortcut: $e ctrl shift mac | $e ctrl shift win | $e ctrl shift unix  action: [ 
 					editCheckBox state: editCheckBox state not ])
 ]
 
@@ -185,7 +184,7 @@ DocLibraryPresenter >> headerChapterShortcut: aCategory [
 DocLibraryPresenter >> headerShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #HeaderShortcut shortcut: $h ctrl mac | $h ctrl shift win | $h ctrl shift unix | $h alt  action: [ 
+				(KMKeymap named: #HeaderShortcut shortcut: $h ctrl shift mac | $h ctrl shift win | $h ctrl shift unix | $h alt  action: [ 
 					showHeaderCheckBox state: showHeaderCheckBox state not ])
 ]
 
@@ -653,10 +652,9 @@ DocLibraryPresenter >> showModeEnable [
 
 { #category : #shortcuts }
 DocLibraryPresenter >> showShortcut: aCategory [
-	self flag: #toFix.
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #ShowShortcut shortcut: $p command shift mac | $p ctrl shift win | $p ctrl shift unix | $p alt  action: [ 
+				(KMKeymap named: #ShowShortcut shortcut: $p ctrl shift mac | $p ctrl shift win | $p ctrl shift unix  action: [ 
 					 showCheckBox state: showCheckBox state not ])
 ]
 
