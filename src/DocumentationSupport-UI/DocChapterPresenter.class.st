@@ -124,6 +124,15 @@ DocChapterPresenter >> editOrPreviewLayout: aBoolean [
 	
 ]
 
+{ #category : #shortcuts }
+DocChapterPresenter >> editShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #EditShortcut shortcut: $e command shift mac | $e ctrl shift win | $e ctrl shift unix  action: [ 
+					editEnable := editEnable not.
+					layout := self layoutShowingEditor: showEditor ])
+]
+
 { #category : #preview }
 DocChapterPresenter >> getPreviewPresenter [ 
 
@@ -165,6 +174,15 @@ DocChapterPresenter >> headerLayout [
 			) at: 2@3 span: 4@1;
 			
 			yourself) height: 120
+]
+
+{ #category : #shortcuts }
+DocChapterPresenter >> headerShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #HeaderShortcut shortcut: $h command shift mac | $h ctrl shift win | $h ctrl shift unix | $h alt  action: [ 
+					headerEnable := headerEnable not.
+					layout := self layoutShowingEditor: showEditor ])
 ]
 
 { #category : #initialization }
@@ -264,6 +282,21 @@ DocChapterPresenter >> layoutShowingEditor: aBoolean [
 	^ self chapterLayout: (self editOrPreviewLayout: aBoolean)
 ]
 
+{ #category : #shortcuts }
+DocChapterPresenter >> openChapterAction [
+
+	| morph presenter category |
+	presenter := self chapter asPresenter open.
+	morph := presenter window submorphs last.
+	category := KMCategory named: #DocChapterShortcut.
+	KMRepository default addCategory: category.
+	morph attachKeymapCategory: #DocChapterShortcut.
+	
+	presenter presenter headerShortcut: category;
+	editShortcut: category;
+	openShortcut: category
+]
+
 { #category : #actions }
 DocChapterPresenter >> openReference: aRef [ 
 
@@ -280,6 +313,13 @@ DocChapterPresenter >> openReference: aRef [
 	
 
 	
+]
+
+{ #category : #shortcuts }
+DocChapterPresenter >> openShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #OpenShortcut shortcut: $o command shift mac | $o ctrl shift win | $o ctrl shift unix | $o alt  action: [ self openChapterAction ])
 ]
 
 { #category : #accessing }
