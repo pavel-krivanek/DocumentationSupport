@@ -188,7 +188,7 @@ DocChapterPresenter >> headerShortcut: aCategory [
 { #category : #initialization }
 DocChapterPresenter >> initialize [
 	super initialize.
-	self setShortcut
+	self setShortcuts
 ]
 
 { #category : #initialization }
@@ -386,25 +386,16 @@ DocChapterPresenter >> setOpenButton [
 ]
 
 { #category : #shortcuts }
-DocChapterPresenter >> setShortcut [
+DocChapterPresenter >> setShortcuts [
 	| category morph |
-	preview ifNotNil: [ 
+	"preview ifNotNil: [ 
 		morph := preview morph.
 		category := KMCategory named: #DocChapterShortcut.
 		KMRepository default addCategory: category.
 		morph attachKeymapCategory: #DocChapterShortcut.
-		category
-			addKeymapEntry:
-				(KMKeymap named: #OpenShortcut shortcut: $o command mac | $o ctrl  win | $o ctrl unix | $o alt  action: [ self chapter asPresenter open ]);
-			addKeymapEntry:
-				(KMKeymap named: #OpenShortcut shortcut: $e command mac | $e ctrl  win | $e ctrl unix | $e alt  action: [ 
-					editEnable := editEnable not.
-					layout := self layoutShowingEditor: showEditor ]);
-			addKeymapEntry:
-				(KMKeymap named: #OpenShortcut shortcut: $h command mac | $h ctrl  win | $h ctrl unix | $h alt  action: [ 
-					headerEnable := headerEnable not.
-					layout := self layoutShowingEditor: showEditor ])
-		].
+		self openShortcut: category.
+		self headerShortcut: category.
+		self editShortcut: category ]"
 	
 ]
 
