@@ -371,8 +371,18 @@ DocLibraryPresenter >> prev [
 		ifFalse: [ 
 			actualChapter := searchEnv currentResultEntry chapter.
 			searchInput owner clickAt.
-			hasPrevChapterChange := true ].
+			hasPrevChapterChange := true.
+			self updateText: searchEnv currentResultEntry ].
 	self updateOccurenceDisplay
+]
+
+{ #category : #'search-actions' }
+DocLibraryPresenter >> prevAction [
+	self prev.
+	^ hasPrevChapterChange
+		  ifTrue: [ 
+			  actualChapterPresenter scrollValue: searchEnv currentResultEntry scrollValue.
+			  hasPrevChapterChange := false ]
 ]
 
 { #category : #'search-actions' }
@@ -496,14 +506,10 @@ DocLibraryPresenter >> setNextChapterButton [
 
 { #category : #'search-buttons' }
 DocLibraryPresenter >> setPreviousButton [
+
 	^ SpButtonPresenter new
-	  	label: 'Previous';
-		action: [ searchEnv ifNotNil: [ [ 
-			hasPrevChapterChange  
-				ifTrue: [ 
-					actualChapterPresenter scrollValue: searchEnv currentResultEntry scrollValue. 
-					hasPrevChapterChange := false ] 
-				ifFalse: [ self prev ]] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]  ]
+		  label: 'Previous';
+		  action: [ searchEnv ifNotNil: [ [ self prevAction ]  on: SubscriptOutOfBounds , MessageNotUnderstood do: [ "nothing" ] ] ]
 ]
 
 { #category : #'search-buttons' }
