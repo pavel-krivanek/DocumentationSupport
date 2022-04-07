@@ -289,24 +289,6 @@ DocLibraryPresenter >> nextChapter [
 			  do: [ "nothing" ] ]
 ]
 
-{ #category : #shortcuts }
-DocLibraryPresenter >> nextChapterShortcut: aCategory [
-	self flag: #toFix.
-	aCategory
-			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: Character arrowUp command mac | Character arrowUp ctrl win | Character arrowUp ctrl unix  action: [ 
-					self editModeEnable ifFalse: [ self nextChapter ] ])
-]
-
-{ #category : #shortcuts }
-DocLibraryPresenter >> nextShortcut: aCategory [
-	self flag: #toFix.
-	aCategory
-			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: Character arrowRight meta mac | Character arrowRight alt win | Character arrowRight alt unix action: [ 
-					self editModeEnable ifFalse: [ self next ]  ])
-]
-
 { #category : #'instance creation' }
 DocLibraryPresenter >> open [
 	self layout 
@@ -405,24 +387,6 @@ DocLibraryPresenter >> prevChapter [
 			  do: [ "nothing" ] ]
 ]
 
-{ #category : #shortcuts }
-DocLibraryPresenter >> prevChapterShortcut: aCategory [
-	self flag: #toFix.
-	aCategory
-			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: Character arrowDown command mac | Character arrowDown ctrl win | Character arrowDown ctrl unix  action: [ 
-					self editModeEnable ifFalse: [ self prevChapter ] ])
-]
-
-{ #category : #shortcuts }
-DocLibraryPresenter >> prevShortcut: aCategory [
-	self flag: #toFix.
-	aCategory
-			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: Character arrowLeft alt mac | Character arrowLeft alt win | Character arrowLeft alt unix action: [ 
-					self editModeEnable ifFalse: [ self prev ]  ])
-]
-
 { #category : #'parameters-bar' }
 DocLibraryPresenter >> refreshChapter [
 	[tree clickAtPath: actualChapterPresenter path] 
@@ -485,15 +449,6 @@ DocLibraryPresenter >> searchBar [
 DocLibraryPresenter >> searchEnv [
 
 	^ searchEnv
-]
-
-{ #category : #shortcuts }
-DocLibraryPresenter >> searchShortcut: aCategory [
-	self flag: #toFix.
-	aCategory
-			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: $l command mac | $l ctrl shift win | $l ctrl shift unix  action: [ 
-					searchInput adapter takeKeyboardFocus ])
 ]
 
 { #category : #'search-buttons' }
