@@ -329,7 +329,8 @@ DocLibraryPresenter >> openChapterAction [
 	
 	presenter presenter headerShortcut: category;
 	editShortcut: category;
-	openShortcut: category
+	openShortcut: category;
+	showChapterShortcut: category
 ]
 
 { #category : #'shortcuts-chapter' }
@@ -566,7 +567,8 @@ DocLibraryPresenter >> setShortcuts [
 		"Set chapter shortcuts"
 		self openChapterShortcut: category;
 		headerChapterShortcut: category;
-		editChapterShortcut: category.
+		editChapterShortcut: category;
+		showChapterShortcut: category.
 		
 		"Set library shortcuts"
 		self headerShortcut: category;
@@ -598,6 +600,14 @@ DocLibraryPresenter >> setupTreeMenu [
 
 	tree contextMenu: treeMenu.
 
+]
+
+{ #category : #'shortcuts-chapter' }
+DocLibraryPresenter >> showChapterShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #ShowChapterShortcut shortcut: $p meta shift mac | $p ctrl shift win | $p ctrl shift unix  action: [ 
+					 actualChapterPresenter splitLayoutOrNot. ])
 ]
 
 { #category : #'parameters-bar' }
