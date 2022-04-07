@@ -128,7 +128,7 @@ DocChapterPresenter >> editOrPreviewLayout: aBoolean [
 DocChapterPresenter >> editShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #EditShortcut shortcut: $e command shift mac | $e ctrl shift win | $e ctrl shift unix  action: [ 
+				(KMKeymap named: #EditShortcut shortcut: $e meta shift mac | $e alt shift win | $e alt shift unix  action: [ 
 					editEnable := editEnable not.
 					layout := self layoutShowingEditor: showEditor ])
 ]
@@ -180,7 +180,7 @@ DocChapterPresenter >> headerLayout [
 DocChapterPresenter >> headerShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #HeaderShortcut shortcut: $h command shift mac | $h ctrl shift win | $h ctrl shift unix | $h alt  action: [ 
+				(KMKeymap named: #HeaderShortcut shortcut: $h meta shift mac | $h alt shift win | $h alt shift unix action: [ 
 					headerEnable := headerEnable not.
 					layout := self layoutShowingEditor: showEditor ])
 ]
@@ -322,7 +322,7 @@ DocChapterPresenter >> openReference: aRef [
 DocChapterPresenter >> openShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #OpenShortcut shortcut: $o command shift mac | $o ctrl shift win | $o ctrl shift unix | $o alt  action: [ self openChapterAction ])
+				(KMKeymap named: #OpenShortcut shortcut: $o meta shift mac | $o alt shift win | $o ctrl shift unix | $o alt  action: [ self openChapterAction ])
 ]
 
 { #category : #accessing }
@@ -413,7 +413,7 @@ DocChapterPresenter >> setShowHeaderButton [
 DocChapterPresenter >> showChapterShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #ShowChapterShortcut shortcut: $p meta shift mac | $p ctrl shift win | $p ctrl shift unix  action: [ 
+				(KMKeymap named: #ShowChapterShortcut shortcut: $p meta shift mac | $p alt shift win | $p alt shift unix  action: [ 
 					 self splitLayoutOrNot. ])
 ]
 

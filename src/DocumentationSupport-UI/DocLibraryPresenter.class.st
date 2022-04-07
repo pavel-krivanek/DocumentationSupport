@@ -606,7 +606,7 @@ DocLibraryPresenter >> setupTreeMenu [
 DocLibraryPresenter >> showChapterShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
-				(KMKeymap named: #ShowChapterShortcut shortcut: $p meta shift mac | $p ctrl shift win | $p ctrl shift unix  action: [ 
+				(KMKeymap named: #ShowChapterShortcut shortcut: $p meta shift mac | $p alt shift win | $p alt shift unix  action: [ 
 					 actualChapterPresenter splitLayoutOrNot. ])
 ]
 
