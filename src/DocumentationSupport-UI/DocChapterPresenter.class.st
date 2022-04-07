@@ -192,7 +192,7 @@ DocChapterPresenter >> initialize [
 ]
 
 { #category : #initialization }
-DocChapterPresenter >> initializePresenters [ 
+DocChapterPresenter >> initializePresenters [
 
 	super initializePresenters.
 	previewUpdateMutex := Mutex new.
@@ -204,67 +204,69 @@ DocChapterPresenter >> initializePresenters [
 	keyInput := self newTextInput.
 	keyInput enabled: false.
 	keyInput text: self chapter key.
-	
-	copyRefButton := self newButton 
-		label: 'ref://';
-		action: [ 
-			Clipboard clipboardText: '[', chapter title, '](ref://', self chapter key, ')' ].
+
+	copyRefButton := self newButton
+		                 label: 'ref://';
+		                 action: [ 
+			                 Clipboard clipboardText:
+					                 '[' , chapter title , '](ref://'
+					                 , self chapter key , ')' ].
 
 	copyIncludeButton := self newButton
-		label: 'include://';
-		action: [ 
-			Clipboard clipboardText: '[', chapter title, '](include://', self chapter key, ')' ].
+		                     label: 'include://';
+		                     action: [ 
+			                     Clipboard clipboardText:
+					                     '[' , chapter title , '](include://'
+					                     , self chapter key , ')' ].
 
 	srcInput := self newText.
 	preview := self getPreviewPresenter.
-	
+
 	preview morph setText: '' asText.
-	
-	srcInput text: self chapter source.	
+
+	srcInput text: self chapter source.
 
 	srcInput whenTextChangedDo: [ :newText | 
 		self chapter source: newText.
 		self updatePreview: newText ].
-	
+
 	chapter whenAspectChangedNotify: self.
-	
+
 	nextInput := self newTextInput.
-	nextInput text: (self chapter nextChapterText).
+	nextInput text: self chapter nextChapterText.
 	nextInput
-		enabled: false; 
+		enabled: false;
 		dropEnabled: true;
-		wantsDrop: [ :transfer | transfer passenger allSatisfy: [ :each | each isKindOf: DocChapter ] ];
-		acceptDrop: [ :transfer | 		
+		wantsDrop: [ :transfer | 
+			transfer passenger allSatisfy: [ :each | each isKindOf: DocChapter ] ];
+		acceptDrop: [ :transfer | 
 			| aChapter |
 			aChapter := transfer passenger anyOne.
 			self chapter nextChapter: aChapter.
 			nextInput text: aChapter title ].
 
 	clearNext := self newButton
-		icon: (self iconNamed: #changeRemove);
-		action: [ 
-			self chapter nextChapter: nil ].
-		
+		             icon: (self iconNamed: #changeRemove);
+		             action: [ self chapter nextChapter: nil ].
+
 	goToNext := self newButton
-		icon: (self iconNamed: #glamorousGo);
-		action: [ 
-			self chapter nextChapter ifNotNil: [ 
-				self openReference: (ZnUrl fromString: ('ref://', self chapter nextChapter key))] ].
-		
+		            icon: (self iconNamed: #glamorousGo);
+		            action: [ 
+			            self chapter nextChapter ifNotNil: [ 
+					            self openReference:
+							            (ZnUrl fromString:
+									             'ref://' , self chapter nextChapter key) ] ].
+
 	showEditor := false.
-	splitButton := self newButton 
-		icon: (self iconNamed: #edit);
-		action: [ 
-			showEditor := showEditor not.
-			layout := self layoutShowingEditor: showEditor ].
-	
+	splitButton := self newButton
+		               icon: (self iconNamed: #edit);
+		               action: [ self splitLayoutOrNot ].
+
 	headerEnable := false.
 	editEnable := false.
-	
+
 	layout := self layoutShowingEditor: showEditor.
 	self updatePreview: self chapter source
-
-
 ]
 
 { #category : #initialization }
@@ -294,7 +296,8 @@ DocChapterPresenter >> openChapterAction [
 	
 	presenter presenter headerShortcut: category;
 	editShortcut: category;
-	openShortcut: category
+	openShortcut: category;
+	showChapterShortcut: category
 ]
 
 { #category : #actions }
@@ -404,6 +407,14 @@ DocChapterPresenter >> setShowHeaderButton [
 	^ SpButtonPresenter new
 		label: 'Header hide/show';
 		action: [ self changeHeaderView ]
+]
+
+{ #category : #shortcuts }
+DocChapterPresenter >> showChapterShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #ShowChapterShortcut shortcut: $p meta shift mac | $p ctrl shift win | $p ctrl shift unix  action: [ 
+					 self splitLayoutOrNot. ])
 ]
 
 { #category : #initialization }
