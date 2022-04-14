@@ -497,6 +497,14 @@ DocLibraryPresenter >> searchEnv [
 	^ searchEnv
 ]
 
+{ #category : #shortcuts }
+DocLibraryPresenter >> searchShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #SearchShortcut shortcut: $l ctrl shift mac | $l ctrl shift win | $l ctrl shift unix  action: [ 
+					 searchInput takeKeyboardFocus ])
+]
+
 { #category : #'search-buttons' }
 DocLibraryPresenter >> setChapterDropList [
 	chapterDropList := SpDropListPresenter new 
