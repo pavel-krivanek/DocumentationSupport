@@ -612,10 +612,16 @@ DocLibraryPresenter >> setShortcuts [
 		editChapterShortcut: category;
 		showChapterShortcut: category.
 		
+		
 		"Set library shortcuts"
 		self headerShortcut: category;
 		editShortcut: category;
-		showShortcut: category
+		showShortcut: category;
+		nextShortcut: category;
+		prevShortcut: category;
+		nextChapterShortcut: category;
+		prevChapterShortcut: category;
+		searchShortcut: category
 ]
 
 { #category : #tree }
