@@ -290,6 +290,15 @@ DocLibraryPresenter >> nextChapter [
 			  do: [ "nothing" ] ]
 ]
 
+{ #category : #shortcuts }
+DocLibraryPresenter >> nextShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #NextShortcut shortcut: Character arrowRight ctrl shift mac | Character arrowRight ctrl shift win | Character arrowRight ctrl shift unix  action: [ 
+					 searchEnv 
+						ifNotNil: [ [ self nextAction ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ] ])
+]
+
 { #category : #'instance creation' }
 DocLibraryPresenter >> open [
 	self layout 
