@@ -408,6 +408,15 @@ DocLibraryPresenter >> prevChapter [
 			  do: [ "nothing" ] ]
 ]
 
+{ #category : #shortcuts }
+DocLibraryPresenter >> prevShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #PrevShortcut shortcut: Character arrowLeft ctrl shift mac | Character arrowLeft ctrl shift win | Character arrowLeft ctrl shift unix  action: [ 
+					 searchEnv 
+						ifNotNil: [ [ self prevAction ] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ] ])
+]
+
 { #category : #'parameters-bar' }
 DocLibraryPresenter >> refreshChapter [
 	[tree clickAtPath: actualChapterPresenter path] 
