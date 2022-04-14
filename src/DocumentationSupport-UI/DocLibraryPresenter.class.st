@@ -291,6 +291,14 @@ DocLibraryPresenter >> nextChapter [
 ]
 
 { #category : #shortcuts }
+DocLibraryPresenter >> nextChapterShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #NextChapterShortcut shortcut: Character arrowUp ctrl shift mac | Character arrowUp ctrl shift win | Character arrowUp ctrl shift unix  action: [ 
+					 self nextChapter ])
+]
+
+{ #category : #shortcuts }
 DocLibraryPresenter >> nextShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
