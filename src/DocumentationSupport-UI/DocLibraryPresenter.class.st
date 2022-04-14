@@ -417,6 +417,14 @@ DocLibraryPresenter >> prevChapter [
 ]
 
 { #category : #shortcuts }
+DocLibraryPresenter >> prevChapterShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #PrevChapterShortcut shortcut: Character arrowDown ctrl shift mac | Character arrowDown ctrl shift win | Character arrowDown ctrl shift unix  action: [ 
+					 self prevChapter ])
+]
+
+{ #category : #shortcuts }
 DocLibraryPresenter >> prevShortcut: aCategory [
 	aCategory
 			addKeymapEntry:
