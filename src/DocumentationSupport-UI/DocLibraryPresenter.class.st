@@ -565,7 +565,7 @@ DocLibraryPresenter >> setPreviousChapterButton [
 
 { #category : #'search-bar' }
 DocLibraryPresenter >> setSearchAction [
-	searchInput whenSubmitDo: [ 
+	searchInput whenSubmitDo: [ :t |
 		searchPattern = searchInput text 
 				ifTrue: [ 
 					searchEnv ifNotNil: [ [ self nextAction	] on: SubscriptOutOfBounds,MessageNotUnderstood  do: [ "nothing" ] ]
