@@ -64,6 +64,18 @@ DocChapterPresenter >> buttonLayout [
 		add: self setOpenButton
 ]
 
+{ #category : #buttons }
+DocChapterPresenter >> changeEditView [
+	editEnable := editEnable not.
+	layout := self layoutShowingEditor: showEditor
+]
+
+{ #category : #buttons }
+DocChapterPresenter >> changeHeaderView [
+	headerEnable := headerEnable not.
+	layout := self layoutShowingEditor: showEditor
+]
+
 { #category : #accessing }
 DocChapterPresenter >> chapter [
 
@@ -112,6 +124,15 @@ DocChapterPresenter >> editOrPreviewLayout: aBoolean [
 	
 ]
 
+{ #category : #shortcuts }
+DocChapterPresenter >> editShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #EditShortcut shortcut: $e meta shift mac | $e alt shift win | $e alt shift unix  action: [ 
+					editEnable := editEnable not.
+					layout := self layoutShowingEditor: showEditor ])
+]
+
 { #category : #preview }
 DocChapterPresenter >> getPreviewPresenter [ 
 
@@ -155,8 +176,23 @@ DocChapterPresenter >> headerLayout [
 			yourself) height: 120
 ]
 
+{ #category : #shortcuts }
+DocChapterPresenter >> headerShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #HeaderShortcut shortcut: $h meta shift mac | $h alt shift win | $h alt shift unix action: [ 
+					headerEnable := headerEnable not.
+					layout := self layoutShowingEditor: showEditor ])
+]
+
 { #category : #initialization }
-DocChapterPresenter >> initializePresenters [ 
+DocChapterPresenter >> initialize [
+	super initialize.
+	self setShortcuts
+]
+
+{ #category : #initialization }
+DocChapterPresenter >> initializePresenters [
 
 	super initializePresenters.
 	previewUpdateMutex := Mutex new.
@@ -168,67 +204,69 @@ DocChapterPresenter >> initializePresenters [
 	keyInput := self newTextInput.
 	keyInput enabled: false.
 	keyInput text: self chapter key.
-	
-	copyRefButton := self newButton 
-		label: 'ref://';
-		action: [ 
-			Clipboard clipboardText: '[', chapter title, '](ref://', self chapter key, ')' ].
+
+	copyRefButton := self newButton
+		                 label: 'ref://';
+		                 action: [ 
+			                 Clipboard clipboardText:
+					                 '[' , chapter title , '](ref://'
+					                 , self chapter key , ')' ].
 
 	copyIncludeButton := self newButton
-		label: 'include://';
-		action: [ 
-			Clipboard clipboardText: '[', chapter title, '](include://', self chapter key, ')' ].
+		                     label: 'include://';
+		                     action: [ 
+			                     Clipboard clipboardText:
+					                     '[' , chapter title , '](include://'
+					                     , self chapter key , ')' ].
 
 	srcInput := self newText.
 	preview := self getPreviewPresenter.
-	
+
 	preview morph setText: '' asText.
-	
-	srcInput text: self chapter source.	
+
+	srcInput text: self chapter source.
 
 	srcInput whenTextChangedDo: [ :newText | 
 		self chapter source: newText.
 		self updatePreview: newText ].
-	
+
 	chapter whenAspectChangedNotify: self.
-	
+
 	nextInput := self newTextInput.
-	nextInput text: (self chapter nextChapterText).
+	nextInput text: self chapter nextChapterText.
 	nextInput
-		enabled: false; 
+		enabled: false;
 		dropEnabled: true;
-		wantsDrop: [ :transfer | transfer passenger allSatisfy: [ :each | each isKindOf: DocChapter ] ];
-		acceptDrop: [ :transfer | 		
+		wantsDrop: [ :transfer | 
+			transfer passenger allSatisfy: [ :each | each isKindOf: DocChapter ] ];
+		acceptDrop: [ :transfer | 
 			| aChapter |
 			aChapter := transfer passenger anyOne.
 			self chapter nextChapter: aChapter.
 			nextInput text: aChapter title ].
 
 	clearNext := self newButton
-		icon: (self iconNamed: #changeRemove);
-		action: [ 
-			self chapter nextChapter: nil ].
-		
+		             icon: (self iconNamed: #changeRemove);
+		             action: [ self chapter nextChapter: nil ].
+
 	goToNext := self newButton
-		icon: (self iconNamed: #glamorousGo);
-		action: [ 
-			self chapter nextChapter ifNotNil: [ 
-				self openReference: (ZnUrl fromString: ('ref://', self chapter nextChapter key))] ].
-		
+		            icon: (self iconNamed: #glamorousGo);
+		            action: [ 
+			            self chapter nextChapter ifNotNil: [ 
+					            self openReference:
+							            (ZnUrl fromString:
+									             'ref://' , self chapter nextChapter key) ] ].
+
 	showEditor := false.
-	splitButton := self newButton 
-		icon: (self iconNamed: #edit);
-		action: [ 
-			showEditor := showEditor not.
-			layout := self layoutShowingEditor: showEditor ].
-	
+	splitButton := self newButton
+		               icon: (self iconNamed: #edit);
+		               action: [ self splitLayoutOrNot ].
+
 	headerEnable := false.
 	editEnable := false.
-	
+
 	layout := self layoutShowingEditor: showEditor.
 	self updatePreview: self chapter source
-
-
 ]
 
 { #category : #initialization }
@@ -244,6 +282,22 @@ DocChapterPresenter >> layoutShowingEditor: aBoolean [
 
 	aBoolean traceCr.
 	^ self chapterLayout: (self editOrPreviewLayout: aBoolean)
+]
+
+{ #category : #shortcuts }
+DocChapterPresenter >> openChapterAction [
+
+	| morph presenter category |
+	presenter := self chapter asPresenter open.
+	morph := presenter window submorphs last.
+	category := KMCategory named: #DocChapterShortcut.
+	KMRepository default addCategory: category.
+	morph attachKeymapCategory: #DocChapterShortcut.
+	
+	presenter presenter headerShortcut: category;
+	editShortcut: category;
+	openShortcut: category;
+	showChapterShortcut: category
 ]
 
 { #category : #actions }
@@ -262,6 +316,13 @@ DocChapterPresenter >> openReference: aRef [
 	
 
 	
+]
+
+{ #category : #shortcuts }
+DocChapterPresenter >> openShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #OpenShortcut shortcut: $o meta shift mac | $o alt shift win | $o ctrl shift unix | $o alt  action: [ self openChapterAction ])
 ]
 
 { #category : #accessing }
@@ -317,9 +378,7 @@ DocChapterPresenter >> scrollValue: aScrollValue [
 DocChapterPresenter >> setEditButton [
 	^ SpButtonPresenter new
 		label: 'Edit/Preview';
-		action: [ 
-			editEnable := editEnable not.
-			layout := self layoutShowingEditor: showEditor ]
+		action: [ self changeEditView ]
 ]
 
 { #category : #buttons }
@@ -329,13 +388,40 @@ DocChapterPresenter >> setOpenButton [
 		action: [ self chapter asPresenter open ]
 ]
 
+{ #category : #shortcuts }
+DocChapterPresenter >> setShortcuts [
+	| category morph |
+	"preview ifNotNil: [ 
+		morph := preview morph.
+		category := KMCategory named: #DocChapterShortcut.
+		KMRepository default addCategory: category.
+		morph attachKeymapCategory: #DocChapterShortcut.
+		self openShortcut: category.
+		self headerShortcut: category.
+		self editShortcut: category ]"
+	
+]
+
 { #category : #buttons }
 DocChapterPresenter >> setShowHeaderButton [
 	^ SpButtonPresenter new
 		label: 'Header hide/show';
-		action: [ 
-			headerEnable := headerEnable not.
-			layout := self layoutShowingEditor: showEditor ]
+		action: [ self changeHeaderView ]
+]
+
+{ #category : #shortcuts }
+DocChapterPresenter >> showChapterShortcut: aCategory [
+	aCategory
+			addKeymapEntry:
+				(KMKeymap named: #ShowChapterShortcut shortcut: $p meta shift mac | $p alt shift win | $p alt shift unix  action: [ 
+					 self splitLayoutOrNot. ])
+]
+
+{ #category : #initialization }
+DocChapterPresenter >> splitLayoutOrNot [
+
+	showEditor := showEditor not.
+	^ layout := self layoutShowingEditor: showEditor
 ]
 
 { #category : #accessing }
