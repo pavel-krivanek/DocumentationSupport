@@ -23,7 +23,7 @@ DocSearchEnvironmentTest >> setUpChapterOfSecondBook [
 	| book |
 	book :=library books second. 
 	book chapters first title: 'chapitre 3'.
-	book chapters first source: 'this is a text for the chapter of the second book'
+	book chapters first source: 'this is a text for the chapter of the second book for tesTs'
 ]
 
 { #category : #running }
@@ -45,7 +45,7 @@ DocSearchEnvironmentTest >> setUpChaptersOfFirstBook [
 	book chapters first title: 'chapitre 1'.
 	book chapters first source: 'This is a test for the DocSearchEnvironment'.
 	book chapters second title: 'chapitre 2'.
-	book chapters second source: 'this is a text for the second chapter of the first book'
+	book chapters second source: 'this is a text for the second chapter of the first book for more Tests'
 ]
 
 { #category : #running }
