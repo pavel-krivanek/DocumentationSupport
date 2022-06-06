@@ -132,23 +132,6 @@ DocChapter >> delete [
 ]
 
 { #category : #'API - search' }
-DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: limitIndex [
-
-	| foundPosition tree text lines1 lines2 |
-	tree := MicroDownParser parse: source.
-	text := (DocRichTextComposer new visit: tree) string.
-	foundPosition := text findString: aSearchPattern startingAt: currentSearchPosition.
-	(foundPosition = 0 or: [ foundPosition > text size ]) ifTrue: [ ^ nil ].
-	lines1 := self numberOfLineOf: text from: 1 to: foundPosition.
-	lines2 := self numberOfLineOf: text from: 1 to: text size.
-	^ DocResultEntry 
-			chapter: self 
-			startPosition: foundPosition 
-			endPosition: foundPosition + aSearchPattern size - 1
-			scrollValue: (lines1 /lines2 ) asFloat
-]
-
-{ #category : #'API - search' }
 DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: limitIndex withSensitiveCase: aBoolean [
 
 	| foundPosition tree text lines1 lines2 |
