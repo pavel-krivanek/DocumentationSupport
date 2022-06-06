@@ -384,6 +384,8 @@ DocSearchEnvironmentTest >> testSearchWithNotOccurence [
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
 	docSearchEnv search: 'dkhjsqokdjakl' withSensitiveCase: true.
+	self assert: docSearchEnv resultEntries size equals: 0.
+	docSearchEnv search: 'dkhjsqokdjakl' withSensitiveCase: false.
 	self assert: docSearchEnv resultEntries size equals: 0
 	
 ]
@@ -404,6 +406,8 @@ DocSearchEnvironmentTest >> testSearchWithNothing [
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
 	docSearchEnv search: '' withSensitiveCase: true.
+	self assert: docSearchEnv resultEntries size equals: 0.
+	docSearchEnv search: '' withSensitiveCase: false.
 	self assert: docSearchEnv resultEntries size equals: 0
 	
 ]
