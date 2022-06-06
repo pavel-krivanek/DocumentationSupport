@@ -181,6 +181,42 @@ DocSearchEnvironment >> search: aSearchPattern in: aChapter restrictedBy: aRange
 
 ]
 
+{ #category : #private }
+DocSearchEnvironment >> search: aSearchPattern in: aChapter restrictedBy: aRangeInterval withSensitiveCase: aBoolean [
+	| entryOrNil  docResultEntries currentSearchPosition |
+	
+	docResultEntries := OrderedCollection new.
+	currentSearchPosition := aRangeInterval first.
+	[ 
+		entryOrNil :=  aChapter findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: aRangeInterval last withSensitiveCase: aBoolean.
+		entryOrNil isNil
+	] whileFalse: [ 
+		docResultEntries add: entryOrNil.
+		currentSearchPosition := entryOrNil endPosition + 1.
+	].
+	
+	^ docResultEntries
+	
+
+
+
+]
+
+{ #category : #'API - search' }
+DocSearchEnvironment >> search: aString withSensitiveCase: aBoolean [
+	[ 
+	searchPattern := aString.
+	self resetResultEntries.
+	searchRange chaptersDo: [ :chapter :rangeInterval |
+		(self search: searchPattern in: chapter restrictedBy: rangeInterval withSensitiveCase: aBoolean) ifNotNil: [ :sre | 
+			resultEntries addAll: sre
+		]
+	].
+	currentEntryIndex := resultEntries ifNotEmpty: [ 1 ] ifEmpty: [ 0 ]
+	] on: MessageNotUnderstood do: [ Error signal: #environmentNotSet ]
+	
+]
+
 { #category : #accessing }
 DocSearchEnvironment >> searchPattern [
 
