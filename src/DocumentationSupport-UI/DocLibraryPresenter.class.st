@@ -462,7 +462,7 @@ DocLibraryPresenter >> searchAction [
 		chapters addAll: book chapters].
 	"Execute the search"
 	env:= DocSearchEnvironment on: (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	env search: searchPattern.
+	env search: searchPattern  withSensitiveCase: false.
 	"Display the number of occurence"
 	^ env
 
