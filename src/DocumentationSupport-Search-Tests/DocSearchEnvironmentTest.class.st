@@ -82,7 +82,7 @@ DocSearchEnvironmentTest >> testFirstOccurenceOfFourthChapter [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	docSearchEnv firstOccurrenceOf: library books third chapters first.
 	self assert: docSearchEnv currentEntryIndex equals: 2.
 	self assert: docSearchEnv resultEntries size equals: 4.
@@ -96,7 +96,7 @@ DocSearchEnvironmentTest >> testFirstOccurenceOfFourthChapterWithShiftedChapter 
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: chapters fourth lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	docSearchEnv firstOccurrenceOf: library books third chapters first.
 	self assert: docSearchEnv currentEntryIndex equals: 1.
 	self assert: docSearchEnv resultEntries size equals: 4.
@@ -110,7 +110,7 @@ DocSearchEnvironmentTest >> testFirstResultEntriesForEachChapter [
 	| res |
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	res := docSearchEnv firstResultEntriesForEachChapters.
 	self assert: res size equals: 3.
 	self assert: res first chapter title  equals: 'chapitre 1'.
@@ -134,7 +134,7 @@ DocSearchEnvironmentTest >> testNextChapterInResultEntries [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	self assert: docSearchEnv currentEntryIndex equals: 1.
 	docSearchEnv nextChapterInResultEntries.
 	self assert: docSearchEnv currentEntryIndex equals: 2.
@@ -148,7 +148,7 @@ DocSearchEnvironmentTest >> testNextChapterInResultEntriesWhenCurrentEntryIndexI
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	docSearchEnv currentEntryIndex: docSearchEnv resultEntries size.
 	self assert: docSearchEnv currentEntryIndex equals: docSearchEnv resultEntries size.
 	docSearchEnv nextChapterInResultEntries.
@@ -161,7 +161,7 @@ DocSearchEnvironmentTest >> testNextChapterInResultEntriesWithNoResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: ''.
+	docSearchEnv search: '' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 0.
 	self assert: docSearchEnv currentEntryIndex equals: 0.
 	docSearchEnv nextChapterInResultEntries.
@@ -174,7 +174,7 @@ DocSearchEnvironmentTest >> testNextChapterInResultEntriesWithOneResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'third'.
+	docSearchEnv search: 'third' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 1.
 	self assert: docSearchEnv currentEntryIndex equals: 1.
 	docSearchEnv nextChapterInResultEntries.
@@ -187,7 +187,7 @@ DocSearchEnvironmentTest >> testNextResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	self assert: docSearchEnv currentEntryIndex equals: 1.
 	docSearchEnv nextResultEntry.
 	self assert: docSearchEnv currentEntryIndex equals: 2
@@ -199,7 +199,7 @@ DocSearchEnvironmentTest >> testNextResultEntryWhenCurrentEntryIndexIsLast [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	docSearchEnv currentEntryIndex: docSearchEnv resultEntries size.
 	self assert: docSearchEnv currentEntryIndex equals: docSearchEnv resultEntries size.
 	docSearchEnv nextResultEntry.
@@ -212,7 +212,7 @@ DocSearchEnvironmentTest >> testPrevChapterInResultEntries [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	self assert: docSearchEnv currentEntryIndex equals: 1.
 	docSearchEnv prevChapterInResultEntries.
 	self assert: docSearchEnv currentEntryIndex equals: 4.
@@ -226,7 +226,7 @@ DocSearchEnvironmentTest >> testPrevChapterInResultEntriesWithNoResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: ''.
+	docSearchEnv search: '' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 0.
 	self assert: docSearchEnv currentEntryIndex equals: 0.
 	docSearchEnv prevChapterInResultEntries.
@@ -238,7 +238,7 @@ DocSearchEnvironmentTest >> testPrevChapterInResultEntriesWithOneResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'third'.
+	docSearchEnv search: 'third' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 1.
 	self assert: docSearchEnv currentEntryIndex equals: 1.
 	docSearchEnv prevChapterInResultEntries.
@@ -251,7 +251,7 @@ DocSearchEnvironmentTest >> testPrevResultEntry [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	docSearchEnv currentEntryIndex: 2.
 	self assert: docSearchEnv currentEntryIndex equals: 2.
 	docSearchEnv prevResultEntry.
@@ -264,7 +264,7 @@ DocSearchEnvironmentTest >> testPrevResultEntryWhenCurrentEntryIndexIsFirst [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	self assert: docSearchEnv currentEntryIndex equals: 1.
 	docSearchEnv prevResultEntry.
 	self assert: docSearchEnv currentEntryIndex equals: 4
@@ -276,7 +276,7 @@ DocSearchEnvironmentTest >> testResultEntriesOf [
 	| res |
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	res := docSearchEnv resultEntriesOf: library books third chapters first key.
 	self assert: res size equals: 2.
 	self assert: res first chapter title  equals: 'chapitre 4'.
@@ -290,7 +290,7 @@ DocSearchEnvironmentTest >> testSearch [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 4.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 1'.
 	self assert: docSearchEnv resultEntries first startPosition equals: 11.
@@ -307,7 +307,7 @@ DocSearchEnvironmentTest >> testSearch [
 DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14 [
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (14 to: chapters first lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 3.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
 	self assert: docSearchEnv resultEntries first startPosition equals: 11.
@@ -322,7 +322,7 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14 [
 DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14WithShiftedChapter [
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (14 to: chapters fourth lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 3.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
 	self assert: docSearchEnv resultEntries first startPosition equals: 71.
@@ -338,7 +338,7 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt14WithShiftedChap
 DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt14 [
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: 14)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 		self assert: docSearchEnv resultEntries size equals: 4.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 1'.
 	self assert: docSearchEnv resultEntries first startPosition equals: 11.
@@ -356,7 +356,7 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt14WithShiftedCha
 	self skip.
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: 14)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test'  withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 3.
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
 	self assert: docSearchEnv resultEntries first startPosition equals: 12.
@@ -372,7 +372,7 @@ DocSearchEnvironmentTest >> testSearchWithNotDocSearchRange [
 
 	docSearchEnv := DocSearchEnvironment new.
 	self
-		should: [ docSearchEnv search: 'dkhjsqokdjakl' ]
+		should: [ docSearchEnv search: 'dkhjsqokdjakl'  withSensitiveCase: true ]
 		raise: Error
 		withExceptionDo: [ :error | 
 		self assert: error tag equals: #environmentNotSet ]
@@ -383,7 +383,7 @@ DocSearchEnvironmentTest >> testSearchWithNotOccurence [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'dkhjsqokdjakl'.
+	docSearchEnv search: 'dkhjsqokdjakl' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 0
 	
 ]
@@ -393,7 +393,7 @@ DocSearchEnvironmentTest >> testSearchWithNotOccurenceWithShiftedChapter [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'dkhjsqokdjakl'.
+	docSearchEnv search: 'dkhjsqokdjakl' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 0
 	
 ]
@@ -403,7 +403,7 @@ DocSearchEnvironmentTest >> testSearchWithNothing [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: ''.
+	docSearchEnv search: '' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 0
 	
 ]
@@ -413,7 +413,7 @@ DocSearchEnvironmentTest >> testSearchWithNothingWhithShifted [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: ''.
+	docSearchEnv search: '' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 0
 	
 ]
@@ -423,7 +423,7 @@ DocSearchEnvironmentTest >> testSearchWithShiftedChapter [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.} posInterval: (1 to: chapters fourth lastPosition)).
-	docSearchEnv search: 'test'.
+	docSearchEnv search: 'test' withSensitiveCase: true.
 	self assert: docSearchEnv resultEntries size equals: 4.
 
 	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
