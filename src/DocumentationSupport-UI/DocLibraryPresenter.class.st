@@ -32,7 +32,8 @@ Class {
 		'editCheckBox',
 		'showCheckBox',
 		'showHeaderCheckBox',
-		'sensitiveCaseCheckBox'
+		'sensitiveCaseCheckBox',
+		'regexCheckBox'
 	],
 	#classInstVars : [
 		'searchInput'
@@ -195,6 +196,13 @@ DocLibraryPresenter >> initializePresenters [
 	super initializePresenters.
 	hasPrevChapterChange := false.
 	hasNextChapterChange := false.
+	
+	showHeaderCheckBox := SpCheckBoxPresenter new label: 'Show header'.
+	editCheckBox := SpCheckBoxPresenter new label: 'Edit mode'.
+	showCheckBox := SpCheckBoxPresenter new label: 'Show preview/edit mode'.
+	sensitiveCaseCheckBox := SpCheckBoxPresenter new label: 'Sensitive Case'.
+	regexCheckBox := SpCheckBoxPresenter new label: 'Regex mode'.
+	
 	docSearchObject := DocSearchEnvironment new.
 	tree := self newTree.
 	editor := self instantiate: DocPanePresenter.
@@ -368,19 +376,17 @@ DocLibraryPresenter >> openInWindow: item [
 
 { #category : #'parameters-bar' }
 DocLibraryPresenter >> parametersBar [
-	showHeaderCheckBox := SpCheckBoxPresenter new label: 'Show header'.
-	editCheckBox := SpCheckBoxPresenter new label: 'Edit mode'.
-	showCheckBox := SpCheckBoxPresenter new label: 'Show preview/edit mode'.
-	sensitiveCaseCheckBox := SpCheckBoxPresenter new label: 'Sensitive Case'.
 	showHeaderCheckBox whenChangedDo: [ self refreshChapter ].
 	editCheckBox whenChangedDo: [ self refreshChapter ].
 	showCheckBox whenChangedDo: [ self refreshChapter ].
 	sensitiveCaseCheckBox whenChangedDo: [ self refreshChapter ].
+	regexCheckBox whenChangedDo: [ self refreshChapter ].
 	^ SpBoxLayout newHorizontal
 		  add: showHeaderCheckBox height: 20;
 		  add: editCheckBox height: 20;
 		  add: showCheckBox height: 20;
-		  add: sensitiveCaseCheckBox height: 20
+		  add: sensitiveCaseCheckBox height: 20;
+		  add: regexCheckBox height: 20
 ]
 
 { #category : #'search-actions' }
@@ -451,6 +457,11 @@ DocLibraryPresenter >> refreshTree [
 
 ]
 
+{ #category : #'parameters-bar' }
+DocLibraryPresenter >> regexModeEnable [
+	^ regexCheckBox state
+]
+
 { #category : #'search-bar' }
 DocLibraryPresenter >> resetSearchEnv [
 	searchEnv := nil.
@@ -466,7 +477,7 @@ DocLibraryPresenter >> searchAction [
 		chapters addAll: book chapters].
 	"Execute the search"
 	env:= DocSearchEnvironment on: (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	env search: searchPattern  withSensitiveCase: self sensitiveCaseEnable.
+	env search: searchPattern  withSensitiveCase: self sensitiveCaseEnable isRegex: self regexModeEnable.
 	"Display the number of occurence"
 	^ env
 
