@@ -181,8 +181,54 @@ DocSearchEnvironment >> search: aString withSensitiveCase: aBoolean [
 	
 ]
 
+{ #category : #'API - search' }
+DocSearchEnvironment >> search: aString withSensitiveCase: aBoolean1 isRegex: aBoolean2 [
+	[ 
+	searchPattern := aString.
+	self resetResultEntries.
+	searchRange chaptersDo: [ :chapter :rangeInterval |
+		aBoolean2 
+		ifTrue: [ 
+			(self searchRegex: searchPattern asRegex in: chapter restrictedBy: rangeInterval withSensitiveCase: aBoolean1) ifNotNil: [ :sre | 
+			resultEntries addAll: sre]
+		] 
+		ifFalse: [ 
+			(self search: searchPattern in: chapter restrictedBy: rangeInterval withSensitiveCase: aBoolean1) ifNotNil: [ :sre | 
+			resultEntries addAll: sre]
+		]
+	].
+	currentEntryIndex := resultEntries ifNotEmpty: [ 1 ] ifEmpty: [ 0 ]
+	] on: MessageNotUnderstood,RegexSyntaxError do: [ Error signal: #environmentNotSet ]
+	
+]
+
 { #category : #accessing }
 DocSearchEnvironment >> searchPattern [
 
 	^ searchPattern
+]
+
+{ #category : #private }
+DocSearchEnvironment >> searchRegex: aRegex in: aChapter restrictedBy: aRangeInterval withSensitiveCase: aBoolean [
+	| entryOrNil  docResultEntries currentSearchPosition tree text regexWords|
+	
+	docResultEntries := OrderedCollection new.
+	currentSearchPosition := aRangeInterval first.
+	
+	tree := MicroDownParser parse: aChapter source.
+	text := aBoolean 
+		ifFalse: [ (DocRichTextComposer new visit: tree) string asLowercase ] 
+		ifTrue: [ (DocRichTextComposer new visit: tree) string ].
+	regexWords := aRegex matchesIn: text.
+	regexWords do: [ :word | 
+		entryOrNil := aChapter findNextString: word startingAt: currentSearchPosition restrictedBy: aRangeInterval last withSensitiveCase: aBoolean.
+		entryOrNil ifNotNil: [
+			docResultEntries add: entryOrNil.
+			currentSearchPosition  := entryOrNil endPosition + 1]].
+	
+	^ docResultEntries
+	
+
+
+
 ]
