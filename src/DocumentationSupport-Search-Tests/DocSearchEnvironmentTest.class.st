@@ -96,12 +96,12 @@ DocSearchEnvironmentTest >> testFirstOccurenceOfFourthChapterWithRegex [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test' withSensitiveCase: false.
+	docSearchEnv search: '[0-9]+' withSensitiveCase: true isRegex: true.
 	docSearchEnv firstOccurrenceOf: library books third chapters first.
 	self assert: docSearchEnv currentEntryIndex equals: 4.
-	self assert: docSearchEnv resultEntries size equals: 6.
+	self assert: docSearchEnv resultEntries size equals: 4.
 	self assert: docSearchEnv currentResultEntry chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv currentResultEntry startPosition equals: 11
+	self assert: docSearchEnv currentResultEntry startPosition equals: 20
 	
 ]
 
@@ -114,20 +114,6 @@ DocSearchEnvironmentTest >> testFirstOccurenceOfFourthChapterWithShiftedChapter 
 	docSearchEnv firstOccurrenceOf: library books third chapters first.
 	self assert: docSearchEnv currentEntryIndex equals: 1.
 	self assert: docSearchEnv resultEntries size equals: 4.
-	self assert: docSearchEnv currentResultEntry chapter title equals: 'chapitre 4'.
-	self assert: docSearchEnv currentResultEntry startPosition equals: 11
-	
-]
-
-{ #category : #'tests-search' }
-DocSearchEnvironmentTest >> testFirstOccurenceOfFourthChapterWithoutSensitiveCase [
-
-	docSearchEnv := DocSearchEnvironment on:
-		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'test' withSensitiveCase: false.
-	docSearchEnv firstOccurrenceOf: library books third chapters first.
-	self assert: docSearchEnv currentEntryIndex equals: 4.
-	self assert: docSearchEnv resultEntries size equals: 6.
 	self assert: docSearchEnv currentResultEntry chapter title equals: 'chapitre 4'.
 	self assert: docSearchEnv currentResultEntry startPosition equals: 11
 	
@@ -416,6 +402,38 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt16WithoutSensitiv
 	
 ]
 
+{ #category : #'tests-regex' }
+DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt23WithRegex [
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (23 to: chapters first lastPosition)).
+	docSearchEnv search: '[0-9]+' withSensitiveCase: true isRegex: true.
+	self assert: docSearchEnv resultEntries size equals: 3.
+	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 2'.
+	self assert: docSearchEnv resultEntries first startPosition equals: 39.
+	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 3'.
+	self assert: docSearchEnv resultEntries second startPosition equals: 32.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 20.
+	
+]
+
+{ #category : #'tests-regex' }
+DocSearchEnvironmentTest >> testSearchWithDocSearchRangeBeginAt23WithShiftedChapterWithRegex [
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (23 to: chapters fourth lastPosition)).
+	docSearchEnv search: '[0-9]+' withSensitiveCase: true isRegex: true.
+	self assert: docSearchEnv resultEntries size equals: 3.
+	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 1'.
+	self assert: docSearchEnv resultEntries first startPosition equals: 6.
+	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 2'.
+	self assert: docSearchEnv resultEntries second startPosition equals: 39.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 3'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 32.
+	
+
+	
+]
+
 { #category : #'tests-sensitive-case' }
 DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt16 [
 	docSearchEnv := DocSearchEnvironment on:
@@ -470,12 +488,40 @@ DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt16WithoutSensiti
 	
 ]
 
+{ #category : #'tests-regex' }
+DocSearchEnvironmentTest >> testSearchWithDocSearchRangeFinishAt23WithRegex [
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: 23)).
+	docSearchEnv search: '[0-9]+' withSensitiveCase: true isRegex: true.
+		self assert: docSearchEnv resultEntries size equals: 4.
+	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 1'.
+	self assert: docSearchEnv resultEntries first startPosition equals: 6.
+	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 2'.
+	self assert: docSearchEnv resultEntries second startPosition equals: 39.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 3'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 32.
+	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries fourth startPosition equals: 20.
+	
+]
+
 { #category : #'tests-sensitive-case' }
 DocSearchEnvironmentTest >> testSearchWithNotDocSearchRange [
 
 	docSearchEnv := DocSearchEnvironment new.
 	self
 		should: [ docSearchEnv search: 'dkhjsqokdjakl'  withSensitiveCase: true ]
+		raise: Error
+		withExceptionDo: [ :error | 
+		self assert: error tag equals: #environmentNotSet ]
+]
+
+{ #category : #'tests-regex' }
+DocSearchEnvironmentTest >> testSearchWithNotDocSearchRangeWithRegex [
+
+	docSearchEnv := DocSearchEnvironment new.
+	self
+		should: [ docSearchEnv search: '[0-9]+'  withSensitiveCase: true isRegex: true]
 		raise: Error
 		withExceptionDo: [ :error | 
 		self assert: error tag equals: #environmentNotSet ]
@@ -502,6 +548,15 @@ DocSearchEnvironmentTest >> testSearchWithNotOccurence [
 	
 ]
 
+{ #category : #'tests-regex' }
+DocSearchEnvironmentTest >> testSearchWithNotOccurenceWithRegex [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'dkhjsqokdjakl' withSensitiveCase: true isRegex: true.
+	self assert: docSearchEnv resultEntries size equals: 0
+]
+
 { #category : #'tests-sensitive-case' }
 DocSearchEnvironmentTest >> testSearchWithNotOccurenceWithShiftedChapter [
 
@@ -512,20 +567,20 @@ DocSearchEnvironmentTest >> testSearchWithNotOccurenceWithShiftedChapter [
 	
 ]
 
+{ #category : #'tests-regex' }
+DocSearchEnvironmentTest >> testSearchWithNotOccurenceWithShiftedChapterWithRegex [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: 'jshdfiqshdikq+' withSensitiveCase: true isRegex: true.
+	self assert: docSearchEnv resultEntries size equals: 0
+]
+
 { #category : #'tests-search' }
 DocSearchEnvironmentTest >> testSearchWithNotOccurenceWithShiftedChapterWithoutSensitiveCase [
 
 	docSearchEnv := DocSearchEnvironment on:
 		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.}  posInterval: (1 to: chapters first lastPosition)).
-	docSearchEnv search: 'dkhjsqokdjakl' withSensitiveCase: false.
-	self assert: docSearchEnv resultEntries size equals: 0
-]
-
-{ #category : #'tests-search' }
-DocSearchEnvironmentTest >> testSearchWithNotOccurenceWithoutSensitiveCase [
-
-	docSearchEnv := DocSearchEnvironment on:
-		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
 	docSearchEnv search: 'dkhjsqokdjakl' withSensitiveCase: false.
 	self assert: docSearchEnv resultEntries size equals: 0
 ]
@@ -560,6 +615,15 @@ DocSearchEnvironmentTest >> testSearchWithNothingWhithShiftedWithoutSensitiveCas
 	
 ]
 
+{ #category : #'tests-regex' }
+DocSearchEnvironmentTest >> testSearchWithNothingWithRegex [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: chapters posInterval: (1 to: chapters first lastPosition)).
+	docSearchEnv search: '' withSensitiveCase: true isRegex: true.
+	self assert: docSearchEnv resultEntries size equals: 0
+]
+
 { #category : #'tests-search' }
 DocSearchEnvironmentTest >> testSearchWithNothingWithoutSensitiveCase [
 
@@ -586,6 +650,24 @@ DocSearchEnvironmentTest >> testSearchWithShiftedChapter [
 	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 1'.
 	self assert: docSearchEnv resultEntries fourth startPosition equals: 14.
 	
+]
+
+{ #category : #'tests-regex' }
+DocSearchEnvironmentTest >> testSearchWithShiftedChapterWithRegex [
+
+	docSearchEnv := DocSearchEnvironment on:
+		                (DocSearchRange chapters: {chapters fourth. chapters fifth. chapters first. chapters second. chapters third.} posInterval: (1 to: chapters fourth lastPosition)).
+	docSearchEnv search: '[0-9]+' withSensitiveCase: true isRegex: true.
+	self assert: docSearchEnv resultEntries size equals: 4.
+
+	self assert: docSearchEnv resultEntries first chapter title equals: 'chapitre 4'.
+	self assert: docSearchEnv resultEntries first startPosition equals: 20.
+	self assert: docSearchEnv resultEntries second chapter title equals: 'chapitre 1'.
+	self assert: docSearchEnv resultEntries second  startPosition equals: 6.
+	self assert: docSearchEnv resultEntries third chapter title equals: 'chapitre 2'.
+	self assert: docSearchEnv resultEntries third startPosition equals: 39.
+	self assert: docSearchEnv resultEntries fourth chapter title equals: 'chapitre 3'.
+	self assert: docSearchEnv resultEntries fourth startPosition equals: 32.
 ]
 
 { #category : #'tests-search' }
