@@ -219,6 +219,7 @@ DocSearchEnvironment >> searchRegex: aRegex in: aChapter restrictedBy: aRangeInt
 	text := aBoolean 
 		ifFalse: [ (DocRichTextComposer new visit: tree) string asLowercase ] 
 		ifTrue: [ (DocRichTextComposer new visit: tree) string ].
+	text := text copyFrom: aRangeInterval first to: text size.
 	regexWords := aRegex matchesIn: text.
 	regexWords do: [ :word | 
 		entryOrNil := aChapter findNextString: word startingAt: currentSearchPosition restrictedBy: aRangeInterval last withSensitiveCase: aBoolean.
