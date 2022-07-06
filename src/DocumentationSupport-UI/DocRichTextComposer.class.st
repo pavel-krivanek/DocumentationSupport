@@ -554,12 +554,14 @@ DocRichTextComposer >> visitMathInline: aMicMathInline [
 { #category : #'visiting-format' }
 DocRichTextComposer >> visitMonospace: anObject [
 	"Notice - I add a highlight to the backgorund rather than mono-spaced."
-	| backgroundColor sem |
+	| backgroundColor sem monospaceAttributes |
+	monospaceAttributes := cssDictionary at: #monospace.
 	backgroundColor := self textStyler monospaceBackgroundColor.
 	self flag: #fixMe.
 	"Right now we stupidly emit TextAction but we should emit TextClassLink and revisit them."
+	monospaceAttributes  add: (TextBackgroundColor color: backgroundColor).
 	canvas 
-		includeAttribute: (TextBackgroundColor color: backgroundColor) 
+		includeAttributes: monospaceAttributes
 		in: [ 
 			sem := MicSemanticAction from: anObject text.
 			sem hasEntity 
