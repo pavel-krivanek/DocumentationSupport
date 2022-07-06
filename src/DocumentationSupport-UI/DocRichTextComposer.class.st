@@ -1,3 +1,10 @@
+"
+I'm a visitor that produces rich text (class `Text`) based on a microdown model.
+I'm implemented using a canvas/brush pattern. The class offers multiple configurations: an offline mode, 
+a not rendering mode, and a not catching exceptions (to ease debugging).
+
+I do the same that `MicRichTextComposer` but you can choose the style of the render.
+"
 Class {
 	#name : #DocRichTextComposer,
 	#superclass : #MicrodownVisitor,
