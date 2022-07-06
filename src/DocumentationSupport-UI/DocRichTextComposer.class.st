@@ -588,9 +588,16 @@ DocRichTextComposer >> visitOrderedList: anObject [
 
 { #category : #'visiting - document' }
 DocRichTextComposer >> visitParagraph: anObject [
-	
+	| textAttributes |
 	canvas newLineIfNotAlready.
-	super visitParagraph: anObject.
+	textAttributes := cssDictionary at: #text.
+	anObject children do: [ :child |
+		child class = MicTextBlock 
+			ifTrue: [ 
+				canvas 
+					includeAttributes: textAttributes
+					in: [ child accept: self ] ] 
+			ifFalse: [ child accept: self ]  ].
 	canvas newLine; << textStyler interBlockSpacing 
 ]
 
