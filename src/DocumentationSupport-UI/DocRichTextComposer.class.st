@@ -9,15 +9,7 @@ Class {
 		'resultEntries',
 		'currentResultEntry',
 		'libraryPresenter',
-		'headerAttributes',
-		'textAttributes',
-		'boldAttributes',
-		'italicAttributes',
-		'strikeAttributes',
-		'monospaceAttributes',
-		'linkAttributes',
-		'codeAttributes',
-		'globalAttributes'
+		'cssDictionary'
 	],
 	#classInstVars : [
 		'searchIndex',
@@ -164,6 +156,18 @@ DocRichTextComposer >> initialize [
 	super initialize.
 	codeStylerClass := MicCodeStylerSpec.
 	self textStyler:  MicTextStyler new.
+	cssDictionary := Dictionary new.
+	cssDictionary at: #header put: OrderedCollection new;
+	at: #text put: OrderedCollection new;
+	at: #bold put: OrderedCollection new;
+	at: #italic put: OrderedCollection new;
+	at: #strike put: OrderedCollection new;
+	at: #monospace put: OrderedCollection new;
+	at: #link put: OrderedCollection new;
+	at: #code put: OrderedCollection new;
+	at: #headerSize put: OrderedCollection new;
+	at: #global put: OrderedCollection new.
+	
 ]
 
 { #category : #testing }
