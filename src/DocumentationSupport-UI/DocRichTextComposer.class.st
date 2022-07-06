@@ -530,7 +530,7 @@ DocRichTextComposer >> visitListItem: anItem [
 	bullet addAttribute: (TextIndent tabs: canvas nesting - 1).
 	canvas newLineIfNotAlready.
 	canvas << bullet.
-	canvas indentIn: [ super visitListItem: anItem ].
+	canvas indentIn: [ self visitChildrenOfForTextAttributes: anItem ].
 
 ]
 
@@ -590,17 +590,9 @@ DocRichTextComposer >> visitOrderedList: anObject [
 
 { #category : #'visiting - document' }
 DocRichTextComposer >> visitParagraph: anObject [
-	| textAttributes |
 	canvas newLineIfNotAlready.
-	textAttributes := cssDictionary at: #text.
-	anObject children do: [ :child |
-		child class = MicTextBlock 
-			ifTrue: [ 
-				canvas 
-					includeAttributes: textAttributes
-					in: [ child accept: self ] ] 
-			ifFalse: [ child accept: self ]  ].
-	canvas newLine; << textStyler interBlockSpacing 
+	self visitChildrenOfForTextAttributes: anObject.
+	canvas newLine; << textStyler interBlockSpacing
 ]
 
 { #category : #'visiting - document' }
