@@ -444,10 +444,14 @@ DocRichTextComposer >> visitFigure: aFigure [
 
 { #category : #'visiting - document' }
 DocRichTextComposer >> visitHeader: aHeader [
-
+	| headerAttributes |
+	headerAttributes := cssDictionary at: #header.
+	(cssDictionary at: #headerSize) 
+		ifNotEmpty: [ headerAttributes add: ((cssDictionary at: #headerSize) at: aHeader level) ] 
+		ifEmpty: [ headerAttributes add: (self textStyler headerLevelFont: aHeader level) ].
 	canvas newLineIfNotAlready.
 	canvas
-		includeAttribute: (self textStyler headerLevelFont: aHeader level)
+		includeAttributes: headerAttributes
 		in: [ super visitHeader: aHeader ].
 	canvas << (textStyler spaceAfterHeaderLevel: aHeader level)
 ]
