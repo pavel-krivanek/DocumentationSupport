@@ -369,7 +369,6 @@ DocRichTextComposer >> visitBold: anObject [
 DocRichTextComposer >> visitCaptionEltForTextAttributes: anObject of: aElementCSSName [
 	| textAttributes |
 	textAttributes := cssDictionary at: aElementCSSName.
-	textAttributes add: (TextColor new color: Color red).
 	anObject captionElements do: [ :child |
 		child class = MicTextBlock 
 			ifTrue: [ 
@@ -403,12 +402,7 @@ DocRichTextComposer >> visitCode: aCodeBlock [
 				asLanguage: aCodeBlock language);
 			newLine.
 		aCodeBlock hasCaption ifTrue: [ 
-			canvas 
-				includeAttribute: TextEmphasis bold 
-				in: [ 
-					canvas
-						<< aCodeBlock caption asText;
-					newLine ]]].
+			self visitCaptionEltForTextAttributes: aCodeBlock of: #code]].
 	canvas << textStyler interBlockSpacing
 		
 ]
