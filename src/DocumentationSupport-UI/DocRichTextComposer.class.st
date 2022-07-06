@@ -172,8 +172,7 @@ DocRichTextComposer >> initialize [
 	at: #monospace put: OrderedCollection new;
 	at: #link put: OrderedCollection new;
 	at: #code put: OrderedCollection new;
-	at: #headerSize put: OrderedCollection new;
-	at: #global put: OrderedCollection new.
+	at: #headerSize put: OrderedCollection new
 	
 ]
 
