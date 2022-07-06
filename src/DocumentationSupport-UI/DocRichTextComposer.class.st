@@ -306,6 +306,17 @@ DocRichTextComposer >> resultEntries: anObject [
 	resultEntries := anObject
 ]
 
+{ #category : #visiting }
+DocRichTextComposer >> setLinkAction: aLink [
+
+	| attribute |
+	attribute := TextAction new
+		             actOnClickBlock: [ 
+			             WebBrowser openOn: aLink url ];
+		             yourself.
+	canvas includeAttribute: attribute in: [ self visitCaptionEltForTextAttributes: aLink of: #link ]
+]
+
 { #category : #accessing }
 DocRichTextComposer >> textStyler [
 
@@ -352,6 +363,33 @@ DocRichTextComposer >> visitBold: anObject [
 		includeAttributes: boldAttributes
 		in: [ super visitBold: anObject ]
 	
+]
+
+{ #category : #visiting }
+DocRichTextComposer >> visitCaptionEltForTextAttributes: anObject of: aElementCSSName [
+	| textAttributes |
+	textAttributes := cssDictionary at: aElementCSSName.
+	textAttributes add: (TextColor new color: Color red).
+	anObject captionElements do: [ :child |
+		child class = MicTextBlock 
+			ifTrue: [ 
+				canvas 
+					includeAttributes: textAttributes
+					in: [ child accept: self ] ] 
+			ifFalse: [ child accept: self ]  ].
+]
+
+{ #category : #'visiting - document' }
+DocRichTextComposer >> visitChildrenOfForTextAttributes: anObject [
+	| textAttributes |
+	textAttributes := cssDictionary at: #text.
+	anObject children do: [ :child |
+		child class = MicTextBlock 
+			ifTrue: [ 
+				canvas 
+					includeAttributes: textAttributes
+					in: [ child accept: self ] ] 
+			ifFalse: [ child accept: self ]  ].
 ]
 
 { #category : #visiting }
@@ -502,22 +540,10 @@ DocRichTextComposer >> visitLink: aLink [
 	(self isInclude: aLink) ifTrue: [ 
 		(DocLinkResolver isValidChapterForName: aLink url asUrl host) 
 			ifFalse: [ attributes add: (TextBackgroundColor new color: (Color orange alpha: 0.5))]
-			ifTrue: [ self include: aLink url asUrl host ] ].
-			
+			ifTrue: [ self include: aLink url asUrl host ] ].	
 	attributes
-		ifNotEmpty: [ canvas includeAttributes: attributes in: [ self visitLinkTMP: aLink ] ]
-		ifEmpty: [ self visitLinkTMP: aLink ]
-]
-
-{ #category : #visiting }
-DocRichTextComposer >> visitLinkTMP: aLink [
-
-	| attribute |
-	attribute := TextAction new
-		             actOnClickBlock: [ 
-			             WebBrowser openOn: aLink url ];
-		             yourself.
-	canvas includeAttribute: attribute in: [ super visitLink: aLink ]
+		ifNotEmpty: [ canvas includeAttributes: attributes in: [ self setLinkAction: aLink ] ]
+		ifEmpty: [ self setLinkAction: aLink ]
 ]
 
 { #category : #'visiting - list' }
