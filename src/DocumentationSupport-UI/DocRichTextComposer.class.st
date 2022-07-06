@@ -346,8 +346,11 @@ DocRichTextComposer >> visitAnnotatedParagraph: anAnnotatedParagraph [
 
 { #category : #'visiting-format' }
 DocRichTextComposer >> visitBold: anObject [
+	| boldAttributes |
+	boldAttributes := cssDictionary at: #bold.
+	boldAttributes add: (TextEmphasis bold).
 	canvas 
-		includeAttribute: TextEmphasis bold 
+		includeAttributes: boldAttributes
 		in: [ super visitBold: anObject ]
 	
 ]
@@ -473,8 +476,11 @@ DocRichTextComposer >> visitHorizontalLine: anHorizontalLine [
 
 { #category : #'visiting-format' }
 DocRichTextComposer >> visitItalic: anObject [
+	| italicAttributes |
+	italicAttributes := cssDictionary at: #italic.
+	italicAttributes add: (TextEmphasis italic ).
 	canvas 
-		includeAttribute: TextEmphasis italic 
+		includeAttributes: italicAttributes
 		in: [ super visitItalic: anObject ]
 ]
 
@@ -607,9 +613,11 @@ DocRichTextComposer >> visitQuote: aQuote [
 
 { #category : #'visiting-format' }
 DocRichTextComposer >> visitStrike: anObject [
-
+	| strikeAttributes |
+	strikeAttributes := cssDictionary at: #strike.
+	strikeAttributes add: (TextEmphasis struckOut ).
 	canvas 
-		includeAttribute: TextEmphasis struckOut 
+		includeAttributes: strikeAttributes
 		in: [ super visitStrike: anObject ]
 ]
 
