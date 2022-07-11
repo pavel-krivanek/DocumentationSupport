@@ -135,6 +135,7 @@ DocBook >> createEmptyCSS [
 		at: #monospace put: OrderedCollection new;
 		at: #link put: OrderedCollection new;
 		at: #code put: OrderedCollection new;
+		at: #headerSize put: OrderedCollection new;
 		yourself
 ]
 
@@ -184,7 +185,6 @@ DocBook >> generateCSS: aDictionary [
 	| css |
 	css := self createEmptyCSS.
 	self addCSSColor: aDictionary in: css.
-	self halt.
 	DocBook at: key put: css. 
 ]
 

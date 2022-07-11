@@ -105,6 +105,17 @@ DocRichTextComposer >> codeStylerClass [
 ]
 
 { #category : #accessing }
+DocRichTextComposer >> css: aDocModel [
+	aDocModel parent 
+		ifNil: [ [
+				| tmpCSS |
+				tmpCSS := DocBook at: aDocModel key.
+				tmpCSS ifNotNil: [cssDictionary := tmpCSS ]
+				] on: KeyNotFound do: ["nothing"] ] 
+		ifNotNil: [ self css: aDocModel parent ]
+]
+
+{ #category : #accessing }
 DocRichTextComposer >> currentResultEntry [
 
 	^ currentResultEntry ifNil: [ ^ DocResultEntry new ]
