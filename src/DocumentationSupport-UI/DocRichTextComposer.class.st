@@ -110,7 +110,7 @@ DocRichTextComposer >> css: aDocModel [
 		ifNil: [ [
 				| tmpCSS |
 				tmpCSS := DocBook at: aDocModel key.
-				tmpCSS ifNotNil: [cssDictionary := tmpCSS shallowCopy ]
+				tmpCSS ifNotNil: [cssDictionary := tmpCSS deepCopy ]
 				] on: KeyNotFound do: ["nothing"] ] 
 		ifNotNil: [ self css: aDocModel parent ]
 ]
