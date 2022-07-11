@@ -7,8 +7,23 @@ Class {
 	#instVars : [
 		'chapters'
 	],
+	#classInstVars : [
+		'cssDictionnary'
+	],
 	#category : #'DocumentationSupport-Model'
 }
+
+{ #category : #accessing }
+DocBook class >> at: aKey [
+	cssDictionnary ifNil: [ ^ nil ].
+	cssDictionnary at: aKey ifPresent: [ :value | ^ value ]
+]
+
+{ #category : #accessing }
+DocBook class >> at: aKey put: aCSSDictionnary [
+	cssDictionnary ifNil: [ cssDictionnary := Dictionary new ].
+	cssDictionnary at: aKey put: aCSSDictionnary
+]
 
 { #category : #'drag and drop' }
 DocBook >> acceptChapter: aChapter [ 
@@ -170,6 +185,7 @@ DocBook >> generateCSS: aDictionary [
 	css := self createEmptyCSS.
 	self addCSSColor: aDictionary in: css.
 	self halt.
+	DocBook at: key put: css. 
 ]
 
 { #category : #accessing }
