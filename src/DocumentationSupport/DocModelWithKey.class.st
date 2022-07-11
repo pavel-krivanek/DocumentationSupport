@@ -35,6 +35,18 @@ DocModelWithKey >> acceptVisitor: arg1 [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'css-API' }
+DocModelWithKey >> addCSSColor: aCSSDictionnary [
+	aCSSDictionnary at: #headerColor ifPresent: [ :value | aCSSDictionnary at: #header add: (Color fromString: value) ].
+	aCSSDictionnary at: #textColor ifPresent: [ :value | aCSSDictionnary at: #text add: (Color fromString: value) ].
+	aCSSDictionnary at: #boldColor ifPresent: [ :value | aCSSDictionnary at: #bold add: (Color fromString: value) ].
+	aCSSDictionnary at: #italicColor ifPresent: [ :value | aCSSDictionnary at: #italic add: (Color fromString: value) ].
+	aCSSDictionnary at: #strikeColor ifPresent: [ :value | aCSSDictionnary at: #strike add: (Color fromString: value) ].
+	aCSSDictionnary at: #monospaceColor ifPresent: [ :value | aCSSDictionnary at: #monospace add: (Color fromString: value) ].
+	aCSSDictionnary at: #linkColor ifPresent: [ :value | aCSSDictionnary at: #link add: (Color fromString: value) ].
+	aCSSDictionnary at: #codeColor ifPresent: [ :value | aCSSDictionnary at: #code add: (Color fromString: value) ].
+]
+
 { #category : #serialization }
 DocModelWithKey >> addMetadataTo: aDictionary [ 
 
@@ -185,6 +197,7 @@ DocModelWithKey >> readMetadataFrom: aDictionary [
 	aDictionary at: #parent ifPresent: [ :value | parent := DocParentReference key: value ].
 	
 	css := self createEmptyCSS.
+	self addCSSColor: css.
 	self halt.
 ]
 
