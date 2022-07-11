@@ -53,14 +53,14 @@ DocBook >> acceptVisitor: aVisitor [
 
 { #category : #'css-API' }
 DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [ 
-	aDictionnary at: #headerColor ifPresent: [ :value | (aCSSDictionnary at: #header) add: (Color fromString: value) ].
-	aDictionnary at: #textColor ifPresent: [ :value | (aCSSDictionnary at: #text) add: (Color fromString: value) ].
-	aDictionnary at: #boldColor ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (Color fromString: value) ].
-	aDictionnary at: #italicColor ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (Color fromString: value) ].
-	aDictionnary at: #strikeColor ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (Color fromString: value) ].
-	aDictionnary at: #monospaceColor ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (Color fromString: value) ].
-	aDictionnary at: #linkColor ifPresent: [ :value | (aCSSDictionnary at: #link) add: (Color fromString: value) ].
-	aDictionnary at: #codeColor ifPresent: [ :value | (aCSSDictionnary at: #code) add: (Color fromString: value) ].
+	aDictionnary at: #headerColor ifPresent: [ :value | (aCSSDictionnary at: #header) add: (TextColor new color: (Color fromString: value)) ].
+	aDictionnary at: #textColor ifPresent: [ :value | (aCSSDictionnary at: #text) add: (TextColor new color: (Color fromString: value)) ].
+	aDictionnary at: #boldColor ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (TextColor new color: (Color fromString: value)) ].
+	aDictionnary at: #italicColor ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (TextColor new color: (Color fromString: value)) ].
+	aDictionnary at: #strikeColor ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (TextColor new color: (Color fromString: value)) ].
+	aDictionnary at: #monospaceColor ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (TextColor new color: (Color fromString: value)) ].
+	aDictionnary at: #linkColor ifPresent: [ :value | (aCSSDictionnary at: #link) add: (TextColor new color: (Color fromString: value)) ].
+	aDictionnary at: #codeColor ifPresent: [ :value | (aCSSDictionnary at: #code) add: (TextColor new color: (Color fromString: value)) ].
 ]
 
 { #category : #adding }
