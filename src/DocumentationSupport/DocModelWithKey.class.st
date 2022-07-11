@@ -65,6 +65,19 @@ DocModelWithKey >> children [
 
 ]
 
+{ #category : #'css-API' }
+DocModelWithKey >> createEmptyCSS [
+	^ Dictionary new at: #header put: OrderedCollection new;
+		at: #text put: OrderedCollection new;
+		at: #bold put: OrderedCollection new;
+		at: #italic put: OrderedCollection new;
+		at: #strike put: OrderedCollection new;
+		at: #monospace put: OrderedCollection new;
+		at: #link put: OrderedCollection new;
+		at: #code put: OrderedCollection new;
+		yourself
+]
+
 { #category : #dirty }
 DocModelWithKey >> dirty [ 
 
@@ -166,10 +179,13 @@ DocModelWithKey >> parentKeyOrNil [
 
 { #category : #serialization }
 DocModelWithKey >> readMetadataFrom: aDictionary [
-	self halt.
+	| css |
 	aDictionary at: #title ifPresent: [ :value | title := value ].
 	aDictionary at: #key ifPresent: [ :value | key := value ].
-	aDictionary at: #parent ifPresent: [ :value | parent := DocParentReference key: value ].	
+	aDictionary at: #parent ifPresent: [ :value | parent := DocParentReference key: value ].
+	
+	css := self createEmptyCSS.
+	self halt.
 ]
 
 { #category : #serialization }
