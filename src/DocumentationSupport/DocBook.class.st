@@ -36,6 +36,18 @@ DocBook >> acceptVisitor: aVisitor [
 	aVisitor visitBook: self
 ]
 
+{ #category : #'css-API' }
+DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [ 
+	aDictionnary at: #headerColor ifPresent: [ :value | (aCSSDictionnary at: #header) add: (Color fromString: value) ].
+	aDictionnary at: #textColor ifPresent: [ :value | (aCSSDictionnary at: #text) add: (Color fromString: value) ].
+	aDictionnary at: #boldColor ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (Color fromString: value) ].
+	aDictionnary at: #italicColor ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (Color fromString: value) ].
+	aDictionnary at: #strikeColor ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (Color fromString: value) ].
+	aDictionnary at: #monospaceColor ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (Color fromString: value) ].
+	aDictionnary at: #linkColor ifPresent: [ :value | (aCSSDictionnary at: #link) add: (Color fromString: value) ].
+	aDictionnary at: #codeColor ifPresent: [ :value | (aCSSDictionnary at: #code) add: (Color fromString: value) ].
+]
+
 { #category : #adding }
 DocBook >> addChapter: aChapter [ 
 
@@ -98,6 +110,19 @@ DocBook >> children [
 	^ self sortedChapters: (chapters select: [ :each | each parent = self ])
 ]
 
+{ #category : #'css-API' }
+DocBook >> createEmptyCSS [
+	^ Dictionary new at: #header put: OrderedCollection new;
+		at: #text put: OrderedCollection new;
+		at: #bold put: OrderedCollection new;
+		at: #italic put: OrderedCollection new;
+		at: #strike put: OrderedCollection new;
+		at: #monospace put: OrderedCollection new;
+		at: #link put: OrderedCollection new;
+		at: #code put: OrderedCollection new;
+		yourself
+]
+
 { #category : #removing }
 DocBook >> delete [ 
 
@@ -139,6 +164,14 @@ DocBook >> fixParentReferencesUsing: aDictionary [
 		ifNotNil: [ aDictionary at: parent key ]
 ]
 
+{ #category : #'css-API' }
+DocBook >> generateCSS: aDictionary [
+	| css |
+	css := self createEmptyCSS.
+	self addCSSColor: aDictionary in: css.
+	self halt.
+]
+
 { #category : #accessing }
 DocBook >> hasSubchapter: aChapter [
 
@@ -151,6 +184,15 @@ DocBook >> initialize [
 	super initialize.
 	
 	chapters := OrderedCollection new.
+]
+
+{ #category : #accessing }
+DocBook >> readMetadataFrom: aDictionary [
+	super readMetadataFrom: aDictionary.
+	self generateCSS: aDictionary.
+	
+	
+	
 ]
 
 { #category : #accessing }

@@ -35,18 +35,6 @@ DocModelWithKey >> acceptVisitor: arg1 [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'css-API' }
-DocModelWithKey >> addCSSColor: aDictionnary in: aCSSDictionnary [ 
-	aDictionnary at: #headerColor ifPresent: [ :value | aCSSDictionnary at: #header add: (Color fromString: value) ].
-	aDictionnary at: #textColor ifPresent: [ :value | aCSSDictionnary at: #text add: (Color fromString: value) ].
-	aDictionnary at: #boldColor ifPresent: [ :value | aCSSDictionnary at: #bold add: (Color fromString: value) ].
-	aDictionnary at: #italicColor ifPresent: [ :value | aCSSDictionnary at: #italic add: (Color fromString: value) ].
-	aDictionnary at: #strikeColor ifPresent: [ :value | aCSSDictionnary at: #strike add: (Color fromString: value) ].
-	aDictionnary at: #monospaceColor ifPresent: [ :value | aCSSDictionnary at: #monospace add: (Color fromString: value) ].
-	aDictionnary at: #linkColor ifPresent: [ :value | aCSSDictionnary at: #link add: (Color fromString: value) ].
-	aDictionnary at: #codeColor ifPresent: [ :value | aCSSDictionnary at: #code add: (Color fromString: value) ].
-]
-
 { #category : #serialization }
 DocModelWithKey >> addMetadataTo: aDictionary [ 
 
@@ -75,19 +63,6 @@ DocModelWithKey >> book [
 DocModelWithKey >> children [
 	^ self subclassResponsibility
 
-]
-
-{ #category : #'css-API' }
-DocModelWithKey >> createEmptyCSS [
-	^ Dictionary new at: #header put: OrderedCollection new;
-		at: #text put: OrderedCollection new;
-		at: #bold put: OrderedCollection new;
-		at: #italic put: OrderedCollection new;
-		at: #strike put: OrderedCollection new;
-		at: #monospace put: OrderedCollection new;
-		at: #link put: OrderedCollection new;
-		at: #code put: OrderedCollection new;
-		yourself
 ]
 
 { #category : #dirty }
@@ -191,14 +166,12 @@ DocModelWithKey >> parentKeyOrNil [
 
 { #category : #serialization }
 DocModelWithKey >> readMetadataFrom: aDictionary [
-	| css |
 	aDictionary at: #title ifPresent: [ :value | title := value ].
 	aDictionary at: #key ifPresent: [ :value | key := value ].
 	aDictionary at: #parent ifPresent: [ :value | parent := DocParentReference key: value ].
 	
-	css := self createEmptyCSS.
-	self addCSSColor: aDictionary in: css.
-	self halt.
+	
+	
 ]
 
 { #category : #serialization }
