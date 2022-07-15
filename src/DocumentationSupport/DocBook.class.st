@@ -63,6 +63,16 @@ DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
 	aDictionnary at: #codeColor ifPresent: [ :value | (aCSSDictionnary at: #code) add: (TextColor new color: (Color fromString: value)) ].
 ]
 
+{ #category : #'css-API' }
+DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [ 
+	aDictionnary at: #textSize ifPresent: [ :value | (aCSSDictionnary at: #text) add: (self textFontReference: 'Source Sans Pro' size: value) ].
+	aDictionnary at: #italicSize ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (self textFontReference: 'Source Sans Pro' size: value) ].
+	aDictionnary at: #strikeSize ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (self textFontReference: 'Source Sans Pro' size: value) ].
+	aDictionnary at: #monospaceSize ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (self textFontReference: 'Source Sans Pro' size: value) ].
+	aDictionnary at: #linkSize ifPresent: [ :value | (aCSSDictionnary at: #link) add: (self textFontReference: 'Source Sans Pro' size: value) ].
+	aDictionnary at: #codeSize ifPresent: [ :value | (aCSSDictionnary at: #code) add: (self textFontReference: 'Source Sans Pro' size: value) ].
+]
+
 { #category : #adding }
 DocBook >> addChapter: aChapter [ 
 
@@ -184,7 +194,8 @@ DocBook >> fixParentReferencesUsing: aDictionary [
 DocBook >> generateCSS: aDictionary [
 	| css |
 	css := self createEmptyCSS.
-	self addCSSColor: aDictionary in: css.
+	self addCSSColor: aDictionary in: css;
+	addCSSPoliceSize: aDictionary in: css.
 	DocBook at: key put: css. 
 ]
 
@@ -225,4 +236,13 @@ DocBook >> takeChapter: aChapter [
 
 	aChapter book chapters remove: aChapter.
 	self chapters add: aChapter 
+]
+
+{ #category : #'css-API' }
+DocBook >> textFontReference: aPoliceName size: aSize [
+	^ TextFontReference
+				 toFont:
+					 (LogicalFont 
+						 familyName: aPoliceName 
+						 pointSize: aSize)
 ]
