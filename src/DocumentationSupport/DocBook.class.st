@@ -65,6 +65,7 @@ DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
 
 { #category : #'css-API' }
 DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [ 
+	self halt.
 	aDictionnary at: #textSize ifPresent: [ :value | (aCSSDictionnary at: #text) add: (self textFontReference: 'Source Sans Pro' size: value) ].
 	aDictionnary at: #boldSize ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (self textFontReference: 'Source Sans Pro' size: value) ].
 	aDictionnary at: #italicSize ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (self textFontReference: 'Source Sans Pro' size: value) ].
@@ -241,6 +242,7 @@ DocBook >> takeChapter: aChapter [
 
 { #category : #'css-API' }
 DocBook >> textFontReference: aPoliceName size: aSize [
+	self halt.
 	^ TextFontReference
 				 toFont:
 					 (LogicalFont 
