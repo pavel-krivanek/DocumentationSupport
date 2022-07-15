@@ -66,6 +66,7 @@ DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
 { #category : #'css-API' }
 DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [ 
 	aDictionnary at: #textSize ifPresent: [ :value | (aCSSDictionnary at: #text) add: (self textFontReference: 'Source Sans Pro' size: value) ].
+	aDictionnary at: #boldSize ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (self textFontReference: 'Source Sans Pro' size: value) ].
 	aDictionnary at: #italicSize ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (self textFontReference: 'Source Sans Pro' size: value) ].
 	aDictionnary at: #strikeSize ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (self textFontReference: 'Source Sans Pro' size: value) ].
 	aDictionnary at: #monospaceSize ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (self textFontReference: 'Source Sans Pro' size: value) ].
