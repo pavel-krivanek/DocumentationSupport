@@ -244,5 +244,5 @@ DocBook >> textFontReference: aPoliceName size: aSize [
 				 toFont:
 					 (LogicalFont 
 						 familyName: aPoliceName 
-						 pointSize: aSize)
+						 pointSize: aSize asInteger)
 ]
