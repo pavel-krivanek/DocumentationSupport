@@ -435,11 +435,11 @@ DocChapterPresenter >> textFor: aSource [
 
 	|  builder text richTextComposer |
 
-	builder := MicroDownParser builder.
+	builder := MicrodownParser builder.
 	builder text: aSource.
 	text := [ 
 		| parser tree |
-		parser := MicroDownParser new.
+		parser := MicrodownParser new.
 		tree := parser parse: builder contents.
 		richTextComposer := DocRichTextComposer new
 			executor: self;

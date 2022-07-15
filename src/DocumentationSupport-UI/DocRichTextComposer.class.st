@@ -156,7 +156,7 @@ DocRichTextComposer >> include: aChapterKey [
 	
 	| text tree |
 	text := (DocChapter dictionnaryOfChaptersAt: aChapterKey) source.
-	tree := MicroDownParser parse: text.
+	tree := MicrodownParser parse: text.
 	tree accept: self
 ]
 
@@ -212,10 +212,15 @@ DocRichTextComposer >> latexFor: aString onError: aBlock [
 	If the latex formula cannot be built because of network or syntax errors,
 	use the error block to build a text"
 
-	| ref resource |
-	ref := MicResourceReference fromUri: aString.
-	resource := ref resolveResourceIn: (MicUrlResolver new baseUrlString: 'https://latex.codecogs.com/png.latex?').
-	^ (resource asForm ifNil: aBlock) asText
+	| ref latexUrlPrefix image anchor |
+	"https://i.upmath.me/png/" "https://latex.codecogs.com/png.image?"
+	latexUrlPrefix := 'https://i.upmath.me/png/'.
+	ref := MicResourceReference fromUri: latexUrlPrefix , aString.
+	[ 	image := ref loadImage.
+		anchor := TextAnchor new anchoredMorph: image.
+		^ self textWithImage: image usingAnchor: anchor ]
+	on: MicResourceReferenceError 
+	do: [^ aBlock value]
 ]
 
 { #category : #accessing }
@@ -338,6 +343,17 @@ DocRichTextComposer >> textStyler [
 DocRichTextComposer >> textStyler: aTextStyler [
 
 	textStyler := aTextStyler.
+]
+
+{ #category : #private }
+DocRichTextComposer >> textWithImage: anImage usingAnchor: anchor [
+	"return a text with an image embedded"
+	| text |
+	text := (String value: 1) asText addAttribute: anchor; yourself.
+	"Adding a zero width no-break space circumvents two errors in rubrics when
+		using images as links. Adding it even if the image is not a link causes no
+		harm (it is invisible), and this is the easiest place to add it."
+	^ text, 16rFEFF asCharacter asString asText
 ]
 
 { #category : #initialization }
@@ -485,13 +501,12 @@ DocRichTextComposer >> visitExternalLink: aLink [
 { #category : #'visiting - inline elements' }
 DocRichTextComposer >> visitFigure: aFigure [
 
-	| imageResource embeddableInText |
-	imageResource := aFigure reference resolveResourceIn: MicUrlResolver new.
-	embeddableInText := imageResource asRenderedOn: self withinNode: aFigure.
-	"Adding a zero width no-break space circumvents two errors in rubrics when
-	using images as links. Adding it even if the image is not a link causes no
-	harm (it is invisible), and this is the easiest place to add it."
-	canvas << (embeddableInText, 16rFEFF asCharacter asString asText)
+	| image anchor|
+	[ image := aFigure reference loadImage.
+		anchor := self anchorFor: image of: aFigure.
+		canvas << (self textWithImage: image usingAnchor: anchor)]
+	on: MicResourceReferenceError
+	do: [ self visitAll: aFigure captionElements  ]
 ]
 
 { #category : #'visiting - document' }
