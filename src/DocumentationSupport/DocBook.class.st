@@ -52,21 +52,33 @@ DocBook >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'css-API' }
+DocBook >> addCSSBackGroundColorColor: aDictionnary in: aCSSDictionnary [ 
+	aDictionnary at: #headerBackgroundColor ifPresent: [ :value | (aCSSDictionnary at: #header) add: (self backgroundColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #textBackgroundColor ifPresent: [ :value | (aCSSDictionnary at: #text) add: (self backgroundColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #boldBackgroundColor ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (self backgroundColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #italicBackgroundColor ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (self backgroundColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #strikeBackgroundColor ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (self backgroundColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #monospaceBackgroundColor ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (self backgroundColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #linkBackgroundColor ifPresent: [ :value | (aCSSDictionnary at: #link) add: (self backgroundColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #codeBackgroundColor ifPresent: [ :value | (aCSSDictionnary at: #code) add: (self backgroundColorClass new color: (Color fromString: value)) ].
+]
+
+{ #category : #'css-API' }
 DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [ 
-	aDictionnary at: #headerColor ifPresent: [ :value | (aCSSDictionnary at: #header) add: (TextColor new color: (Color fromString: value)) ].
-	aDictionnary at: #textColor ifPresent: [ :value | (aCSSDictionnary at: #text) add: (TextColor new color: (Color fromString: value)) ].
-	aDictionnary at: #boldColor ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (TextColor new color: (Color fromString: value)) ].
-	aDictionnary at: #italicColor ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (TextColor new color: (Color fromString: value)) ].
-	aDictionnary at: #strikeColor ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (TextColor new color: (Color fromString: value)) ].
-	aDictionnary at: #monospaceColor ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (TextColor new color: (Color fromString: value)) ].
-	aDictionnary at: #linkColor ifPresent: [ :value | (aCSSDictionnary at: #link) add: (TextColor new color: (Color fromString: value)) ].
-	aDictionnary at: #codeColor ifPresent: [ :value | (aCSSDictionnary at: #code) add: (TextColor new color: (Color fromString: value)) ].
+	aDictionnary at: #headerColor ifPresent: [ :value | (aCSSDictionnary at: #header) add: (self textColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #textColor ifPresent: [ :value | (aCSSDictionnary at: #text) add: (self textColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #boldColor ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (self textColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #italicColor ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (self textColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #strikeColor ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (self textColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #monospaceColor ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (self textColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #linkColor ifPresent: [ :value | (aCSSDictionnary at: #link) add: (self textColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #codeColor ifPresent: [ :value | (aCSSDictionnary at: #code) add: (self textColorClass new color: (Color fromString: value)) ].
 ]
 
 { #category : #'css-API' }
 DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [ 
 	aDictionnary at: #textSize ifPresent: [ :value | (aCSSDictionnary at: #text) add: (self textFontReference: 'Source Sans Pro' size: value) ].
-	aDictionnary at: #boldSize ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (self textFontReference: 'Source Sans Pro' size: value) ].
+	aDictionnary at: #boldSize ifPresent: [ :value | "(aCSSDictionnary at: #bold) add: (self textFontReference: 'Source Sans Pro' size: value)" ].
 	aDictionnary at: #italicSize ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (self textFontReference: 'Source Sans Pro' size: value) ].
 	aDictionnary at: #strikeSize ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (self textFontReference: 'Source Sans Pro' size: value) ].
 	aDictionnary at: #monospaceSize ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (self textFontReference: 'Source Sans Pro' size: value) ].
@@ -104,6 +116,11 @@ DocBook >> addNewChapterWithoutNotification [
 	newChapter library: self library.
 	self addChapter: newChapter.
 	^ newChapter
+]
+
+{ #category : #'css-API' }
+DocBook >> backgroundColorClass [
+	^ TextBackgroundColor
 ]
 
 { #category : #accessing }
@@ -196,7 +213,7 @@ DocBook >> generateCSS: aDictionary [
 	| css |
 	css := self createEmptyCSS.
 	self addCSSColor: aDictionary in: css;
-	addCSSPoliceSize: aDictionary in: css.
+	addCSSBackGroundColorColor: aDictionary in: css.
 	DocBook at: key put: css. 
 ]
 
@@ -240,10 +257,15 @@ DocBook >> takeChapter: aChapter [
 ]
 
 { #category : #'css-API' }
+DocBook >> textColorClass [
+	^ TextColor
+]
+
+{ #category : #'css-API' }
 DocBook >> textFontReference: aPoliceName size: aSize [
 	^ (TextFontReference
-				 toFont:
-					 (LogicalFont 
-						 familyName: 'Source Sans Pro' 
-						 pointSize: 24))
+				toFont:
+					(LogicalFont 
+						familyName: 'Source Sans Pro'
+						pointSize: 24))
 ]
