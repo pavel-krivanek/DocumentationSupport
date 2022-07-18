@@ -195,8 +195,8 @@ DocBook >> fixParentReferencesUsing: aDictionary [
 DocBook >> generateCSS: aDictionary [
 	| css |
 	css := self createEmptyCSS.
-	self addCSSColor: aDictionary in: css";
-	addCSSPoliceSize: aDictionary in: css".
+	self addCSSColor: aDictionary in: css;
+	addCSSPoliceSize: aDictionary in: css.
 	DocBook at: key put: css. 
 ]
 
@@ -241,9 +241,9 @@ DocBook >> takeChapter: aChapter [
 
 { #category : #'css-API' }
 DocBook >> textFontReference: aPoliceName size: aSize [
-	^ TextFontReference
+	^ (TextFontReference
 				 toFont:
 					 (LogicalFont 
-						 familyName: aPoliceName 
-						 pointSize: aSize asInteger)
+						 familyName: 'Source Sans Pro' 
+						 pointSize: 24))
 ]
