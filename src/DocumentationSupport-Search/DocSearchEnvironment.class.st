@@ -145,29 +145,14 @@ DocSearchEnvironment >> resultEntriesOf: aChapterKey [
 	^ resultEntries select: [ :resultEntry | resultEntry chapter key = aChapterKey ]
 ]
 
-{ #category : #'API - search' }
-DocSearchEnvironment >> search: aString [
-	[ 
-	searchPattern := aString.
-	self resetResultEntries.
-	searchRange chaptersDo: [ :chapter :rangeInterval |
-		(self search: searchPattern in: chapter restrictedBy: rangeInterval) ifNotNil: [ :sre | 
-			resultEntries addAll: sre
-		]
-	].
-	currentEntryIndex := resultEntries ifNotEmpty: [ 1 ] ifEmpty: [ 0 ]
-	] on: MessageNotUnderstood do: [ Error signal: #environmentNotSet ]
-	
-]
-
 { #category : #private }
-DocSearchEnvironment >> search: aSearchPattern in: aChapter restrictedBy: aRangeInterval [
+DocSearchEnvironment >> search: aSearchPattern in: aChapter restrictedBy: aRangeInterval withSensitiveCase: aBoolean [
 	| entryOrNil  docResultEntries currentSearchPosition |
 	
 	docResultEntries := OrderedCollection new.
 	currentSearchPosition := aRangeInterval first.
 	[ 
-		entryOrNil :=  aChapter findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: aRangeInterval last.
+		entryOrNil :=  aChapter findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: aRangeInterval last withSensitiveCase: aBoolean.
 		entryOrNil isNil
 	] whileFalse: [ 
 		docResultEntries add: entryOrNil.
@@ -181,8 +166,70 @@ DocSearchEnvironment >> search: aSearchPattern in: aChapter restrictedBy: aRange
 
 ]
 
+{ #category : #'API - search' }
+DocSearchEnvironment >> search: aString withSensitiveCase: aBoolean [
+	[ 
+	searchPattern := aString.
+	self resetResultEntries.
+	searchRange chaptersDo: [ :chapter :rangeInterval |
+		(self search: searchPattern in: chapter restrictedBy: rangeInterval withSensitiveCase: aBoolean) ifNotNil: [ :sre | 
+			resultEntries addAll: sre
+		]
+	].
+	currentEntryIndex := resultEntries ifNotEmpty: [ 1 ] ifEmpty: [ 0 ]
+	] on: MessageNotUnderstood do: [ Error signal: #environmentNotSet ]
+	
+]
+
+{ #category : #'API - search' }
+DocSearchEnvironment >> search: aString withSensitiveCase: aBoolean1 isRegex: aBoolean2 [
+	[ 
+	searchPattern := aString.
+	self resetResultEntries.
+	searchRange chaptersDo: [ :chapter :rangeInterval |
+		aBoolean2 
+		ifTrue: [ 
+			(self searchRegex: searchPattern asRegex in: chapter restrictedBy: rangeInterval withSensitiveCase: aBoolean1) ifNotNil: [ :sre | 
+			resultEntries addAll: sre]
+		] 
+		ifFalse: [ 
+			(self search: searchPattern in: chapter restrictedBy: rangeInterval withSensitiveCase: aBoolean1) ifNotNil: [ :sre | 
+			resultEntries addAll: sre]
+		]
+	].
+	currentEntryIndex := resultEntries ifNotEmpty: [ 1 ] ifEmpty: [ 0 ]
+	] on: MessageNotUnderstood,RegexSyntaxError do: [ Error signal: #environmentNotSet ]
+	
+]
+
 { #category : #accessing }
 DocSearchEnvironment >> searchPattern [
 
 	^ searchPattern
+]
+
+{ #category : #private }
+DocSearchEnvironment >> searchRegex: aRegex in: aChapter restrictedBy: aRangeInterval withSensitiveCase: aBoolean [
+	| entryOrNil  docResultEntries currentSearchPosition tree text regexWords|
+	
+	docResultEntries := OrderedCollection new.
+	currentSearchPosition := aRangeInterval first.
+	
+	tree := MicroDownParser parse: aChapter source.
+	text := aBoolean 
+		ifFalse: [ (DocRichTextComposer new visit: tree) string asLowercase ] 
+		ifTrue: [ (DocRichTextComposer new visit: tree) string ].
+	text := text copyFrom: aRangeInterval first to: text size.
+	regexWords := aRegex matchesIn: text.
+	regexWords do: [ :word | 
+		entryOrNil := aChapter findNextString: word startingAt: currentSearchPosition restrictedBy: aRangeInterval last withSensitiveCase: aBoolean.
+		entryOrNil ifNotNil: [
+			docResultEntries add: entryOrNil.
+			currentSearchPosition  := entryOrNil endPosition + 1]].
+	
+	^ docResultEntries
+	
+
+
+
 ]
