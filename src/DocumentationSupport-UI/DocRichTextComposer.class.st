@@ -97,7 +97,7 @@ DocRichTextComposer >> include: aChapterKey [
 	
 	| text tree |
 	text := (DocChapter dictionnaryOfChaptersAt: aChapterKey) source.
-	tree := MicroDownParser parse: text.
+	tree := MicrodownParser parse: text.
 	tree accept: self
 ]
 
