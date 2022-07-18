@@ -2,4 +2,4 @@ title: 'Documentation support'
 key: '91bclk1izenja63tom5j39v34'
 parent: 
 boldColor: 'blue'
-boldSize: '28'
+boldBackgroundColor: 'red'
