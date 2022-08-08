@@ -102,7 +102,7 @@ DocBook >> addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol att
 { #category : #'css-API' }
 DocBook >> addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: aFirstvalue eltType: aSymbolElt [
 	aDictionnary at: aSymbolElt,aSymbol,#Opacity 
-		ifPresent: [ :value | (aCSSDictionnary at: aSymbolElt) add: (aBlock value: aFirstvalue value: value asFloat) ]
+		ifPresent: [ :value | (aCSSDictionnary at: aSymbolElt) add: (aBlock value: aFirstvalue value: (Float readFrom:  value)) ]
 		ifAbsent: [ (aCSSDictionnary at: aSymbolElt) add: (aBlock value: aFirstvalue value: 1) ]
 ]
 
