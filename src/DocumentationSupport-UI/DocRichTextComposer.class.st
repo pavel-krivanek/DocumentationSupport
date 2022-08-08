@@ -386,6 +386,7 @@ DocRichTextComposer >> visitBold: anObject [
 	| boldAttributes |
 	boldAttributes := (cssDictionary at: #bold) deepCopy.
 	boldAttributes add: (TextEmphasis bold).
+	boldAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #boldSize))).
 	canvas 
 		includeAttributes: boldAttributes
 		in: [ super visitBold: anObject ]

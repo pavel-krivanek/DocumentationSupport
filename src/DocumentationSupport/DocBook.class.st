@@ -81,10 +81,14 @@ DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
 
 { #category : #'css-API' }
 DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [
-	"self addCSS: aDictionnary 
-		  in: aCSSDictionnary 
-		  type: #Size
-		  attribute: [ :size | (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: size asInteger)) ]"
+	aDictionnary at: #headerSize ifPresent: [ :value | (aCSSDictionnary at: #headerSize) add: value asInteger ].
+	aDictionnary at: #textSize ifPresent: [ :value | (aCSSDictionnary at: #textSize) add: value asInteger ].
+	aDictionnary at: #boldSize ifPresent: [ :value | (aCSSDictionnary at: #boldSize) add: value asInteger ].
+	aDictionnary at: #italicSize ifPresent: [ :value | (aCSSDictionnary at: #italicSize) add: value asInteger ].
+	aDictionnary at: #strikeSize ifPresent: [ :value | (aCSSDictionnary at: #strikeSize) add: value asInteger ].
+	aDictionnary at: #monospaceSize ifPresent: [ :value | (aCSSDictionnary at: #monospaceSize) add: value asInteger ].
+	aDictionnary at: #linkSize ifPresent: [ :value | (aCSSDictionnary at: #linkSize) add: value asInteger ].
+	aDictionnary at: #codeSize ifPresent: [ :value | (aCSSDictionnary at: #codeSize) add: value asInteger ].
 ]
 
 { #category : #'css-API' }
