@@ -64,11 +64,11 @@ DocBook >> addCSS: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBl
 ]
 
 { #category : #'css-API' }
-DocBook >> addCSSBackGroundColorColor: aDictionnary in: aCSSDictionnary [ 
-	self addCSS: aDictionnary 
+DocBook >> addCSSBackGroundColor: aDictionnary in: aCSSDictionnary [ 
+	self addCSSWithOpacity: aDictionnary 
 		  in: aCSSDictionnary 
 		  type: #BackgroundColor
-		  attribute: [ :colorString | self backgroundColorClass new color: (Color fromString: colorString) ]
+		  attribute: [ :colorString :float | self backgroundColorClass new color: ((Color fromString: colorString) alpha: float) ]
 ]
 
 { #category : #'css-API' }
@@ -233,7 +233,7 @@ DocBook >> generateCSS: aDictionary [
 	| css |
 	css := self createEmptyCSS.
 	self addCSSColor: aDictionary in: css;
-	addCSSBackGroundColorColor: aDictionary in: css;
+	addCSSBackGroundColor: aDictionary in: css;
 	addCSSPoliceSize: aDictionary in: css.
 	DocBook at: key put: css. 
 ]
