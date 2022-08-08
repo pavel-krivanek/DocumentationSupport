@@ -52,6 +52,18 @@ DocBook >> acceptVisitor: aVisitor [
 ]
 
 { #category : #'css-API' }
+DocBook >> addCSS: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock [
+	aDictionnary at: #header,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #header) add: (aBlock value: value) ].
+	aDictionnary at: #text,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #text) add: (aBlock value: value) ].
+	aDictionnary at: #bold,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (aBlock value: value) ].
+	aDictionnary at: #italic,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (aBlock value: value) ].
+	aDictionnary at: #strike,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (aBlock value: value) ].
+	aDictionnary at: #monospace,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (aBlock value: value) ].
+	aDictionnary at: #link,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #link) add: (aBlock value: value) ].
+	aDictionnary at: #code,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #code) add: (aBlock value: value) ].
+]
+
+{ #category : #'css-API' }
 DocBook >> addCSSBackGroundColorColor: aDictionnary in: aCSSDictionnary [ 
 	aDictionnary at: #headerBackgroundColor ifPresent: [ :value | (aCSSDictionnary at: #header) add: (self backgroundColorClass new color: (Color fromString: value)) ].
 	aDictionnary at: #textBackgroundColor ifPresent: [ :value | (aCSSDictionnary at: #text) add: (self backgroundColorClass new color: (Color fromString: value)) ].
@@ -64,15 +76,16 @@ DocBook >> addCSSBackGroundColorColor: aDictionnary in: aCSSDictionnary [
 ]
 
 { #category : #'css-API' }
-DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [ 
-	aDictionnary at: #headerColor ifPresent: [ :value | (aCSSDictionnary at: #header) add: (self textColorClass new color: (Color fromString: value)) ].
+DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
+	self addCSS: aDictionnary in: aCSSDictionnary type: #Color attribute: [ :colorString | ^ self textColorClass new color: (Color fromString: colorString) ]
+	"aDictionnary at: #headerColor ifPresent: [ :value | (aCSSDictionnary at: #header) add: (self textColorClass new color: (Color fromString: value)) ].
 	aDictionnary at: #textColor ifPresent: [ :value | (aCSSDictionnary at: #text) add: (self textColorClass new color: (Color fromString: value)) ].
 	aDictionnary at: #boldColor ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (self textColorClass new color: (Color fromString: value)) ].
 	aDictionnary at: #italicColor ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (self textColorClass new color: (Color fromString: value)) ].
 	aDictionnary at: #strikeColor ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (self textColorClass new color: (Color fromString: value)) ].
 	aDictionnary at: #monospaceColor ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (self textColorClass new color: (Color fromString: value)) ].
 	aDictionnary at: #linkColor ifPresent: [ :value | (aCSSDictionnary at: #link) add: (self textColorClass new color: (Color fromString: value)) ].
-	aDictionnary at: #codeColor ifPresent: [ :value | (aCSSDictionnary at: #code) add: (self textColorClass new color: (Color fromString: value)) ].
+	aDictionnary at: #codeColor ifPresent: [ :value | (aCSSDictionnary at: #code) add: (self textColorClass new color: (Color fromString: value)) ]."
 ]
 
 { #category : #'css-API' }
