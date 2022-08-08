@@ -76,7 +76,7 @@ DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
 	self addCSSWithOpacity: aDictionnary 
 		  in: aCSSDictionnary 
 		  type: #Color 
-		  attribute: [ :colorString :float | (self textColorClass new color: (Color fromString: colorString)) alpha: float ]
+		  attribute: [ :colorString :float | self textColorClass new color: ((Color fromString: colorString) alpha: float) ]
 ]
 
 { #category : #'css-API' }
@@ -101,8 +101,9 @@ DocBook >> addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol att
 
 { #category : #'css-API' }
 DocBook >> addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: aFirstvalue eltType: aSymbolElt [
-	self halt.
-	(aDictionnary at: aSymbolElt,aSymbol,#Opacity) isPresent ifTrue: [ :value | (aCSSDictionnary at: aSymbolElt) add: (aBlock value: value) ].
+	aDictionnary at: aSymbolElt,aSymbol,#Opacity 
+		ifPresent: [ :value | (aCSSDictionnary at: aSymbolElt) add: (aBlock value: aFirstvalue value: value asFloat) ]
+		ifAbsent: [ (aCSSDictionnary at: aSymbolElt) add: (aBlock value: aFirstvalue value: 1) ]
 ]
 
 { #category : #adding }
