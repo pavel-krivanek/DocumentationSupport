@@ -84,7 +84,7 @@ DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [
 	self addCSS: aDictionnary 
 		  in: aCSSDictionnary 
 		  type: #Size
-		  attribute: [ :size | (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: size)) ]
+		  attribute: [ :size | (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: size asInteger)) ]
 ]
 
 { #category : #adding }
