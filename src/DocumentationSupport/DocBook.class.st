@@ -55,7 +55,8 @@ DocBook >> acceptVisitor: aVisitor [
 DocBook >> addCSS: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock [
 	aDictionnary at: #header,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #header) add: (aBlock value: value) ].
 	aDictionnary at: #text,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #text) add: (aBlock value: value) ].
-	aDictionnary at: #bold,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #bold) add: (aBlock value: value) ].
+	self halt.
+	aDictionnary at: #bold,aSymbol ifPresent: [ :value | self halt. (aCSSDictionnary at: #bold) add: (aBlock value: value) ].
 	aDictionnary at: #italic,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (aBlock value: value) ].
 	aDictionnary at: #strike,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (aBlock value: value) ].
 	aDictionnary at: #monospace,aSymbol ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (aBlock value: value) ].
