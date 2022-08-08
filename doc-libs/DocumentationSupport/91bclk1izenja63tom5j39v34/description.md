@@ -3,4 +3,4 @@ key: '91bclk1izenja63tom5j39v34'
 parent: 
 boldColor: 'blue'
 boldBackgroundColor: 'red'
-boldSize: '24'
+boldColorOpacity: '0.1'
