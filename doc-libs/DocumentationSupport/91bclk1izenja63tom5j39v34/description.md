@@ -4,3 +4,4 @@ parent:
 boldColor: 'blue'
 boldBackgroundColor: 'red'
 boldBackgroundColorOpacity: '0.1'
+boldSize: '4'
