@@ -80,14 +80,11 @@ DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
 ]
 
 { #category : #'css-API' }
-DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [ 
-	aDictionnary at: #textSize ifPresent: [ :value | (aCSSDictionnary at: #text) add: (self textFontReference: 'Source Sans Pro' size: value) ].
-	aDictionnary at: #boldSize ifPresent: [ :value | "(aCSSDictionnary at: #bold) add: (self textFontReference: 'Source Sans Pro' size: value)" ].
-	aDictionnary at: #italicSize ifPresent: [ :value | (aCSSDictionnary at: #italic) add: (self textFontReference: 'Source Sans Pro' size: value) ].
-	aDictionnary at: #strikeSize ifPresent: [ :value | (aCSSDictionnary at: #strike) add: (self textFontReference: 'Source Sans Pro' size: value) ].
-	aDictionnary at: #monospaceSize ifPresent: [ :value | (aCSSDictionnary at: #monospace) add: (self textFontReference: 'Source Sans Pro' size: value) ].
-	aDictionnary at: #linkSize ifPresent: [ :value | (aCSSDictionnary at: #link) add: (self textFontReference: 'Source Sans Pro' size: value) ].
-	aDictionnary at: #codeSize ifPresent: [ :value | (aCSSDictionnary at: #code) add: (self textFontReference: 'Source Sans Pro' size: value) ].
+DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [
+	self addCSS: aDictionnary 
+		  in: aCSSDictionnary 
+		  type: #Size
+		  attribute: [ :size | (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: size)) ]
 ]
 
 { #category : #adding }
@@ -217,7 +214,8 @@ DocBook >> generateCSS: aDictionary [
 	| css |
 	css := self createEmptyCSS.
 	self addCSSColor: aDictionary in: css;
-	addCSSBackGroundColorColor: aDictionary in: css.
+	addCSSBackGroundColorColor: aDictionary in: css;
+	addCSSPoliceSize: aDictionary in: css.
 	DocBook at: key put: css. 
 ]
 

@@ -384,7 +384,7 @@ DocRichTextComposer >> visitAnnotatedParagraph: anAnnotatedParagraph [
 { #category : #'visiting-format' }
 DocRichTextComposer >> visitBold: anObject [
 	| boldAttributes |
-	boldAttributes := cssDictionary at: #bold.
+	boldAttributes := (cssDictionary at: #bold) deepCopy.
 	boldAttributes add: (TextEmphasis bold).
 	canvas 
 		includeAttributes: boldAttributes
