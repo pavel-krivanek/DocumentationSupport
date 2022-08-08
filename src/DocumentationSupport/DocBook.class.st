@@ -73,18 +73,36 @@ DocBook >> addCSSBackGroundColorColor: aDictionnary in: aCSSDictionnary [
 
 { #category : #'css-API' }
 DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
-	self addCSS: aDictionnary 
+	self addCSSWithOpacity: aDictionnary 
 		  in: aCSSDictionnary 
 		  type: #Color 
-		  attribute: [ :colorString | self textColorClass new color: (Color fromString: colorString) ]
+		  attribute: [ :colorString :float | (self textColorClass new color: (Color fromString: colorString)) alpha: float ]
 ]
 
 { #category : #'css-API' }
 DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [
-	self addCSS: aDictionnary 
+	"self addCSS: aDictionnary 
 		  in: aCSSDictionnary 
 		  type: #Size
-		  attribute: [ :size | (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: size asInteger)) ]
+		  attribute: [ :size | (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: size asInteger)) ]"
+]
+
+{ #category : #'css-API' }
+DocBook >> addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock [
+	aDictionnary at: #header,aSymbol ifPresent: [ :value | self addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: value eltType: #header ].
+	aDictionnary at: #text,aSymbol ifPresent: [ :value | self addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: value eltType: #text ].
+	aDictionnary at: #bold,aSymbol ifPresent: [ :value | self addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: value eltType: #bold ].
+	aDictionnary at: #italic,aSymbol ifPresent: [ :value | self addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: value eltType: #italic ].
+	aDictionnary at: #strike,aSymbol ifPresent: [ :value | self addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: value eltType: #strike ].
+	aDictionnary at: #monospace,aSymbol ifPresent: [ :value | self addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: value eltType: #monospace ].
+	aDictionnary at: #link,aSymbol ifPresent: [ :value | self addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: value eltType: #link ].
+	aDictionnary at: #code,aSymbol ifPresent: [ :value | self addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: value eltType: #code ].
+]
+
+{ #category : #'css-API' }
+DocBook >> addCSSWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol attribute: aBlock firstValue: aFirstvalue eltType: aSymbolElt [
+	self halt.
+	(aDictionnary at: aSymbolElt,aSymbol,#Opacity) isPresent ifTrue: [ :value | (aCSSDictionnary at: aSymbolElt) add: (aBlock value: value) ].
 ]
 
 { #category : #adding }
