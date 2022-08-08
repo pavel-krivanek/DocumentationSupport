@@ -132,26 +132,18 @@ DocChapter >> delete [
 ]
 
 { #category : #'API - search' }
-DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition [
-
-	| foundPosition |
-
-	foundPosition := source findString: aSearchPattern startingAt: currentSearchPosition.
-	foundPosition = 0 ifTrue: [ ^ nil ].
-	
-	^ DocResultEntry 
-			chapter: self 
-			startPosition: foundPosition 
-			endPosition: foundPosition + aSearchPattern size - 1
-]
-
-{ #category : #'API - search' }
-DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: limitIndex [
+DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: limitIndex withSensitiveCase: aBoolean [
 
 	| foundPosition tree text lines1 lines2 |
-	tree := MicrodownParser parse: source.
-	text := (DocRichTextComposer new visit: tree) string.
-	foundPosition := text findString: aSearchPattern startingAt: currentSearchPosition.
+	tree := MicroDownParser parse: source.
+	
+	text := aBoolean 
+		ifFalse: [ (DocRichTextComposer new visit: tree) string asLowercase ] 
+		ifTrue: [ (DocRichTextComposer new visit: tree) string ].
+	foundPosition := aBoolean 
+		ifFalse: [ text findString: aSearchPattern asLowercase startingAt: currentSearchPosition ] 
+		ifTrue: [ text findString: aSearchPattern startingAt: currentSearchPosition ].
+		
 	(foundPosition = 0 or: [ foundPosition > text size ]) ifTrue: [ ^ nil ].
 	lines1 := self numberOfLineOf: text from: 1 to: foundPosition.
 	lines2 := self numberOfLineOf: text from: 1 to: text size.
@@ -335,12 +327,6 @@ DocChapter >> readStonKey: aKey value: value [
 	aKey = #nextChapter ifTrue: [ nextChapter := DocParentReference key: value ].
 	
 	
-]
-
-{ #category : #'API - search' }
-DocChapter >> searchString: aSearchPattern restrictedBy: aRangeInterval [
-
-	^ source findString: aSearchPattern startingAt: aRangeInterval first.
 ]
 
 { #category : #serialization }
