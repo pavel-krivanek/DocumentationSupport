@@ -81,14 +81,14 @@ DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
 
 { #category : #'css-API' }
 DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [
-	aDictionnary at: #headerSize ifPresent: [ :value | (aCSSDictionnary at: #headerSize) add: value asInteger ].
-	aDictionnary at: #textSize ifPresent: [ :value | (aCSSDictionnary at: #textSize) add: value asInteger ].
-	aDictionnary at: #boldSize ifPresent: [ :value | (aCSSDictionnary at: #boldSize) add: value asInteger ].
-	aDictionnary at: #italicSize ifPresent: [ :value | (aCSSDictionnary at: #italicSize) add: value asInteger ].
-	aDictionnary at: #strikeSize ifPresent: [ :value | (aCSSDictionnary at: #strikeSize) add: value asInteger ].
-	aDictionnary at: #monospaceSize ifPresent: [ :value | (aCSSDictionnary at: #monospaceSize) add: value asInteger ].
-	aDictionnary at: #linkSize ifPresent: [ :value | (aCSSDictionnary at: #linkSize) add: value asInteger ].
-	aDictionnary at: #codeSize ifPresent: [ :value | (aCSSDictionnary at: #codeSize) add: value asInteger ].
+	"aDictionnary at: #headerSize ifPresent: [ :value | aCSSDictionnary at: #headerSize put: value asInteger ]."
+	aDictionnary at: #textSize ifPresent: [ :value | aCSSDictionnary at: #textSize put: value asInteger ].
+	aDictionnary at: #boldSize ifPresent: [ :value | aCSSDictionnary at: #boldSize put: value asInteger ].
+	aDictionnary at: #italicSize ifPresent: [ :value | aCSSDictionnary at: #italicSize put: value asInteger ].
+	aDictionnary at: #strikeSize ifPresent: [ :value | aCSSDictionnary at: #strikeSize put: value asInteger ].
+	aDictionnary at: #monospaceSize ifPresent: [ :value | aCSSDictionnary at: #monospaceSize put: value asInteger ].
+	aDictionnary at: #linkSize ifPresent: [ :value | aCSSDictionnary at: #linkSize put: value asInteger ].
+	aDictionnary at: #codeSize ifPresent: [ :value | aCSSDictionnary at: #codeSize put: value asInteger ].
 ]
 
 { #category : #'css-API' }
@@ -188,6 +188,13 @@ DocBook >> createEmptyCSS [
 		at: #link put: OrderedCollection new;
 		at: #code put: OrderedCollection new;
 		at: #headerSize put: OrderedCollection new;
+		at: #textSize put: 10;
+		at: #boldSize put: 10;
+		at: #italicSize put: 10;
+		at: #strikeSize put: 10;
+		at: #monospace put: 10;
+		at: #linkSize put: 10;
+		at: #codeSize put: 10;
 		yourself
 ]
 

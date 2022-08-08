@@ -396,7 +396,8 @@ DocRichTextComposer >> visitBold: anObject [
 { #category : #visiting }
 DocRichTextComposer >> visitCaptionEltForTextAttributes: anObject of: aElementCSSName [
 	| textAttributes |
-	textAttributes := cssDictionary at: aElementCSSName.
+	textAttributes := (cssDictionary at: aElementCSSName) deepCopy.
+	textAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #codeSize))).
 	anObject captionElements do: [ :child |
 		child class = MicTextBlock 
 			ifTrue: [ 
@@ -409,7 +410,8 @@ DocRichTextComposer >> visitCaptionEltForTextAttributes: anObject of: aElementCS
 { #category : #'visiting - document' }
 DocRichTextComposer >> visitChildrenOfForTextAttributes: anObject [
 	| textAttributes |
-	textAttributes := cssDictionary at: #text.
+	textAttributes := (cssDictionary at: #text) deepCopy.
+	textAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #textSize))).
 	anObject children do: [ :child |
 		child class = MicTextBlock 
 			ifTrue: [ 
@@ -537,6 +539,7 @@ DocRichTextComposer >> visitItalic: anObject [
 	| italicAttributes |
 	italicAttributes := cssDictionary at: #italic.
 	italicAttributes add: (TextEmphasis italic ).
+	italicAttributes add: (TextFontReference toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #italicSize))).
 	canvas 
 		includeAttributes: italicAttributes
 		in: [ super visitItalic: anObject ]
@@ -547,6 +550,7 @@ DocRichTextComposer >> visitLink: aLink [
 
 	| attributes |
 	attributes := OrderedCollection new.
+	attributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #linkSize))).
 	(self isWeb: aLink) ifTrue: [ 
 		attributes add: (TextAction new
 							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ]).
@@ -603,6 +607,7 @@ DocRichTextComposer >> visitMonospace: anObject [
 	"Notice - I add a highlight to the backgorund rather than mono-spaced."
 	| backgroundColor sem monospaceAttributes |
 	monospaceAttributes := cssDictionary at: #monospace.
+	monospaceAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #monospaceSize))).
 	backgroundColor := self textStyler monospaceBackgroundColor.
 	self flag: #fixMe.
 	"Right now we stupidly emit TextAction but we should emit TextClassLink and revisit them."
@@ -663,6 +668,7 @@ DocRichTextComposer >> visitStrike: anObject [
 	| strikeAttributes |
 	strikeAttributes := cssDictionary at: #strike.
 	strikeAttributes add: (TextEmphasis struckOut ).
+	strikeAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #strikeSize))).
 	canvas 
 		includeAttributes: strikeAttributes
 		in: [ super visitStrike: anObject ]
