@@ -187,12 +187,13 @@ DocBook >> createEmptyCSS [
 		at: #monospace put: OrderedCollection new;
 		at: #link put: OrderedCollection new;
 		at: #code put: OrderedCollection new;
+		
 		at: #headerSize put: OrderedCollection new;
 		at: #textSize put: 10;
 		at: #boldSize put: 10;
 		at: #italicSize put: 10;
 		at: #strikeSize put: 10;
-		at: #monospace put: 10;
+		at: #monospaceSize put: 10;
 		at: #linkSize put: 10;
 		at: #codeSize put: 10;
 		yourself
