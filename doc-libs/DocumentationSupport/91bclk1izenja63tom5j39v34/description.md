@@ -11,4 +11,5 @@ globalColor: 'red'
 globalColorOpacity: '0.5'
 globalBackgroundColor: 'gray'
 globalBackgroundColorOpacity: '0.2'
+globalSize: '5'
 
