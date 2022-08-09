@@ -136,7 +136,7 @@ DocBook >> addGlobalColor: aDictionnary in: aCSSDictionnary with: anAttribute [
 DocBook >> addGlobalColorWithOpacity: aDictionnary in: aCSSDictionnary [
 	aDictionnary at: #globalColor ifPresent: [ :colorString |
 		aDictionnary at: #globalColorOpacity 
-			ifPresent: [ :float | self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString) alpha: float)) ]
+			ifPresent: [ :float | self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString) alpha: (Float readFrom: float))) ]
 			ifAbsent: [ self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString))) ]
 		]
 ]
