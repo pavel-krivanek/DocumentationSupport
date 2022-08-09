@@ -120,6 +120,27 @@ DocBook >> addChapter: aChapter [
 
 ]
 
+{ #category : #'css-API' }
+DocBook >> addGlobalColor: aDictionnary in: aCSSDictionnary with: anAttribute [
+	aDictionnary at: #headerColor ifAbsent: [ (aCSSDictionnary at: #header) add: anAttribute ].
+	aDictionnary at: #textColor ifAbsent: [ (aCSSDictionnary at: #text) add: anAttribute ].
+	aDictionnary at: #boldColor ifAbsent: [ (aCSSDictionnary at: #bold) add: anAttribute ].
+	aDictionnary at: #italicColor ifAbsent: [ (aCSSDictionnary at: #italic) add: anAttribute ].
+	aDictionnary at: #strikeColor ifAbsent: [ (aCSSDictionnary at: #strike) add: anAttribute ].
+	aDictionnary at: #monospaceColor ifAbsent: [ (aCSSDictionnary at: #monospace) add: anAttribute ].
+	aDictionnary at: #linkColor ifAbsent: [ (aCSSDictionnary at: #link) add: anAttribute ].
+	aDictionnary at: #codeColor ifAbsent: [ (aCSSDictionnary at: #code) add: anAttribute ].
+]
+
+{ #category : #'css-API' }
+DocBook >> addGlobalColorWithOpacity: aDictionnary in: aCSSDictionnary [
+	aDictionnary at: #globalColor ifPresent: [ :colorString |
+		aDictionnary at: #globalColorOpacity 
+			ifPresent: [ :float | self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString) alpha: float)) ]
+			ifAbsent: [ self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString))) ]
+		]
+]
+
 { #category : #adding }
 DocBook >> addNewChapter [
 
@@ -246,7 +267,8 @@ DocBook >> generateCSS: aDictionary [
 	css := self createEmptyCSS: 10.
 	self addCSSColor: aDictionary in: css;
 	addCSSBackGroundColor: aDictionary in: css;
-	addCSSPoliceSize: aDictionary in: css.
+	addCSSPoliceSize: aDictionary in: css;
+	addGlobalColorWithOpacity: aDictionary in: css.
 	DocBook at: key put: css. 
 ]
 
