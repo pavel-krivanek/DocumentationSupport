@@ -81,7 +81,7 @@ DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
 
 { #category : #'css-API' }
 DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [
-	"aDictionnary at: #headerSize ifPresent: [ :value | aCSSDictionnary at: #headerSize put: value asInteger ]."
+	aDictionnary at: #headerSize ifPresent: [ :value | aCSSDictionnary at: #headerSize put: (self generateHeaderSize: value) ].
 	aDictionnary at: #textSize ifPresent: [ :value | aCSSDictionnary at: #textSize put: value asInteger ].
 	aDictionnary at: #boldSize ifPresent: [ :value | aCSSDictionnary at: #boldSize put: value asInteger ].
 	aDictionnary at: #italicSize ifPresent: [ :value | aCSSDictionnary at: #italicSize put: value asInteger ].
@@ -199,6 +199,28 @@ DocBook >> createEmptyCSS [
 		yourself
 ]
 
+{ #category : #'css-API' }
+DocBook >> createEmptyCSS: aDefaultPoliceSize [
+	^ Dictionary new at: #header put: OrderedCollection new;
+		at: #text put: OrderedCollection new;
+		at: #bold put: OrderedCollection new;
+		at: #italic put: OrderedCollection new;
+		at: #strike put: OrderedCollection new;
+		at: #monospace put: OrderedCollection new;
+		at: #link put: OrderedCollection new;
+		at: #code put: OrderedCollection new;
+		
+		at: #headerSize put: OrderedCollection new;
+		at: #textSize put: aDefaultPoliceSize;
+		at: #boldSize put: aDefaultPoliceSize;
+		at: #italicSize put: aDefaultPoliceSize;
+		at: #strikeSize put: aDefaultPoliceSize;
+		at: #monospaceSize put: aDefaultPoliceSize;
+		at: #linkSize put: aDefaultPoliceSize;
+		at: #codeSize put: aDefaultPoliceSize;
+		yourself
+]
+
 { #category : #removing }
 DocBook >> delete [ 
 
@@ -243,11 +265,20 @@ DocBook >> fixParentReferencesUsing: aDictionary [
 { #category : #'css-API' }
 DocBook >> generateCSS: aDictionary [
 	| css |
-	css := self createEmptyCSS.
+	css := self createEmptyCSS: 10.
 	self addCSSColor: aDictionary in: css;
 	addCSSBackGroundColor: aDictionary in: css;
 	addCSSPoliceSize: aDictionary in: css.
 	DocBook at: key put: css. 
+]
+
+{ #category : #'css-API' }
+DocBook >> generateHeaderSize: aStringOfInteger [
+	| headerSizeCollection |
+	headerSizeCollection := OrderedCollection new.
+	(aStringOfInteger findTokens: ' ') do: [ :intergerString | 
+		headerSizeCollection add: (TextFontReference toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: intergerString asInteger)) ].
+	^ headerSizeCollection
 ]
 
 { #category : #accessing }

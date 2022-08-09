@@ -517,7 +517,7 @@ DocRichTextComposer >> visitHeader: aHeader [
 	| headerAttributes |
 	headerAttributes := cssDictionary at: #header.
 	(cssDictionary at: #headerSize) 
-		ifNotEmpty: [ headerAttributes add: ((cssDictionary at: #headerSize) at: aHeader level) ] 
+		ifNotEmpty: [ headerAttributes add: ((cssDictionary at: #headerSize) at: (aHeader level min: (cssDictionary at: #headerSize) size)) ] 
 		ifEmpty: [ headerAttributes add: (self textStyler headerLevelFont: aHeader level) ].
 	canvas newLineIfNotAlready.
 	canvas
