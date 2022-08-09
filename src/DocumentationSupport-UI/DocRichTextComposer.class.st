@@ -139,6 +139,11 @@ DocRichTextComposer >> executor: anObject [
 	executor := anObject
 ]
 
+{ #category : #'visiting - document' }
+DocRichTextComposer >> headerLevelFont: aLevel [
+	^ (cssDictionary at: #headerSize) at: (aLevel min: (cssDictionary at: #headerSize) size) asInteger
+]
+
 { #category : #highlighting }
 DocRichTextComposer >> highlightText: aText [
 	[ 
@@ -517,7 +522,7 @@ DocRichTextComposer >> visitHeader: aHeader [
 	| headerAttributes |
 	headerAttributes := cssDictionary at: #header.
 	(cssDictionary at: #headerSize) 
-		ifNotEmpty: [ headerAttributes add: ((cssDictionary at: #headerSize) at: (aHeader level min: (cssDictionary at: #headerSize) size)) ] 
+		ifNotEmpty: [ headerAttributes add: (TextFontReference toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (self headerLevelFont: aHeader level)asInteger)) ] 
 		ifEmpty: [ headerAttributes add: (self textStyler headerLevelFont: aHeader level) ].
 	canvas newLineIfNotAlready.
 	canvas

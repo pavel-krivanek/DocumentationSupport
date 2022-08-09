@@ -81,7 +81,7 @@ DocBook >> addCSSColor: aDictionnary in: aCSSDictionnary [
 
 { #category : #'css-API' }
 DocBook >> addCSSPoliceSize: aDictionnary in: aCSSDictionnary [
-	aDictionnary at: #headerSize ifPresent: [ :value | aCSSDictionnary at: #headerSize put: (self generateHeaderSize: value) ].
+	aDictionnary at: #headerSize ifPresent: [ :value | aCSSDictionnary at: #headerSize put: (value findTokens: ' ') ].
 	aDictionnary at: #textSize ifPresent: [ :value | aCSSDictionnary at: #textSize put: value asInteger ].
 	aDictionnary at: #boldSize ifPresent: [ :value | aCSSDictionnary at: #boldSize put: value asInteger ].
 	aDictionnary at: #italicSize ifPresent: [ :value | aCSSDictionnary at: #italicSize put: value asInteger ].
@@ -178,28 +178,6 @@ DocBook >> children [
 ]
 
 { #category : #'css-API' }
-DocBook >> createEmptyCSS [
-	^ Dictionary new at: #header put: OrderedCollection new;
-		at: #text put: OrderedCollection new;
-		at: #bold put: OrderedCollection new;
-		at: #italic put: OrderedCollection new;
-		at: #strike put: OrderedCollection new;
-		at: #monospace put: OrderedCollection new;
-		at: #link put: OrderedCollection new;
-		at: #code put: OrderedCollection new;
-		
-		at: #headerSize put: OrderedCollection new;
-		at: #textSize put: 10;
-		at: #boldSize put: 10;
-		at: #italicSize put: 10;
-		at: #strikeSize put: 10;
-		at: #monospaceSize put: 10;
-		at: #linkSize put: 10;
-		at: #codeSize put: 10;
-		yourself
-]
-
-{ #category : #'css-API' }
 DocBook >> createEmptyCSS: aDefaultPoliceSize [
 	^ Dictionary new at: #header put: OrderedCollection new;
 		at: #text put: OrderedCollection new;
@@ -270,15 +248,6 @@ DocBook >> generateCSS: aDictionary [
 	addCSSBackGroundColor: aDictionary in: css;
 	addCSSPoliceSize: aDictionary in: css.
 	DocBook at: key put: css. 
-]
-
-{ #category : #'css-API' }
-DocBook >> generateHeaderSize: aStringOfInteger [
-	| headerSizeCollection |
-	headerSizeCollection := OrderedCollection new.
-	(aStringOfInteger findTokens: ' ') do: [ :intergerString | 
-		headerSizeCollection add: (TextFontReference toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: intergerString asInteger)) ].
-	^ headerSizeCollection
 ]
 
 { #category : #accessing }
