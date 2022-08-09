@@ -155,10 +155,14 @@ DocBook >> addGlobalColorWithOpacity: aDictionnary in: aCSSDictionnary [
 
 { #category : #'css-API' }
 DocBook >> addGlobalColorWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol [
+	| attributeClass |
+	attributeClass := aSymbol = #Color 
+		ifTrue:  [ self textColorClass ]
+		ifFalse: [ self backgroundColorClass ].
 	aDictionnary at: #global,aSymbol ifPresent: [ :colorString |
 		aDictionnary at: #global,aSymbol,#Opacity
-			ifPresent: [ :float | self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString) alpha: (Float readFrom: float))) type: aSymbol ]
-			ifAbsent: [ self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString))) type: aSymbol ]
+			ifPresent: [ :float | self addGlobalColor: aDictionnary in: aCSSDictionnary with: (attributeClass new color: ((Color fromString: colorString) alpha: (Float readFrom: float))) type: aSymbol ]
+			ifAbsent: [ self addGlobalColor: aDictionnary in: aCSSDictionnary with: (attributeClass new color: ((Color fromString: colorString))) type: aSymbol ]
 		]
 ]
 
