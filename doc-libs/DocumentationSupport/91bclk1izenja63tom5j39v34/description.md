@@ -9,3 +9,6 @@ textSize: '20'
 headerSize: '38 4 18 14 12 10'
 globalColor: 'red'
 globalColorOpacity: '0.5'
+globalBackgroundColor: 'gray'
+globalBackgroundColorOpacity: '0.2'
+
