@@ -133,11 +133,32 @@ DocBook >> addGlobalColor: aDictionnary in: aCSSDictionnary with: anAttribute [
 ]
 
 { #category : #'css-API' }
+DocBook >> addGlobalColor: aDictionnary in: aCSSDictionnary with: anAttribute type: aSymbol [
+	aDictionnary at: #header,aSymbol ifAbsent: [ (aCSSDictionnary at: #header) add: anAttribute ].
+	aDictionnary at: #text,aSymbol ifAbsent: [ (aCSSDictionnary at: #text) add: anAttribute ].
+	aDictionnary at: #bold,aSymbol ifAbsent: [ (aCSSDictionnary at: #bold) add: anAttribute ].
+	aDictionnary at: #italic,aSymbol ifAbsent: [ (aCSSDictionnary at: #italic) add: anAttribute ].
+	aDictionnary at: #strike,aSymbol ifAbsent: [ (aCSSDictionnary at: #strike) add: anAttribute ].
+	aDictionnary at: #monospace,aSymbol ifAbsent: [ (aCSSDictionnary at: #monospace) add: anAttribute ].
+	aDictionnary at: #link,aSymbol ifAbsent: [ (aCSSDictionnary at: #link) add: anAttribute ].
+	aDictionnary at: #code,aSymbol ifAbsent: [ (aCSSDictionnary at: #code) add: anAttribute ].
+]
+
+{ #category : #'css-API' }
 DocBook >> addGlobalColorWithOpacity: aDictionnary in: aCSSDictionnary [
 	aDictionnary at: #globalColor ifPresent: [ :colorString |
 		aDictionnary at: #globalColorOpacity 
 			ifPresent: [ :float | self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString) alpha: (Float readFrom: float))) ]
 			ifAbsent: [ self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString))) ]
+		]
+]
+
+{ #category : #'css-API' }
+DocBook >> addGlobalColorWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol [
+	aDictionnary at: #global,aSymbol ifPresent: [ :colorString |
+		aDictionnary at: #global,aSymbol,#Opacity
+			ifPresent: [ :float | self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString) alpha: (Float readFrom: float))) type: aSymbol ]
+			ifAbsent: [ self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString))) type: aSymbol ]
 		]
 ]
 
@@ -268,7 +289,9 @@ DocBook >> generateCSS: aDictionary [
 	self addCSSColor: aDictionary in: css;
 	addCSSBackGroundColor: aDictionary in: css;
 	addCSSPoliceSize: aDictionary in: css;
-	addGlobalColorWithOpacity: aDictionary in: css.
+	addGlobalColorWithOpacity: aDictionary in: css;
+	addGlobalColorWithOpacity: aDictionary in: css  type: #Color;
+	addGlobalColorWithOpacity: aDictionary in: css type: #BackgroundColor.
 	DocBook at: key put: css. 
 ]
 
