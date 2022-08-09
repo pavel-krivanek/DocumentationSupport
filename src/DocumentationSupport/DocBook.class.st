@@ -145,15 +145,6 @@ DocBook >> addGlobalColor: aDictionnary in: aCSSDictionnary with: anAttribute ty
 ]
 
 { #category : #'css-API' }
-DocBook >> addGlobalColorWithOpacity: aDictionnary in: aCSSDictionnary [
-	aDictionnary at: #globalColor ifPresent: [ :colorString |
-		aDictionnary at: #globalColorOpacity 
-			ifPresent: [ :float | self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString) alpha: (Float readFrom: float))) ]
-			ifAbsent: [ self addGlobalColor: aDictionnary in: aCSSDictionnary with: (self textColorClass new color: ((Color fromString: colorString))) ]
-		]
-]
-
-{ #category : #'css-API' }
 DocBook >> addGlobalColorWithOpacity: aDictionnary in: aCSSDictionnary type: aSymbol [
 	| attributeClass |
 	attributeClass := aSymbol = #Color 
@@ -289,11 +280,12 @@ DocBook >> fixParentReferencesUsing: aDictionary [
 { #category : #'css-API' }
 DocBook >> generateCSS: aDictionary [
 	| css |
-	css := self createEmptyCSS: 10.
+	aDictionary at: #globalSize 
+		ifPresent: [ :value | css := self createEmptyCSS: value asInteger ]
+		ifAbsent: [ css := self createEmptyCSS: 10 ].
 	self addCSSColor: aDictionary in: css;
 	addCSSBackGroundColor: aDictionary in: css;
 	addCSSPoliceSize: aDictionary in: css;
-	addGlobalColorWithOpacity: aDictionary in: css;
 	addGlobalColorWithOpacity: aDictionary in: css  type: #Color;
 	addGlobalColorWithOpacity: aDictionary in: css type: #BackgroundColor.
 	DocBook at: key put: css. 
