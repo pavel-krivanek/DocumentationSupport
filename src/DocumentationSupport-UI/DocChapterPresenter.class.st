@@ -442,7 +442,8 @@ DocChapterPresenter >> textFor: aSource [
 		parser := MicrodownParser new.
 		tree := parser parse: builder contents.
 		richTextComposer := DocRichTextComposer new
-			executor: self.
+			executor: self;
+			css: self chapter.
 		self parent 
 			ifNotNil: [ 
 				richTextComposer libraryPresenter: self parent.

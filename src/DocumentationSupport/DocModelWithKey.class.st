@@ -166,10 +166,12 @@ DocModelWithKey >> parentKeyOrNil [
 
 { #category : #serialization }
 DocModelWithKey >> readMetadataFrom: aDictionary [
-
 	aDictionary at: #title ifPresent: [ :value | title := value ].
 	aDictionary at: #key ifPresent: [ :value | key := value ].
-	aDictionary at: #parent ifPresent: [ :value | parent := DocParentReference key: value ].	
+	aDictionary at: #parent ifPresent: [ :value | parent := DocParentReference key: value ].
+	
+	
+	
 ]
 
 { #category : #serialization }
