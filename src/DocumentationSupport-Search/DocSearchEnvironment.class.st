@@ -215,7 +215,7 @@ DocSearchEnvironment >> searchRegex: aRegex in: aChapter restrictedBy: aRangeInt
 	docResultEntries := OrderedCollection new.
 	currentSearchPosition := aRangeInterval first.
 	
-	tree := MicroDownParser parse: aChapter source.
+	tree := MicrodownParser parse: aChapter source.
 	text := aBoolean 
 		ifFalse: [ (DocRichTextComposer new visit: tree) string asLowercase ] 
 		ifTrue: [ (DocRichTextComposer new visit: tree) string ].

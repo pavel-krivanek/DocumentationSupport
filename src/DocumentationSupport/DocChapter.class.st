@@ -135,7 +135,7 @@ DocChapter >> delete [
 DocChapter >> findNextString: aSearchPattern startingAt: currentSearchPosition restrictedBy: limitIndex withSensitiveCase: aBoolean [
 
 	| foundPosition tree text lines1 lines2 |
-	tree := MicroDownParser parse: source.
+	tree := MicrodownParser parse: source.
 	
 	text := aBoolean 
 		ifFalse: [ (DocRichTextComposer new visit: tree) string asLowercase ] 
