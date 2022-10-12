@@ -391,7 +391,7 @@ DocRichTextComposer >> visitBold: anObject [
 	| boldAttributes |
 	boldAttributes := (cssDictionary at: #bold) deepCopy.
 	boldAttributes add: (TextEmphasis bold).
-	boldAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #boldSize))).
+	boldAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #boldSize ifAbsent: [10]))).
 	canvas 
 		includeAttributes: boldAttributes
 		in: [ super visitBold: anObject ]
@@ -402,7 +402,7 @@ DocRichTextComposer >> visitBold: anObject [
 DocRichTextComposer >> visitCaptionEltForTextAttributes: anObject of: aElementCSSName [
 	| textAttributes |
 	textAttributes := (cssDictionary at: aElementCSSName) deepCopy.
-	textAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #codeSize))).
+	textAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #codeSize ifAbsent: [10]))).
 	anObject captionElements do: [ :child |
 		child class = MicTextBlock 
 			ifTrue: [ 
@@ -416,7 +416,7 @@ DocRichTextComposer >> visitCaptionEltForTextAttributes: anObject of: aElementCS
 DocRichTextComposer >> visitChildrenOfForTextAttributes: anObject [
 	| textAttributes |
 	textAttributes := (cssDictionary at: #text) deepCopy.
-	textAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #textSize))).
+	textAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #textSize ifAbsent: [10]))).
 	anObject children do: [ :child |
 		child class = MicTextBlock 
 			ifTrue: [ 
@@ -544,7 +544,7 @@ DocRichTextComposer >> visitItalic: anObject [
 	| italicAttributes |
 	italicAttributes := cssDictionary at: #italic.
 	italicAttributes add: (TextEmphasis italic ).
-	italicAttributes add: (TextFontReference toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #italicSize))).
+	italicAttributes add: (TextFontReference toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #italicSize ifAbsent: [10]))).
 	canvas 
 		includeAttributes: italicAttributes
 		in: [ super visitItalic: anObject ]
@@ -555,7 +555,7 @@ DocRichTextComposer >> visitLink: aLink [
 
 	| attributes |
 	attributes := OrderedCollection new.
-	attributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #linkSize))).
+	attributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #linkSize ifAbsent: [10 ]))).
 	(self isWeb: aLink) ifTrue: [ 
 		attributes add: (TextAction new
 							 actOnClickBlock: [ WebBrowser openOn: aLink url printString ]).
@@ -612,7 +612,7 @@ DocRichTextComposer >> visitMonospace: anObject [
 	"Notice - I add a highlight to the backgorund rather than mono-spaced."
 	| backgroundColor sem monospaceAttributes |
 	monospaceAttributes := cssDictionary at: #monospace.
-	monospaceAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #monospaceSize))).
+	monospaceAttributes add: (TextFontReference	toFont: (LogicalFont familyName: 'Source Sans Pro' pointSize: (cssDictionary at: #monospaceSize ifAbsent: [10]))).
 	backgroundColor := self textStyler monospaceBackgroundColor.
 	self flag: #fixMe.
 	"Right now we stupidly emit TextAction but we should emit TextClassLink and revisit them."
