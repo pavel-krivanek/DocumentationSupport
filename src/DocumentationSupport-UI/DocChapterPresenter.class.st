@@ -107,7 +107,7 @@ DocChapterPresenter >> chapterLayout: aLayout [
 { #category : #layout }
 DocChapterPresenter >> editOrPreviewLayout: aBoolean [
 	| tmplayout |
-	aBoolean traceCr.
+
 	tmplayout := SpBoxLayout newHorizontal spacing: 5.
 	editEnable 
 		ifTrue:  [ 
@@ -280,7 +280,6 @@ DocChapterPresenter >> initializeWindow: aWindowPresenter [
 { #category : #layout }
 DocChapterPresenter >> layoutShowingEditor: aBoolean [
 
-	aBoolean traceCr.
 	^ self chapterLayout: (self editOrPreviewLayout: aBoolean)
 ]
 
