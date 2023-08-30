@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #specs }
-DocModelPresenter class >> defaultSpec [
+DocModelPresenter class >> defaultLayout [
 
 	^ self subclassResponsibility
 ]

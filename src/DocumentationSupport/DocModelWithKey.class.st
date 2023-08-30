@@ -115,7 +115,6 @@ DocModelWithKey >> key [
 DocModelWithKey >> key: anObject [
 
 	key := anObject.
-	
 	self makeDirty.
 	self aspectChanged: #title
 
@@ -133,10 +132,18 @@ DocModelWithKey >> library: anObject [
 	library := anObject
 ]
 
+{ #category : #accessing }
+DocModelWithKey >> libraryKeyOrNil [
+
+	library ifNil: [ ^ nil ].
+	
+	^ library key
+]
+
 { #category : #dirty }
 DocModelWithKey >> makeDirty [ 
 
-	^ self library makeDirty
+	^ self library ifNotNil: [ :lib | lib makeDirty ]
 ]
 
 { #category : #accessing }
@@ -167,10 +174,12 @@ DocModelWithKey >> parentKeyOrNil [
 
 { #category : #serialization }
 DocModelWithKey >> readMetadataFrom: aDictionary [
-
 	aDictionary at: #title ifPresent: [ :value | title := value ].
 	aDictionary at: #key ifPresent: [ :value | key := value ].
-	aDictionary at: #parent ifPresent: [ :value | parent := DocParentReference key: value ].	
+	aDictionary at: #parent ifPresent: [ :value | parent := DocParentReference key: value ].
+	
+	
+	
 ]
 
 { #category : #serialization }
@@ -259,7 +268,6 @@ DocModelWithKey >> title: anObject [
 
 { #category : #serialization }
 DocModelWithKey >> writeStonKeysTo: aDictionary [ 
-
 	aDictionary
 		at: #title put: title;
 		at: #key put: key;

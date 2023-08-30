@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : #specs }
-DocBookPresenter class >> defaultSpec [
+DocBookPresenter class >> defaultLayout [
 
 	^ SpGridLayout new
 		beColumnNotHomogeneous;
